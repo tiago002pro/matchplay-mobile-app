@@ -1,10 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
-import Profile from "../screens/Profile";
-import Chat from "../screens/Chat";
+import ProfileScreen from "../screens/Profile";
+import ChatScrean from "../screens/Chat";
 import Games from "../screens/Games";
-import Meet from "../screens/Meet";
+import MatchingScreen from "../screens/Meet";
 import { Ionicons } from "@expo/vector-icons";
+import { THEME } from "../styles/Theme";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -12,24 +13,24 @@ export default function TabRoutes() {
   return(
     <Navigator
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         headerShadowVisible: false,
+        tabBarShowLabel: false,
         headerStyle: {
-          backgroundColor: '#030303',
+          backgroundColor: THEME.colors.headers,
         },
         tabBarStyle: {
-          backgroundColor: '#030303',
+          backgroundColor: THEME.colors.background,
           borderTopWidth: 0,
         },
         tabBarInactiveTintColor: '#fff', 
-        tabBarActiveTintColor: '#8A2BE2',
+        tabBarActiveTintColor: THEME.colors.primary,
         tabBarLabelStyle: {
           marginTop: -5,
           marginBottom: 5,
         },
         headerTitleStyle: {
           color: '#fff',
-          fontFamily: 'InterTight_700Bold',
           fontWeight: '700',
           textTransform: 'capitalize',
         },
@@ -46,7 +47,7 @@ export default function TabRoutes() {
 
       <Screen
         name="Chat"
-        component={Chat}
+        component={ChatScrean}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
@@ -55,7 +56,7 @@ export default function TabRoutes() {
 
       <Screen
         name="Meet"
-        component={Meet}
+        component={MatchingScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={size}/>
@@ -73,10 +74,10 @@ export default function TabRoutes() {
 
       <Screen
         name="Profile"
-        component={Profile}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
-            <Ionicons name={focused ? 'person-circle' : 'person-circle-outline'} color={color} size={size}/>
+            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={size}/>
         }}
       />
     </Navigator>
