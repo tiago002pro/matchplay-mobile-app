@@ -1,7 +1,11 @@
+import { useAuth } from "../context/AuthContext";
 import StackRoutes from "./stack.routes";
+import TabRoutes from "./tab.routes";
 
 export default function Routes() {
+  const { authState } = useAuth();
+
   return (
-    <StackRoutes/>
+    authState.isAuthenticated ? <TabRoutes/> : <StackRoutes/>
   );
 }

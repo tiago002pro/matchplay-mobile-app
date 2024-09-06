@@ -6,10 +6,11 @@ import { useNavigation } from "@react-navigation/native";
 import { MyInput } from "../../components/MyInput";
 import { MyButton } from "../../components/MyButton";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
-import AuthService from "../../service/AuthService";
+import { useAuth } from "../../context/AuthContext";
 
 export function LoginScreen() {
   const navigation:any = useNavigation();
+  const { doLogin } = useAuth();
 
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -22,9 +23,8 @@ export function LoginScreen() {
     navigation.navigate('TabRoutes');
   }
 
-  async function doLogin() {
-    const token = await AuthService.login(login, password)
-    console.log("token", token);
+  async function signIn() {
+    await doLogin(login, password)
   }
 
   return (
@@ -48,7 +48,7 @@ export function LoginScreen() {
 
           <MyButton
             label={'Entrar'}
-            action={doLogin}
+            action={signIn}
           />
 
           <Box style={styles.signupBtnArea}>

@@ -1,20 +1,31 @@
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { RegisterUser } from '../interface/register.interface';
+import jwtDecode from 'jwt-decode';
 
-const api = axios.create({
-  baseURL: 'http://10.0.0.112:8080/matchplay-api',
-});
+export function AuthService() {
+  const root = 'auth';
 
-class AuthService {
-  private root!: string;
-
-  constructor() {
-    this.root = "/auth"
+  async function signIn(login:string, password:string):Promise<any> {
+    try {
+      const response = await axiosInstance.post(`/${root}/signin`, { login, password })
+      const tokenDecoded:any = jwtDecode(response.data.token);
+      return {
+        token: response.data.token,
+        user: {
+          id: tokenDecoded.id,
+          name: tokenDecoded.name,
+          login: tokenDecoded.login,
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
   }
 
-  public async login(login:string, password:string) {
+  async function signup(registerUser:RegisterUser):Promise<any> {
     try {
-      const response = await api.post(`${this.root}/login`, { login, password })
+      const response = await axiosInstance.post(`${root}/signup`, registerUser)
       return response.data
     } catch (error) {
       console.log("error", error);
@@ -22,15 +33,8 @@ class AuthService {
     }
   }
 
-  public async signup(registerUser:RegisterUser):Promise<any> {
-    try {
-      const response = await api.post(`${this.root}/signup`, registerUser)
-      return response.data
-    } catch (error) {
-      console.log("error", error);
-      throw error;
-    }
+  return {
+    signIn,
+    signup,
   }
 }
-
-export default new AuthService();
