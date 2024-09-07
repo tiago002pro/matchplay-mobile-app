@@ -1,8 +1,8 @@
 export interface User {
   id?:number;
-  username?:string;
-  email?:string;
+  name?:string;
+  login?:string;
   password?:string;
   role?:string;
-  createdAt?:Date;
+  profileImage?:any;
 }

@@ -12,7 +12,7 @@ export function AuthService() {
       return {
         token: response.data.token,
         user: {
-          id: tokenDecoded.id,
+          id: parseInt(tokenDecoded.sub),
           name: tokenDecoded.name,
           login: tokenDecoded.login,
         }
