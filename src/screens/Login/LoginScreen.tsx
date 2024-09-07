@@ -19,10 +19,6 @@ export function LoginScreen() {
     navigation.navigate('SignupScreen');
   }
 
-  function goToTabRoutes():void {
-    navigation.navigate('TabRoutes');
-  }
-
   async function signIn() {
     await doLogin(login, password)
   }
