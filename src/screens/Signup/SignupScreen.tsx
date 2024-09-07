@@ -7,10 +7,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
 import { RegisterUser } from "../../interface/register.interface";
-import AuthService from "../../service/AuthService";
+import { AuthService } from "../../service/AuthService";
 
 export function SignupScreen() {
   const navigation:any = useNavigation();
+  const { signup } = AuthService();
 
   const [name, setName] = useState<string>("");
   const [login, setLogin] = useState<string>("");
@@ -20,11 +21,12 @@ export function SignupScreen() {
     navigation.navigate('LoginScreen');
   }
 
-  async function signup() {
+  async function doSignup() {
     const registerUser: RegisterUser = {
       name, login, password
     }
-    const token = await AuthService.signup(registerUser)
+    await signup(registerUser)
+    goToLoginScreen()
   }
 
   return(
@@ -53,7 +55,7 @@ export function SignupScreen() {
 
           <MyButton
             label={'Cadastrar'}
-            action={signup}
+            action={doSignup}
           />
 
             <Box style={styles.loginBtnArea}>
