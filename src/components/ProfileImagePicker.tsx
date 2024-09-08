@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { PersonService } from "../service/PersonService";
 import { Person } from "../interface/person.interface";
 import { storage } from "../../firebaseConfig";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 const widthScreen = Dimensions.get('screen').width;
 
@@ -27,12 +27,12 @@ export default function ProfileImagePicker({ person, setPerson }:ProfileImagePic
         },
         {
           text: "Galeria",
-          onPress: async () => await pickImageFromGalery(setPerson, person),
+          onPress: async () => await pickImageFromGalery(person, setPerson),
           style: 'default'
         },
         {
           text: "Câmera",
-          onPress: async () => await pickImageFromCamera(setPerson, person),
+          onPress: async () => await pickImageFromCamera(person, setPerson),
           style: 'default'
         },
       ],
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const pickImageFromGalery = async (setPerson:any, person:Person) => {
+const pickImageFromGalery = async (person:Person, setPerson:any) => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
   if (status !== "granted") {
@@ -96,18 +96,18 @@ const pickImageFromGalery = async (setPerson:any, person:Person) => {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets) {
       if (!person || !person?.id) {
         Alert.alert("Usuário não encontrado")
       } else {
         setPerson({ ...person, profileImage: result.assets[0].uri })
-        await uploadImage(result.assets[0].uri, person, setPerson)
+        await uploadImage(result.assets[0].uri, person?.id)
       } 
     }
   }
 }
 
-const pickImageFromCamera = async (setPerson:any, person:Person) => {
+const pickImageFromCamera = async (person:Person, setPerson:any) => {
   const { status } = await ImagePicker.requestCameraPermissionsAsync();
   
   if (status !== "granted") {
@@ -122,38 +122,42 @@ const pickImageFromCamera = async (setPerson:any, person:Person) => {
       base64: true
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets) {
       if (!person || !person?.id) {
         Alert.alert("Usuário não encontrado")
       } else {
         setPerson({ ...person, profileImage: result.assets[0].uri })
-        await uploadImage(result.assets[0].uri, person, setPerson)
+        await uploadImage(result.assets[0].uri, person?.id)
       } 
     }
   }
 }
 
-async function uploadImage(file:any, person:Person, setPerson:any) {
+async function uploadImage(uri:string, personId:number) {
   const { uploadImageProfile } = PersonService();
 
-  if (!file) {
+  if (!uri) {
     Alert.alert('Please select an image first.');
     return;
   }
 
   const formData:any = new FormData();
   formData.append("photo", {
-    uri: file,
+    uri: uri,
     type: 'image/jpeg',
     name: 'profile.jpg',
   });
 
-  const response = await fetch(file);
+  const response = await fetch(uri);
   const blob = await response.blob();
-  const storageRef  = ref(storage, `/images/users/${person.id}`);
+  const storageRef  = ref(storage, `/images/users/${personId}`);
 
-  uploadBytesResumable(storageRef, blob).then((snapshot) => getDownloadURL(snapshot.ref)).then(async (downloadURL:any) => {
-    await uploadImageProfile(person.id, downloadURL)
-    setPerson({ ...person, profileImage: downloadURL })
-  })
+  try {
+    await uploadBytes(storageRef, blob);
+    const url = await getDownloadURL(storageRef);
+    await uploadImageProfile(personId, encodeURIComponent(url))
+  } catch (error) {
+    console.error('Upload failed', error);
+    Alert.alert('Upload failed', 'There was an error uploading the image.');
+  }
 }
