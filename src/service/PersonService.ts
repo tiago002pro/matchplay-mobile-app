@@ -22,8 +22,19 @@ export function PersonService() {
     }
   }
 
+  async function searchFriends(personId:number, page:number, search:string):Promise<any[]> {
+    try {
+      const response = await axiosInstance.get(`/${root}/${personId}/search-friends?page=${page}&search=${search}`);
+      return response.data.content;
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
   return {
     getByUserId,
     uploadImageProfile,
+    searchFriends,
   }
 }

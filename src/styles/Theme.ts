@@ -6,6 +6,6 @@ export const THEME = extendTheme({
     secondary: '#f1c40f',
     background: '#0D0D0D',
     tabbar: '#030303',
-    headers: '#030303',
+    header: '#111111',
   }
 });
