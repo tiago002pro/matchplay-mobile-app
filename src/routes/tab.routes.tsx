@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import ProfileScreen from "../screens/Profile";
-import ChatScrean from "../screens/Chat";
 import Games from "../screens/Games";
 import MatchingScreen from "../screens/Meet";
 import { Ionicons } from "@expo/vector-icons";
 import { THEME } from "../styles/Theme";
+import ChatStackRoutes from "./ChatStack.routes";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -13,11 +13,11 @@ export default function TabRoutes() {
   return(
     <Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         headerShadowVisible: false,
         tabBarShowLabel: false,
         headerStyle: {
-          backgroundColor: THEME.colors.headers,
+          backgroundColor: THEME.colors.header,
         },
         tabBarStyle: {
           backgroundColor: THEME.colors.background,
@@ -46,8 +46,8 @@ export default function TabRoutes() {
       />
 
       <Screen
-        name="Chat"
-        component={ChatScrean}
+        name="ChatStackRoutes"
+        component={ChatStackRoutes}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
