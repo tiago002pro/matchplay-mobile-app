@@ -1,4 +1,4 @@
-import axiosInstance from "../api/axiosInstance";
+import axiosInstance from "../../../api/axiosInstance";
 import { Chat } from "../interface/chat.interface";
 
 export function ChatService() {

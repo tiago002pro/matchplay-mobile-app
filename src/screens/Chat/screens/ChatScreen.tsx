@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
-import { THEME } from "../../styles/Theme";
-import { useAuth } from "../../context/AuthContext";
-import { Chat } from "./interface/chat.interface";
-import { ChatService } from "./service/ChatService";
+import { useAuth } from "../../../context/AuthContext";
+import { Chat } from "../interface/chat.interface";
+import { THEME } from "../../../styles/Theme";
+import { ChatService } from "../service/ChatService";
 
 const widthScreen = Dimensions.get('screen').width;
 
-export function MessagesScreen({ route }:any) {
+export function ChatScreen({ route }:any) {
   const { authState } = useAuth();
   const { saveMessage, getAll } = ChatService();
   const [person, setPerson] = useState<any>(authState?.user);
