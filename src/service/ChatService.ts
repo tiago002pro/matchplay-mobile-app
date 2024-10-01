@@ -1,10 +1,10 @@
 import axiosInstance from "../api/axiosInstance";
-import { Message } from "../interface/message.interface";
+import { Chat } from "../interface/chat.interface";
 
-export function MessageService() {
-  const root = 'message';
+export function ChatService() {
+  const root = 'chat';
 
-  async function saveMessage(message:Message) {
+  async function saveMessage(message:Chat) {
     try {
       const response = await axiosInstance.post(`/${root}/save`, message);
       return response.data;

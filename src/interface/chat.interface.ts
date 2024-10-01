@@ -1,5 +1,6 @@
-export interface Message {
+export interface Chat {
   id?:number;
+  sequence?:number;
   senderId?:number;
   recipientId?:number;
   text?:string;
