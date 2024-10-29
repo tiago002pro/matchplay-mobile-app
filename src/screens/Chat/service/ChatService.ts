@@ -2,7 +2,7 @@ import axiosInstance from "../../../api/axiosInstance";
 import { Chat } from "../interface/chat.interface";
 
 export function ChatService() {
-  const root = 'chat';
+  const root = '/chat';
 
   async function saveMessage(message:Chat) {
     try {

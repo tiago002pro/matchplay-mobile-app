@@ -1,7 +1,7 @@
 import axiosInstance from "../api/axiosInstance";
 
 export function PersonService() {
-  const root = 'person';
+  const root = '/person';
 
   async function getByUserId(userId:number) {
     try {
@@ -24,7 +24,7 @@ export function PersonService() {
 
   async function searchFriends(personId:number, page:number, search:string):Promise<any[]> {
     try {
-      const response = await axiosInstance.get(`/${root}/${personId}/search-friends?page=${page}&search=${search}`);
+      const response = await axiosInstance.get(`/${root}/${personId}/search-friends?page=${page}&pageSize=${10}`);
       return response.data.content;
     } catch (error) {
       console.log("error", error);

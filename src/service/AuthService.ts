@@ -3,7 +3,7 @@ import { RegisterUser } from '../interface/register.interface';
 import jwtDecode from 'jwt-decode';
 
 export function AuthService() {
-  const root = 'auth';
+  const root = '/auth';
 
   async function signIn(login:string, password:string):Promise<any> {
     try {

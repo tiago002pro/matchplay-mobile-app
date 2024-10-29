@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import ProfileScreen from "../screens/Profile";
-import Games from "../screens/Games";
+import GamesScreen from "../screens/Games/GamesScreen";
 import MatchingScreen from "../screens/Meet";
 import { Ionicons } from "@expo/vector-icons";
 import { THEME } from "../styles/Theme";
@@ -65,7 +65,7 @@ export default function TabRoutes() {
 
       <Screen
         name="Games"
-        component={Games}
+        component={GamesScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'game-controller' : 'game-controller-outline'} color={color} size={size}/>

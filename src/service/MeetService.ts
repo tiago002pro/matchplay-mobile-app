@@ -1,7 +1,7 @@
 import axiosInstance from "../api/axiosInstance";
 
 export function MeetService() {
-  const root = 'meet';
+  const root = '/meet';
 
   async function searchAllPeopleToMeet() {
     try {
