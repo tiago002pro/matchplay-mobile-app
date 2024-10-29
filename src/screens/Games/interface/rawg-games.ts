@@ -1,10 +1,3 @@
-
-export interface SearchRawgGames {
-  page?:number,
-  pageSize?:number,
-  search?:string,
-}
-
 export interface RawgGamesResponse {
   count?:number;
   hasNext?:boolean;
@@ -12,6 +5,7 @@ export interface RawgGamesResponse {
 }
 
 export interface RawgGames {
+  id:number;
   name:string;
   backgroundImage?:string;
 }

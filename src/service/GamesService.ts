@@ -1,17 +1,13 @@
 import axiosInstance from "../api/axiosInstance"
-import { SearchRawgGames } from "../screens/Games/interface/rawg-games";
 
 export function GamesService() {
   const root = '/games'
 
-  async function searchRawgGames(searchRawgGames:SearchRawgGames) {
+  async function searchRawgGames(page:number, pageSize:number, search:string) {
     try {
       const response = await axiosInstance.get(`${root}/rawg/search`, {
-        params: {
-          page: searchRawgGames.page,
-          pageSize: searchRawgGames.pageSize,
-          search: searchRawgGames.search
-        }});
+        params: { page,  pageSize, search }
+      });
       return response.data;
     } catch (error) {
       console.log("error", error);

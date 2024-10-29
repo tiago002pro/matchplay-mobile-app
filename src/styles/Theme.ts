@@ -7,5 +7,6 @@ export const THEME = extendTheme({
     background: '#0D0D0D',
     tabbar: '#030303',
     header: '#111111',
+    font: '#e0e0e0',
   },
 });
