@@ -1,5 +1,5 @@
-import axiosInstance from "../../../service/axiosInstance";
-import { Chat } from "../interface/chat.interface";
+import axiosInstance from "./axiosInstance";
+import { Chat } from "../screens/Chat/interface/chat.interface";
 
 export function ChatService() {
   const root = '/chat';

@@ -4,7 +4,7 @@ import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { useAuth } from "../../../context/AuthContext";
 import { Chat } from "../interface/chat.interface";
 import { THEME } from "../../../styles/Theme";
-import { ChatService } from "../service/ChatService";
+import { ChatService } from "../../../service/ChatService";
 
 const widthScreen = Dimensions.get('screen').width;
 
