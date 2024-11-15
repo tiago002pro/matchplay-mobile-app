@@ -3,17 +3,15 @@ import { Pressable } from "react-native";
 import { THEME } from "../styles/Theme";
 
 interface MyInputProps {
-  key?:any;
   onChangeText?:any;
   placeholder?:string;
   value?:any;
   rightElementFunction?:any;
 }
 
-export function InputComponent({ key, onChangeText, placeholder, value, rightElementFunction }:MyInputProps) {
+export function InputComponent({ onChangeText, placeholder, value, rightElementFunction }:MyInputProps) {
   return(
     <Input
-      key={key}
       onChangeText={onChangeText}
       placeholder={placeholder}
       value={value}
