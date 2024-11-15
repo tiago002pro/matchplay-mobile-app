@@ -4,7 +4,7 @@ import { THEME } from "../styles/Theme";
 import { Alert, Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { PersonService } from "../service/PersonService";
-import { Person } from "../interface/person.interface";
+import { Person } from "../interfaces/IPerson";
 import { storage } from "../../firebaseConfig";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 

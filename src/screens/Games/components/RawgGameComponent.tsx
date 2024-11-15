@@ -2,7 +2,7 @@ import { Box, Image, Text, View } from "native-base";
 import { Dimensions, StyleSheet } from "react-native";
 import { THEME } from "../../../styles/Theme";
 import React from "react";
-import { RawgGames } from "../interface/rawg-games";
+import { RawgGames } from "../../../interfaces/IGames";
 
 const { width } = Dimensions.get('screen');
 const imageW = width * 0.30;

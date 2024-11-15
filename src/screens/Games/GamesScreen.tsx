@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { GamesService } from "../../service/GamesService";
 import { FlatList } from "native-base";
-import { RawgGames, RawgGamesResponse } from "./interface/rawg-games";
+import { RawgGames, RawgGamesResponse } from "../../interfaces/IGames";
 import { RawgGameComponent } from "./components/RawgGameComponent";
 import { ActivityIndicator } from "react-native-paper";
 import { THEME } from "../../styles/Theme";

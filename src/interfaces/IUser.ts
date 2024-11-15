@@ -6,3 +6,9 @@ export interface User {
   role?:string;
   profileImage?:any;
 }
+
+export interface Register {
+  name?:string;
+  login?:string;
+  password?:string;
+}

@@ -1,5 +1,5 @@
+import { Register } from '../interfaces/IUser';
 import axiosInstance from './axiosInstance';
-import { RegisterUser } from '../interface/register.interface';
 import jwtDecode from 'jwt-decode';
 
 export function AuthService() {
@@ -23,7 +23,7 @@ export function AuthService() {
     }
   }
 
-  async function signup(registerUser:RegisterUser):Promise<any> {
+  async function signup(registerUser:Register):Promise<any> {
     try {
       const response = await axiosInstance.post(`${root}/signup`, registerUser)
       return response.data

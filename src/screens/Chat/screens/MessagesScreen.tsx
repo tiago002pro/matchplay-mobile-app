@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { PersonService } from "../../../service/PersonService";
 import { useAuth } from "../../../context/AuthContext";
-import { Person } from "../../../interface/person.interface";
+import { Person } from "../../../interfaces/IPerson";
 import { THEME } from "../../../styles/Theme";
 
 const widthScreen = Dimensions.get('screen').width;

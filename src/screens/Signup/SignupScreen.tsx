@@ -6,8 +6,8 @@ import { MyButton } from "../../components/MyButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
-import { RegisterUser } from "../../interface/register.interface";
 import { AuthService } from "../../service/AuthService";
+import { Register } from "../../interfaces/IUser";
 
 export function SignupScreen() {
   const navigation:any = useNavigation();
@@ -22,7 +22,7 @@ export function SignupScreen() {
   }
 
   async function doSignup() {
-    const registerUser: RegisterUser = {
+    const registerUser: Register = {
       name, login, password
     }
     await signup(registerUser)

@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import ProfileImagePicker from "../../components/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";
-import { Person } from "../../interface/person.interface";
+import { Person } from "../../interfaces/IPerson";
 
 export default function ProfileScreen() {
   const { authState, doLogout } = useAuth();
