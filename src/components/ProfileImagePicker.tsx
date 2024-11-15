@@ -10,7 +10,7 @@ import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 const widthScreen = Dimensions.get('screen').width;
 
-interface ProfileImagePickerProps {
+type ProfileImagePickerProps = {
   person:IPerson;
   setPerson:any;
 }

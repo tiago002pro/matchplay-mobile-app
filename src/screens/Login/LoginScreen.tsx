@@ -3,8 +3,8 @@ import { ImageBackground, StyleSheet, View } from "react-native";
 import { THEME } from "../../styles/theme";
 import { Box, Button, FormControl, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { MyInput } from "../../components/MyInput";
-import { MyButton } from "../../components/MyButton";
+import { PrimaryInput } from "../../components/PrimaryInput";
+import { PrimaryButton } from "../../components/PrimaryButton";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
 import { useAuth } from "../../context/AuthContext";
 
@@ -27,14 +27,14 @@ export function LoginScreen() {
     <View style={styles.container}>
       <ImageBackground style={styles.background} source={backgroundLogin}>
         <FormControl>
-          <MyInput
+          <PrimaryInput
             type={'email-address'}
             label={'E-mail'}
             value={login}
             onChangeText={setLogin}
           />
 
-          <MyInput
+          <PrimaryInput
             key={'Senha'}
             label={'Senha'}
             value={password}
@@ -42,7 +42,7 @@ export function LoginScreen() {
             isPassword={true}
           />
 
-          <MyButton
+          <PrimaryButton
             label={'Entrar'}
             action={signIn}
           />

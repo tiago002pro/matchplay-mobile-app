@@ -8,7 +8,11 @@ const { width } = Dimensions.get('screen');
 const imageW = width * 0.30;
 const imageH = imageW * .65;
 
-export const RawgGameComponent = React.memo(({ game }: {game: IRawgGames}) => (
+type RawgGameProps = {
+  game:IRawgGames;
+}
+
+export const RawgGame = React.memo(({ game }: RawgGameProps) => (
   <View style={styles.container}>
     <Box style={styles.imageArea}>
       <Image

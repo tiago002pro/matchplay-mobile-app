@@ -1,8 +1,8 @@
 import { Box, Button, FormControl, Text, View } from "native-base";
 import { ImageBackground, StyleSheet } from "react-native";
 import { THEME } from "../../styles/theme";
-import { MyInput } from "../../components/MyInput";
-import { MyButton } from "../../components/MyButton";
+import { PrimaryInput } from "../../components/PrimaryInput";
+import { PrimaryButton } from "../../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
@@ -33,27 +33,27 @@ export function SignupScreen() {
     <View style={styles.container}>
       <ImageBackground style={styles.background} source={backgroundLogin}>
         <FormControl>
-          <MyInput
+          <PrimaryInput
             label={'Nome'}
             value={name}
             onChangeText={setName}
           />
 
-          <MyInput
+          <PrimaryInput
             type={'email-address'}
             label={'E-mail'}
             value={login}
             onChangeText={setLogin}
           />
 
-          <MyInput
+          <PrimaryInput
             label={'Senha'}
             value={password}
             onChangeText={setPassword}
             isPassword={true}
           />
 
-          <MyButton
+          <PrimaryButton
             label={'Cadastrar'}
             action={doSignup}
           />

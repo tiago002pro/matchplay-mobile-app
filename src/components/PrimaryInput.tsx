@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { THEME } from "../styles/theme";
 
-interface MyInputProps {
+type PrimaryInputProps = {
   type?:any;
   label?:string;
   value?:any;
@@ -11,7 +11,7 @@ interface MyInputProps {
   error?:boolean;
 }
 
-export function MyInput({ type, label, value, onChangeText, isPassword, error }:MyInputProps) {
+export function PrimaryInput({ type, label, value, onChangeText, isPassword, error }:PrimaryInputProps) {
   const [showPassword, setShowPassword] = useState<boolean>(isPassword || false);
 
   const rightElement = <TextInput.Icon

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Box } from "native-base";
 import { THEME } from "../../styles/theme";
-import { MyButton } from "../../components/MyButton";
+import { PrimaryButton } from "../../components/PrimaryButton";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import ProfileImagePicker from "../../components/ProfileImagePicker";
@@ -33,7 +33,7 @@ export default function ProfileScreen() {
       </Box>
 
       <Box style={{marginTop: 30}}>
-        <MyButton
+        <PrimaryButton
           label="Sair"
           action={doLogout}
         />
