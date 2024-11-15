@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { GamesService } from "../../service/GamesService";
 import { FlatList } from "native-base";
 import { RawgGames, RawgGamesResponse } from "../../interfaces/IGames";
-import { RawgGameComponent } from "./components/RawgGameComponent";
+import { RawgGameComponent } from "../../components/RawgGame";
 import { ActivityIndicator } from "react-native-paper";
 import { THEME } from "../../styles/theme";
 import { InputComponent } from "../../components/InputComponent";
