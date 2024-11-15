@@ -4,14 +4,14 @@ import { THEME } from "../styles/theme";
 import { Alert, Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { PersonService } from "../service/PersonService";
-import { Person } from "../interfaces/IPerson";
+import { IPerson } from "../interfaces/IPerson";
 import { storage } from "../../firebaseConfig";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 const widthScreen = Dimensions.get('screen').width;
 
 interface ProfileImagePickerProps {
-  person:Person;
+  person:IPerson;
   setPerson:any;
 }
 
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const pickImageFromGalery = async (person:Person, setPerson:any) => {
+const pickImageFromGalery = async (person:IPerson, setPerson:any) => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
   if (status !== "granted") {
@@ -107,7 +107,7 @@ const pickImageFromGalery = async (person:Person, setPerson:any) => {
   }
 }
 
-const pickImageFromCamera = async (person:Person, setPerson:any) => {
+const pickImageFromCamera = async (person:IPerson, setPerson:any) => {
   const { status } = await ImagePicker.requestCameraPermissionsAsync();
   
   if (status !== "granted") {

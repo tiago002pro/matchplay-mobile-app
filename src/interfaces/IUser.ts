@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id?:number;
   name?:string;
   login?:string;
@@ -7,7 +7,7 @@ export interface User {
   profileImage?:any;
 }
 
-export interface Register {
+export interface IRegister {
   name?:string;
   login?:string;
   password?:string;

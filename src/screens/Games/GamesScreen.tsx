@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { GamesService } from "../../service/GamesService";
 import { FlatList } from "native-base";
-import { RawgGames, RawgGamesResponse } from "../../interfaces/IGames";
+import { IRawgGames, IRawgGamesResponse } from "../../interfaces/IGames";
 import { RawgGameComponent } from "../../components/RawgGame";
 import { ActivityIndicator } from "react-native-paper";
 import { THEME } from "../../styles/theme";
@@ -11,7 +11,7 @@ import { InputComponent } from "../../components/InputComponent";
 export default function GamesScreen() {
   const pageSize = 10;
   const { searchRawgGames } = GamesService();
-  const [games, setGames] = useState<RawgGames[]>([]);
+  const [games, setGames] = useState<IRawgGames[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
@@ -20,7 +20,7 @@ export default function GamesScreen() {
   const fetchGames = async (newSearch = false) => {
     setLoading(true);
 
-    const response:RawgGamesResponse = await searchRawgGames(page, pageSize, search);
+    const response:IRawgGamesResponse = await searchRawgGames(page, pageSize, search);
     if (response.games) {
       setGames(newSearch ? response.games : [...games, ...response.games]);
     }
@@ -61,7 +61,7 @@ export default function GamesScreen() {
   }
 
   // Renderizar o item do jogo
-  const renderItem = ({ item }: { item: RawgGames }) => (
+  const renderItem = ({ item }: { item: IRawgGames }) => (
     <RawgGameComponent game={item} />
   );
 

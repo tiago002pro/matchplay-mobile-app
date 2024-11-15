@@ -1,4 +1,4 @@
-export interface Chat {
+export interface IChat {
   id?:number;
   sequence?:number;
   senderId?:number;

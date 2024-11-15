@@ -6,12 +6,12 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import ProfileImagePicker from "../../components/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";
-import { Person } from "../../interfaces/IPerson";
+import { IPerson } from "../../interfaces/IPerson";
 
 export default function ProfileScreen() {
   const { authState, doLogout } = useAuth();
   const { getByUserId } = PersonService();
-  const [person, setPerson] = useState<Person>({});
+  const [person, setPerson] = useState<IPerson>({});
 
   useEffect(() => {
     getUser()
@@ -19,7 +19,7 @@ export default function ProfileScreen() {
 
   async function getUser() {
     const userId = authState?.user?.id;
-    const data:Person = await getByUserId(userId)
+    const data:IPerson = await getByUserId(userId)
     setPerson(data);
   }
 

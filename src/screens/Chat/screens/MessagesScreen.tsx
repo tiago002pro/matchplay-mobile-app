@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { PersonService } from "../../../service/PersonService";
 import { useAuth } from "../../../context/AuthContext";
-import { Person } from "../../../interfaces/IPerson";
+import { IPerson } from "../../../interfaces/IPerson";
 import { THEME } from "../../../styles/theme";
 
 const widthScreen = Dimensions.get('screen').width;
@@ -13,7 +13,7 @@ const widthScreen = Dimensions.get('screen').width;
 export function MessagesScreen() {
   const { getByUserId, searchFriends } = PersonService();
   const { authState } = useAuth();
-  const [friends, setFriends] = useState<Person[]>([]);
+  const [friends, setFriends] = useState<IPerson[]>([]);
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
@@ -22,7 +22,7 @@ export function MessagesScreen() {
   }, [page])
 
   async function loadFriends() {
-    const response:Person[] = await searchFriends(authState?.user?.id, page, "")
+    const response:IPerson[] = await searchFriends(authState?.user?.id, page, "")
     setFriends([...friends, ...response])
     if (response.length === 0) setHasMore(false)
   }

@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { THEME } from "../../styles/theme";
 import { useAuth } from "../../context/AuthContext";
-import { Chat } from "../../interfaces/IChat";
+import { IChat } from "../../interfaces/IChat";
 import { ChatService } from "../../service/ChatService";
 
 const widthScreen = Dimensions.get('screen').width;
@@ -23,7 +23,7 @@ export function MessagesScreen({ route }:any) {
   async function getMessages() {
     const response:any[] = await getAll(person.id, friend.id)
     
-    const fetchedMessages:IMessage[] = response.map((m:Chat) => ({
+    const fetchedMessages:IMessage[] = response.map((m:IChat) => ({
       _id: m.id,
       text: m.text,
       createdAt: m.date,
@@ -42,7 +42,7 @@ export function MessagesScreen({ route }:any) {
       setMessages((previousMessages: any) => GiftedChat.append(previousMessages, messages));
     }
 
-    const newMessage:Chat = {
+    const newMessage:IChat = {
       sequence: 1,
       senderId: person.id,
       recipientId: friend.id,

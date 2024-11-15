@@ -1,10 +1,10 @@
-export interface RawgGamesResponse {
+export interface IRawgGamesResponse {
   count?:number;
   hasNext?:boolean;
-  games?:RawgGames[];
+  games?:IRawgGames[];
 }
 
-export interface RawgGames {
+export interface IRawgGames {
   id:number;
   name:string;
   backgroundImage?:string;
