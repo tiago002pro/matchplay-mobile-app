@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Box } from "native-base";
 import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import ProfileImagePicker from "../../components/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";

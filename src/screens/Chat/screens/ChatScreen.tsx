@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import { IChat } from "../../../interfaces/IChat";
 import { THEME } from "../../../styles/theme";
 import { ChatService } from "../../../service/ChatService";

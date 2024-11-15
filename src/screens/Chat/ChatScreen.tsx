@@ -3,7 +3,7 @@ import { Dimensions, FlatList, StyleSheet, TouchableWithoutFeedback } from "reac
 import { THEME } from "../../styles/theme";
 import { useEffect, useState } from "react";
 import { PersonService } from "../../service/PersonService";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { IPerson } from "../../interfaces/IPerson";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";

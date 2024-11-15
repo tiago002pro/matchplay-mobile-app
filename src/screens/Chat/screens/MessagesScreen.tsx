@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { PersonService } from "../../../service/PersonService";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import { IPerson } from "../../../interfaces/IPerson";
 import { THEME } from "../../../styles/theme";
 

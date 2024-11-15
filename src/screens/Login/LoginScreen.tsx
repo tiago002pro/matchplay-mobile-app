@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { PrimaryInput } from "../../components/PrimaryInput";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function LoginScreen() {
   const navigation:any = useNavigation();

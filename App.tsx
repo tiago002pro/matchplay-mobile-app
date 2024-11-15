@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Routes from './src/routes';
 import { NativeBaseProvider, StatusBar } from 'native-base';
-import { AuthProvider } from './src/context/AuthContext';
+import { AuthProvider } from './src/contexts/AuthContext';
 import { LogBox } from 'react-native';
 
 export default function App() {
