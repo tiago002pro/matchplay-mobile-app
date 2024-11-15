@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { useAuth } from "../../../context/AuthContext";
 import { Chat } from "../../../interfaces/IChat";
-import { THEME } from "../../../styles/Theme";
+import { THEME } from "../../../styles/theme";
 import { ChatService } from "../../../service/ChatService";
 
 const widthScreen = Dimensions.get('screen').width;

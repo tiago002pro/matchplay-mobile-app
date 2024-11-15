@@ -4,7 +4,7 @@ import ProfileScreen from "../screens/Profile";
 import GamesScreen from "../screens/Games/GamesScreen";
 import MatchingScreen from "../screens/Meet";
 import { Ionicons } from "@expo/vector-icons";
-import { THEME } from "../styles/Theme";
+import { THEME } from "../styles/theme";
 import ChatStackRoutes from "./ChatStack.routes";
 
 const { Navigator, Screen } = createBottomTabNavigator();

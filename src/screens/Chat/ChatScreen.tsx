@@ -1,6 +1,6 @@
 import { Box, Image, Text, View, VStack } from "native-base";
 import { Dimensions, FlatList, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { THEME } from "../../styles/Theme";
+import { THEME } from "../../styles/theme";
 import { useEffect, useState } from "react";
 import { PersonService } from "../../service/PersonService";
 import { useAuth } from "../../context/AuthContext";

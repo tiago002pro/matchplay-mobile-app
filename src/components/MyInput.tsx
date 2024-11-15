@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TextInput } from "react-native-paper";
-import { THEME } from "../styles/Theme";
+import { THEME } from "../styles/theme";
 
 interface MyInputProps {
   type?:any;

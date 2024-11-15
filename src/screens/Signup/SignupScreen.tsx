@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, Text, View } from "native-base";
 import { ImageBackground, StyleSheet } from "react-native";
-import { THEME } from "../../styles/Theme";
+import { THEME } from "../../styles/theme";
 import { MyInput } from "../../components/MyInput";
 import { MyButton } from "../../components/MyButton";
 import { useNavigation } from "@react-navigation/native";

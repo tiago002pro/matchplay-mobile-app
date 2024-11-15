@@ -1,6 +1,6 @@
 import { Box, Image, Text, View } from "native-base";
 import { Dimensions, StyleSheet } from "react-native";
-import { THEME } from "../../../styles/Theme";
+import { THEME } from "../../../styles/theme";
 import React from "react";
 import { RawgGames } from "../../../interfaces/IGames";
 

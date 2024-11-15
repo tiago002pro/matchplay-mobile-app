@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import { THEME } from "../../styles/Theme";
+import { THEME } from "../../styles/theme";
 import { Box, Button, FormControl, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { MyInput } from "../../components/MyInput";

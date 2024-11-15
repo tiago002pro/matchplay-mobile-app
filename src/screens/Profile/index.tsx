@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Box } from "native-base";
-import { THEME } from "../../styles/Theme";
+import { THEME } from "../../styles/theme";
 import { MyButton } from "../../components/MyButton";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";

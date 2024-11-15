@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Animated, Dimensions, Image, PanResponder, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { THEME } from "../../styles/Theme";
+import { THEME } from "../../styles/theme";
 import { MeetService } from "../../service/MeetService";
 
 const widthScreen = Dimensions.get('screen').width;

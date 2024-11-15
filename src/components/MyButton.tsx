@@ -1,6 +1,6 @@
 import { Button } from "native-base";
 import { StyleSheet } from "react-native";
-import { THEME } from "../styles/Theme";
+import { THEME } from "../styles/theme";
 
 interface MyButtonProps {
   label?:string;

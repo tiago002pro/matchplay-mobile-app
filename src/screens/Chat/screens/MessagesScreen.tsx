@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { PersonService } from "../../../service/PersonService";
 import { useAuth } from "../../../context/AuthContext";
 import { Person } from "../../../interfaces/IPerson";
-import { THEME } from "../../../styles/Theme";
+import { THEME } from "../../../styles/theme";
 
 const widthScreen = Dimensions.get('screen').width;
 

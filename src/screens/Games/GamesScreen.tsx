@@ -5,7 +5,7 @@ import { FlatList } from "native-base";
 import { RawgGames, RawgGamesResponse } from "../../interfaces/IGames";
 import { RawgGameComponent } from "./components/RawgGameComponent";
 import { ActivityIndicator } from "react-native-paper";
-import { THEME } from "../../styles/Theme";
+import { THEME } from "../../styles/theme";
 import { InputComponent } from "../../components/InputComponent";
 
 export default function GamesScreen() {
