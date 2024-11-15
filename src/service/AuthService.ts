@@ -1,4 +1,4 @@
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from './axiosInstance';
 import { RegisterUser } from '../interface/register.interface';
 import jwtDecode from 'jwt-decode';
 

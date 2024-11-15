@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService } from "../service/AuthService";
-import { setAuthToken } from "../api/axiosInstance";
+import { setAuthToken } from "../service/axiosInstance";
 
 interface AuthState {
   isAuthenticated: boolean;

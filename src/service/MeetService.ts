@@ -1,4 +1,4 @@
-import axiosInstance from "../api/axiosInstance";
+import axiosInstance from "./axiosInstance";
 
 export function MeetService() {
   const root = '/meet';
