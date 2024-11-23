@@ -2,17 +2,12 @@ import { Box, Image, Text, View } from "native-base";
 import { Dimensions, StyleSheet } from "react-native";
 import { THEME } from "../styles/theme";
 import React from "react";
-import { IRawgGames } from "../interfaces/IGames";
 
 const { width } = Dimensions.get('screen');
 const imageW = width * 0.30;
 const imageH = imageW * .65;
 
-type RawgGameProps = {
-  game:IRawgGames;
-}
-
-export const RawgGame = React.memo(({ game }: RawgGameProps) => (
+export const RawgGame: React.FC<RawgGameProps> = React.memo(({ game }) => (
   <View style={styles.container}>
     <Box style={styles.imageArea}>
       <Image

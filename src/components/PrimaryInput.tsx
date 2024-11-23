@@ -1,17 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { THEME } from "../styles/theme";
 
-type PrimaryInputProps = {
-  type?:any;
-  label?:string;
-  value?:any;
-  onChangeText?:any;
-  isPassword?:boolean;
-  error?:boolean;
-}
-
-export function PrimaryInput({ type, label, value, onChangeText, isPassword, error }:PrimaryInputProps) {
+export const PrimaryInput:React.FC<PrimaryInputProps> = React.memo(({ type, label, value, onChangeText, isPassword, error }) => {
   const [showPassword, setShowPassword] = useState<boolean>(isPassword || false);
 
   const rightElement = <TextInput.Icon
@@ -49,4 +40,4 @@ export function PrimaryInput({ type, label, value, onChangeText, isPassword, err
       }}
     />
   );
-}
+});
