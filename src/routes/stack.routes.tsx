@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { LoginScreen } from "../screens/Login/LoginScreen";
-import { SignupScreen } from "../screens/Signup/SignupScreen";
+import { SignInScreen } from "../screens/SignIn/SignInScreen";
+import { SignUpScreen } from "../screens/SignUp/SignupScreen";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -12,13 +12,13 @@ export default function StackRoutes() {
       }}
     >
       <Screen
-        name="LoginScreen"
-        component={LoginScreen}
+        name="SignInScreen"
+        component={SignInScreen}
       />
 
       <Screen
-        name="SignupScreen"
-        component={SignupScreen}
+        name="SignUpScreen"
+        component={SignUpScreen}
       />
     </Navigator>
   )

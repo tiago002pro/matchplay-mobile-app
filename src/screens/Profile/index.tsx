@@ -19,8 +19,8 @@ export default function ProfileScreen() {
 
   async function getUser() {
     const userId = authState?.user?.id;
-    const data:IPerson = await getByUserId(userId)
-    setPerson(data);
+    const response:IPerson = await getByUserId(userId)
+    setPerson(response);
   }
 
   return(

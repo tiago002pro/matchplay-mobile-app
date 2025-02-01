@@ -8,11 +8,11 @@ import { PrimaryButton } from "../../components/PrimaryButton";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
 import { useAuth } from "../../contexts/AuthContext";
 
-export function LoginScreen() {
+export function SignInScreen() {
   const navigation:any = useNavigation();
   const { doLogin } = useAuth();
 
-  const [login, setLogin] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   function goToSignupScreen():void {
@@ -20,7 +20,7 @@ export function LoginScreen() {
   }
 
   async function signIn() {
-    await doLogin(login, password)
+    await doLogin(email, password)
   }
 
   return (
@@ -30,8 +30,8 @@ export function LoginScreen() {
           <PrimaryInput
             type={'email-address'}
             label={'E-mail'}
-            value={login}
-            onChangeText={setLogin}
+            value={email}
+            onChangeText={setEmail}
           />
 
           <PrimaryInput

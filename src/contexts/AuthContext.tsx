@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthService } from "../service/AuthService";
+import { AuthenticationService } from "../service/AuthenticationService";
 import { setAuthToken } from "../service/axiosInstance";
 
 interface AuthState {
@@ -11,7 +11,7 @@ interface AuthState {
 
 interface AuthContextProps {
   authState: AuthState;
-  doLogin: (login:string, password:string) => Promise<void>;
+  doLogin: (email:string, password:string) => Promise<void>;
   doLogout: () => Promise<void>;
   getToken: () => any;
 }
@@ -19,7 +19,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { signIn } = AuthService();
+  const { signIn } = AuthenticationService();
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
     user: null,
@@ -46,9 +46,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     checkAuthStatus();
   }, [])
 
-  async function doLogin(login:string, password:string) {
+  async function doLogin(email:string, password:string) {
     try {
-      const response = await signIn(login, password)
+      const response = await signIn(email, password)
       setAuthState({
         isAuthenticated: true,
         user: response.user,

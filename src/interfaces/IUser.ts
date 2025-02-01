@@ -9,6 +9,11 @@ export interface IUser {
 
 export interface IRegister {
   name?:string;
-  login?:string;
+  username?:string;
+  email?:string;
   password?:string;
+}
+
+export interface IToken {
+  token:string;
 }

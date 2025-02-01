@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance  = axios.create({
-  baseURL: 'http://10.0.0.102:8080/matchplay-api',
+  baseURL: 'http://localhost:9090/api/matchplay',
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",

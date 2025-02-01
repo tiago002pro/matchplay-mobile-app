@@ -1,3 +1,5 @@
+import { IApiResponse } from "../interfaces/IApiResponse";
+import { IRawgGamesResponse } from "../interfaces/IGames";
 import axiosInstance from "./axiosInstance"
 
 export function GamesService() {
@@ -5,10 +7,16 @@ export function GamesService() {
 
   async function searchRawgGames(page:number, pageSize:number, search:string) {
     try {
-      const response = await axiosInstance.get(`${root}/rawg/search`, {
+      const response = await axiosInstance.get<IApiResponse<IRawgGamesResponse>>(`${root}/rawg/search`, {
         params: { page,  pageSize, search }
       });
-      return response.data;
+
+      if (response.data.statusCode == 200 && response.data.result) {
+        return response.data.result;
+      } else {
+        console.log("error", response.data.statusCode);
+        throw response.data.errorMessage;
+      }
     } catch (error) {
       console.log("error", error);
       throw error;

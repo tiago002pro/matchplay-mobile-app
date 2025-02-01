@@ -6,27 +6,26 @@ import { PrimaryButton } from "../../components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
-import { AuthService } from "../../service/AuthService";
+import { AuthenticationService } from "../../service/AuthenticationService";
 import { IRegister } from "../../interfaces/IUser";
 
-export function SignupScreen() {
+export function SignUpScreen() {
   const navigation:any = useNavigation();
-  const { signup } = AuthService();
+  const { signup } = AuthenticationService();
 
   const [name, setName] = useState<string>("");
-  const [login, setLogin] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  async function doSignup() {
+    const registerUser: IRegister = { name, username, email, password }
+    await signup(registerUser)
+    goToLoginScreen()
+  }
 
   function goToLoginScreen():void {
     navigation.navigate('LoginScreen');
-  }
-
-  async function doSignup() {
-    const registerUser: IRegister = {
-      name, login, password
-    }
-    await signup(registerUser)
-    goToLoginScreen()
   }
 
   return(
@@ -40,10 +39,16 @@ export function SignupScreen() {
           />
 
           <PrimaryInput
+            label={'Username'}
+            value={username}
+            onChangeText={setUsername}
+          />
+
+          <PrimaryInput
             type={'email-address'}
             label={'E-mail'}
-            value={login}
-            onChangeText={setLogin}
+            value={email}
+            onChangeText={setEmail}
           />
 
           <PrimaryInput
