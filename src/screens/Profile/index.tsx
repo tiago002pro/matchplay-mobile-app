@@ -4,7 +4,7 @@ import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
-import ProfileImagePicker from "../../components/ProfileImagePicker";
+import ProfileImagePicker from "./components/profile-image-picker/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
 import { GamerPeriod } from "./components/gamer-period/GamerPeriod";
