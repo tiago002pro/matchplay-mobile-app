@@ -36,30 +36,39 @@ export default function TabRoutes() {
         },
       }}
     >
-      <Screen
+      {/* <Screen
         name="Home"
         component={Home}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? "home" : "home-outline"} color={color} size={size}/>
         }}
-      />
+      /> */}
 
-      <Screen
+      {/* <Screen
         name="ChatStackRoutes"
         component={ChatStackRoutes}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
         }}
-      />
+      /> */}
 
-      <Screen
+      {/* <Screen
         name="Meet"
         component={MatchingScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={size}/>
+        }}
+      /> */}
+
+      <Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color, size, focused }) =>
+            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={size}/>
         }}
       />
 
@@ -69,15 +78,6 @@ export default function TabRoutes() {
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'game-controller' : 'game-controller-outline'} color={color} size={size}/>
-        }}
-      />
-
-      <Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) =>
-            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={size}/>
         }}
       />
     </Navigator>

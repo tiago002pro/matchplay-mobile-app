@@ -1,5 +1,5 @@
 export interface IApiResponse<T> {
-  result?:T;
-  statusCode?:number;
-  errorMessage?:string;
+  result:T;
+  statusCode:number;
+  errorMessage:string;
 }

@@ -16,7 +16,7 @@ export function SignInScreen() {
   const [password, setPassword] = useState<string>("");
 
   function goToSignupScreen():void {
-    navigation.navigate('SignupScreen');
+    navigation.navigate('SignUpScreen');
   }
 
   async function signIn() {

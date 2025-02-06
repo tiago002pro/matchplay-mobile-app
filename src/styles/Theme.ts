@@ -8,5 +8,10 @@ export const THEME = extendTheme({
     tabbar: '#030303',
     header: '#111111',
     font: '#e0e0e0',
+    modalContainerBg: "rgba(0,0,0,0.7)",
+  },
+  sizes: {
+    paddingPage: 20,
+    borderRadius: 30,
   },
 });

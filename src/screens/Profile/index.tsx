@@ -1,64 +1,99 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Box } from "native-base";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Box, ScrollView } from "native-base";
 import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import ProfileImagePicker from "../../components/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";
-import { IPerson } from "../../interfaces/IPerson";
+import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
+import { GamerPeriod } from "./components/gamer-period/GamerPeriod";
+import { GamerPeriodModal } from "./modals/gamer-period/GamerPeriodModal";
 
 export default function ProfileScreen() {
   const { authState, doLogout } = useAuth();
   const { getByUserId } = PersonService();
-  const [person, setPerson] = useState<IPerson>({});
+  const [person, setPerson] = useState<IPerson | undefined>(undefined);
+  const [gamerProfile, setGamerProfile] = useState<IGamerProfile | undefined>(undefined);
+  const [gamerPeriod, setGamerPeriod] = useState<IGamerPeriod | undefined>(undefined);
+  const [gamerPeriodModalVisible, setGamerPeriodModalVisible] = useState(false);
 
   useEffect(() => {
-    getUser()
+    getPersonByUser()
   }, [])
 
-  async function getUser() {
+  async function getPersonByUser() {
     const userId = authState?.user?.id;
     const response:IPerson = await getByUserId(userId)
     setPerson(response);
+    setGamerProfile(response.gamerProfile);
+    setGamerPeriod(response.gamerProfile.gamerPeriod);
+  }
+
+  if (!person || !gamerProfile || !gamerPeriod) {
+    console.log(`Loading`);
   }
 
   return(
-    <View style={styles.container}>
-      <ProfileImagePicker person={person} setPerson={setPerson} />
+    <ScrollView flex={1}>
+      <View style={styles.container}>
+        {person && <ProfileImagePicker person={person} setPerson={setPerson} />}
 
-      <Box style={styles.userName}>
-        <Text style={styles.text}>Nome de usuário:</Text>
-        <Text style={styles.name}>{person?.name}</Text>
-      </Box>
+        <Box style={styles.userName}>
+          <Text style={styles.text}>Nome de usuário:</Text>
+          <Text style={styles.name}>{person?.name}</Text>
+        </Box>
 
-      <Box style={{marginTop: 30}}>
         <PrimaryButton
           label="Sair"
           action={doLogout}
         />
-      </Box>
-    </View>
+
+        {
+          gamerPeriod &&
+          <TouchableOpacity onPress={() => setGamerPeriodModalVisible(true)}>
+            <Text style={styles.text}>Selecione dias de jogo</Text>
+            <GamerPeriod
+              gamerPeriod={gamerPeriod}
+              setGamerPeriod={setGamerPeriod}
+              pointerEvents={`none`}
+            />
+            {
+              gamerPeriodModalVisible &&
+              <GamerPeriodModal
+                modalVisible={gamerPeriodModalVisible}
+                setModalVisible={setGamerPeriodModalVisible}
+                gamerPeriod={gamerPeriod}
+                setGamerPeriod={setGamerPeriod}
+              />
+            }
+          </TouchableOpacity>
+        }
+
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: THEME.colors.background,
+    display: `flex`,
+    gap: 30,
   },
   userName: {
     alignItems: 'center',
-  },
-  text: {
-    color: '#FFF',
+    display: `flex`,
+    gap: 5,
   },
   name: {
-    marginTop: 20,
-    fontSize: 22,
+    fontSize: THEME.fontSizes.lg * 2,
     fontWeight: 'bold',
+    color: '#FFF',
+  },
+  text: {
+    textAlign: 'center',
     color: '#FFF',
   },
 });

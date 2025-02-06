@@ -5,7 +5,7 @@ import axiosInstance from "./axiosInstance";
 export function PersonService() {
   const root = '/person';
 
-  async function getByUserId(userId:number) {
+  async function getByUserId(userId:number):Promise<IPerson> {
     try {
       const response = await axiosInstance.get<IApiResponse<IPerson>>(`${root}/user/${userId}`);
       return response.data.result;

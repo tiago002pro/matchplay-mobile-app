@@ -1,26 +1,26 @@
 import { IGame } from "./IGames";
 
 export interface IPerson {
-  id?:number;
+  id:number;
   name?:string;
   gender?:string;
   dateBirth?:Date;
   profileImage?:any;
-  userId?:number;
-  gamerProfile?:IGamerProfile;
+  userId:number;
+  gamerProfile:IGamerProfile;
 }
 
-interface IGamerProfile {
-  id?:number;
+export interface IGamerProfile {
+  id:number;
   description?:string;
   language?:string;
-  gamerPlatform?:IGamerPlatform;
-  gamerPeriod?:IGamerPeriod;
+  gamerPlatform:IGamerPlatform;
+  gamerPeriod:IGamerPeriod;
   games?:IGame[];
 }
 
-interface IGamerPlatform {
-  id?:number;
+export interface IGamerPlatform {
+  id:number;
   namePlatform?:string;
   username?:string;
   playstation?:boolean;
@@ -34,22 +34,22 @@ interface IGamerPlatform {
   amazonLuna?:boolean;
 }
 
-interface IGamerPeriod {
-  id?:number;
+export interface IGamerPeriod {
+  id:number;
   startTime?:any;
   endTime?:any;
-  sunday?:IPeriod;
-  monday?:IPeriod;
-  tuesday?:IPeriod;
-  wednesday?:IPeriod;
-  thursday?:IPeriod;
-  friday?:IPeriod;
-  saturday?:IPeriod;
+  sunday:IPeriod;
+  monday:IPeriod;
+  tuesday:IPeriod;
+  wednesday:IPeriod;
+  thursday:IPeriod;
+  friday:IPeriod;
+  saturday:IPeriod;
 }
 
-interface IPeriod {
-  id?:number;
-  morning?:boolean;
-  afternoon?:boolean;
-  night?:boolean;
+export interface IPeriod {
+  id:number;
+  morning:boolean;
+  afternoon:boolean;
+  night:boolean;
 }
