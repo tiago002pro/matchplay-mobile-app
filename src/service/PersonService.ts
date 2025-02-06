@@ -15,9 +15,9 @@ export function PersonService() {
     }
   }
 
-  async function uploadImageProfile(id:any, firebaseUrl:string) {
+  async function uploadImageProfile(id:any, firebaseUrl:string):Promise<void> {
     try {
-      await axiosInstance.patch<IApiResponse<string>>(`${root}/upload-image-profile/${id}?firebaseUrl=${firebaseUrl}`);
+      await axiosInstance.patch<IApiResponse<string>>(`${root}/${id}/upload-image-profile?firebaseUrl=${firebaseUrl}`);
     } catch (error) {
       console.log("error", error);
       throw error;
