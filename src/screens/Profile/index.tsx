@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Box, ScrollView } from "native-base";
+import { Box, Pressable, ScrollView } from "native-base";
 import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { useAuth } from "../../contexts/AuthContext";
@@ -51,25 +51,26 @@ export default function ProfileScreen() {
 
         {
           gamerPeriod &&
-          <TouchableOpacity onPress={() => setGamerPeriodModalVisible(true)}>
-            <Text style={styles.text}>Selecione dias de jogo</Text>
-            <GamerPeriod
-              gamerPeriod={gamerPeriod}
-              setGamerPeriod={setGamerPeriod}
-              pointerEvents={`none`}
-            />
-            {
-              gamerPeriodModalVisible &&
-              <GamerPeriodModal
-                modalVisible={gamerPeriodModalVisible}
-                setModalVisible={setGamerPeriodModalVisible}
+          <Pressable onPress={() => setGamerPeriodModalVisible(true)}>
+            <Box style={styles.gamerPeriodBtn}>
+              <Text style={styles.text}>Selecione dias de jogo</Text>
+              <GamerPeriod
                 gamerPeriod={gamerPeriod}
                 setGamerPeriod={setGamerPeriod}
+                pointerEvents={`none`}
               />
-            }
-          </TouchableOpacity>
+              {
+                gamerPeriodModalVisible &&
+                <GamerPeriodModal
+                  modalVisible={gamerPeriodModalVisible}
+                  setModalVisible={setGamerPeriodModalVisible}
+                  gamerPeriod={gamerPeriod}
+                  setGamerPeriod={setGamerPeriod}
+                />
+              }
+            </Box>
+          </Pressable>
         }
-
       </View>
     </ScrollView>
   );
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.background,
     display: `flex`,
     gap: 30,
+    padding: THEME.sizes.paddingPage,
   },
   userName: {
     alignItems: 'center',
@@ -96,4 +98,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFF',
   },
+  gamerPeriodBtn: {
+    gap: 10,
+  }
 });

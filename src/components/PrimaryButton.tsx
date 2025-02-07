@@ -5,18 +5,25 @@ import { THEME } from "../styles/theme";
 type PrimaryButtonProps = {
   label?:string;
   action?:any;
+  color?:string;
+  bg?:any;
 }
 
-export function PrimaryButton({ label, action }:PrimaryButtonProps) {
+export function PrimaryButton({ label, action, bg, color, ...props }:PrimaryButtonProps) {
   return (
     <Button
       key={label}
       style={MyButtonStyles.btn}
       onPress={action}
-      bg={THEME.colors.background}
+      bg={bg || THEME.colors.background}
       _pressed={{
         backgroundColor: THEME.colors.primary,
       }}
+      _text={{
+        fontSize: THEME.fontSizes.md,
+        color: color || THEME.colors.white,
+      }}
+      {...props}
     >
     {label}
     </Button>

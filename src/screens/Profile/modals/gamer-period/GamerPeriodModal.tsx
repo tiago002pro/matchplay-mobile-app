@@ -49,7 +49,11 @@ export function GamerPeriodModal({ modalVisible, setModalVisible, gamerPeriod, s
               pointerEvents={`auto`}
             />
             <View style={styles.footer}>
-              <PrimaryButton label="Salvar" action={() => save()} />
+              <PrimaryButton
+                label="Salvar"
+                action={() => save()}
+                bg={THEME.colors.primary}
+              />
               <PrimaryButton label="Cancelar" action={() => closeModal()} />
             </View>
           </View>
