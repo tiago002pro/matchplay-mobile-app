@@ -14,18 +14,17 @@ export function SignUpScreen() {
   const { signup } = AuthenticationService();
 
   const [name, setName] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   async function doSignup() {
-    const registerUser: IRegister = { name, username, email, password }
+    const registerUser: IRegister = { name, email, password }
     await signup(registerUser)
     goToLoginScreen()
   }
 
   function goToLoginScreen():void {
-    navigation.navigate('LoginScreen');
+    navigation.navigate('SignInScreen');
   }
 
   return(
@@ -36,12 +35,6 @@ export function SignUpScreen() {
             label={'Nome'}
             value={name}
             onChangeText={setName}
-          />
-
-          <PrimaryInput
-            label={'Username'}
-            value={username}
-            onChangeText={setUsername}
           />
 
           <PrimaryInput

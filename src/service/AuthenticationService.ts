@@ -9,14 +9,16 @@ export function AuthenticationService() {
   async function signIn(email:string, password:string):Promise<any> {
     try {
       const response = await axiosInstance.post<IApiResponse<IToken>>(`${root}/signin`, { email, password })
-      
       const tokenDecoded:any = jwtDecode(response.data.result?.token || '');
+      
       return {
         token: response.data.result?.token,
         user: {
           id: parseInt(tokenDecoded.sub),
           name: tokenDecoded.name,
-          login: tokenDecoded.login,
+          login: tokenDecoded.email,
+          username: tokenDecoded.username,
+          personId: tokenDecoded.personId
         }
       }
     } catch (error) {

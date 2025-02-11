@@ -5,9 +5,9 @@ import axiosInstance from "./axiosInstance";
 export function PersonService() {
   const root = '/person';
 
-  async function getByUserId(userId:number):Promise<IPerson> {
+  async function getById(id:number):Promise<IPerson> {
     try {
-      const response = await axiosInstance.get<IApiResponse<IPerson>>(`${root}/user/${userId}`);
+      const response = await axiosInstance.get<IApiResponse<IPerson>>(`${root}/${id}`);
       return response.data.result;
     } catch (error) {
       console.log("error", error);
@@ -25,7 +25,7 @@ export function PersonService() {
   }
 
   return {
-    getByUserId,
+    getById,
     uploadImageProfile,
   }
 }

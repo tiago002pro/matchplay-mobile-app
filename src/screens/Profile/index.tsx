@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Box, Pressable, ScrollView } from "native-base";
 import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
@@ -12,7 +12,7 @@ import { GamerPeriodModal } from "./modals/gamer-period/GamerPeriodModal";
 
 export default function ProfileScreen() {
   const { authState, doLogout } = useAuth();
-  const { getByUserId } = PersonService();
+  const { getById } = PersonService();
   const [person, setPerson] = useState<IPerson | undefined>(undefined);
   const [gamerProfile, setGamerProfile] = useState<IGamerProfile | undefined>(undefined);
   const [gamerPeriod, setGamerPeriod] = useState<IGamerPeriod | undefined>(undefined);
@@ -23,8 +23,8 @@ export default function ProfileScreen() {
   }, [])
 
   async function getPersonByUser() {
-    const userId = authState?.user?.id;
-    const response:IPerson = await getByUserId(userId)
+    const personId = authState?.user?.personId;
+    const response:IPerson = await getById(personId)
     setPerson(response);
     setGamerProfile(response.gamerProfile);
     setGamerPeriod(response.gamerProfile.gamerPeriod);
