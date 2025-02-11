@@ -13,5 +13,6 @@ export const THEME = extendTheme({
   sizes: {
     paddingPage: 20,
     borderRadius: 30,
+    heightTabBar: 60,
   },
 });

@@ -24,8 +24,19 @@ export function PersonService() {
     }
   }
 
+  async function getPersonsToMatch():Promise<IPerson[]> {
+    try {
+      const response = await axiosInstance.post<IApiResponse<IPerson[]>>(`${root}/match`);
+      return response.data.result;
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
   return {
     getById,
     uploadImageProfile,
+    getPersonsToMatch,
   }
 }

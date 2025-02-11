@@ -1,11 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../screens/Home";
 import ProfileScreen from "../screens/Profile";
 import GamesScreen from "../screens/Games/GamesScreen";
-import MatchingScreen from "../screens/Meet";
 import { Ionicons } from "@expo/vector-icons";
 import { THEME } from "../styles/theme";
-import ChatStackRoutes from "./ChatStack.routes";
+import { MatchScreen } from "../screens/Match/MatchScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -13,7 +11,7 @@ export default function TabRoutes() {
   return(
     <Navigator
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         headerShadowVisible: false,
         tabBarShowLabel: false,
         headerStyle: {
@@ -22,6 +20,7 @@ export default function TabRoutes() {
         tabBarStyle: {
           backgroundColor: THEME.colors.background,
           borderTopWidth: 0,
+          height: THEME.sizes.heightTabBar,
         },
         tabBarInactiveTintColor: '#fff', 
         tabBarActiveTintColor: THEME.colors.primary,
@@ -54,15 +53,6 @@ export default function TabRoutes() {
         }}
       /> */}
 
-      {/* <Screen
-        name="Meet"
-        component={MatchingScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) =>
-            <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={size}/>
-        }}
-      /> */}
-
       <Screen
         name="Profile"
         component={ProfileScreen}
@@ -78,6 +68,15 @@ export default function TabRoutes() {
         options={{
           tabBarIcon: ({ color, size, focused }) =>
             <Ionicons name={focused ? 'game-controller' : 'game-controller-outline'} color={color} size={size}/>
+        }}
+      />
+
+      <Screen
+        name="Match"
+        component={MatchScreen}
+        options={{
+          tabBarIcon: ({ color, size, focused }) =>
+          <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={size}/>
         }}
       />
     </Navigator>
