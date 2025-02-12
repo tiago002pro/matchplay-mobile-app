@@ -4,11 +4,11 @@ import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
-import ProfileImagePicker from "./components/profile-image-picker/ProfileImagePicker";
+import ProfileImagePicker from "../profile/components/profile-image-picker/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
-import { GamerPeriod } from "./components/gamer-period/GamerPeriod";
-import { GamerPeriodModal } from "./modals/gamer-period/GamerPeriodModal";
+import { GamerPeriod } from "../profile/components/gamer-period/GamerPeriod";
+import { GamerPeriodModal } from "../profile/modals/gamer-period/GamerPeriodModal";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();

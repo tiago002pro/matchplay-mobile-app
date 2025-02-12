@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { THEME } from "../styles/theme";
-import { ProfileScreen } from "../screens/profile/index";
-import { GamesScreen } from "../screens/games";
-import { MatchScreen } from "../screens/match";
+import { THEME } from "styles/theme";
+import { ProfileScreen } from "./ProfileScreen";
+import { GamesScreen } from "./GamesScreen";
+import { MatchScreen } from "./MatchScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
