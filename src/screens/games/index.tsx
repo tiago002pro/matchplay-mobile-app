@@ -8,7 +8,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { THEME } from "../../styles/theme";
 import { InputComponent } from "../../components/InputComponent";
 
-export default function GamesScreen() {
+export function GamesScreen() {
   const pageSize = 10;
   const { searchRawgGames } = GamesService();
   const [games, setGames] = useState<RawgGames[]>([]);

@@ -10,7 +10,7 @@ import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
 import { GamerPeriod } from "./components/gamer-period/GamerPeriod";
 import { GamerPeriodModal } from "./modals/gamer-period/GamerPeriodModal";
 
-export default function ProfileScreen() {
+export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
   const { getById } = PersonService();
   const [person, setPerson] = useState<IPerson | undefined>(undefined);

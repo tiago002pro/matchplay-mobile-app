@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ProfileScreen from "../screens/Profile";
-import GamesScreen from "../screens/Games/GamesScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { THEME } from "../styles/theme";
-import { MatchScreen } from "../screens/Match/MatchScreen";
+import { ProfileScreen } from "../screens/profile/index";
+import { GamesScreen } from "../screens/games";
+import { MatchScreen } from "../screens/match";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -35,23 +35,6 @@ export default function TabRoutes() {
         },
       }}
     >
-      {/* <Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: ({ color, size, focused }) =>
-            <Ionicons name={focused ? "home" : "home-outline"} color={color} size={size}/>
-        }}
-      /> */}
-
-      {/* <Screen
-        name="ChatStackRoutes"
-        component={ChatStackRoutes}
-        options={{
-          tabBarIcon: ({ color, size, focused }) =>
-            <Ionicons name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
-        }}
-      /> */}
 
       <Screen
         name="Profile"

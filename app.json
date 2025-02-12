@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "matchplay-mobile-app",
+    "name": "Matchplay",
     "slug": "matchplay-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,20 +10,26 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f17900"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tiagodev002pro.matchplaymobileapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#f17900"
       },
       "package": "com.tiagodev002pro.matchplaymobileapp",
       "permissions": [
         "ACCESS_WIFI_STATE",
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO"
       ]
     },
     "web": {
@@ -32,7 +38,16 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          },
+          "ios": {}
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
