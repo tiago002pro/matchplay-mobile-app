@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { FlatList } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
 
@@ -69,38 +69,50 @@ export function GamesScreen() {
   );
 
   return(
-    <View style={styles.container}>
-      <InputComponent
-        key={'GAMES'}
-        onChangeText={onChangeSearch}
-        placeholder={"Busque jogos"}
-        value={search}
-        rightElementFunction={clearInput}
-      />
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <InputComponent
+          key={'GAMES'}
+          onChangeText={onChangeSearch}
+          placeholder={"Busque jogos"}
+          value={search}
+          rightElementFunction={clearInput}
+        />
 
-      <FlatList
-        data={games}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        onEndReached={loadMore}
-        onEndReachedThreshold={0.5}
-        showsHorizontalScrollIndicator={false}
-        ListFooterComponent={loading ? <ActivityIndicator size="large" color={THEME.colors.primary} /> : null}
-        initialNumToRender={10} // Carrega apenas 10 itens inicialmente
-        maxToRenderPerBatch={5} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
-        windowSize={3} //Define quantas páginas (grupos de itens) renderizar por vez.
-        removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-      />
-    </View>
+        <FlatList
+          data={games}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
+          showsHorizontalScrollIndicator={false}
+          ListFooterComponent={
+            loading ? 
+              <ActivityIndicator
+                size="large"
+                color={THEME.colors.primary}
+                style={{marginTop: 300}}
+              />
+            : null
+          }
+          initialNumToRender={10} // Carrega apenas 10 itens inicialmente
+          maxToRenderPerBatch={5} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
+          windowSize={3} //Define quantas páginas (grupos de itens) renderizar por vez.
+          removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    paddingStart: 10,
-    paddingEnd: 10,
-    justifyContent: 'center',
-    backgroundColor: '#0D0D0D',
+    alignItems: 'center',
+    padding: THEME.sizes.paddingPage,
+    backgroundColor: THEME.colors.background,
   },
 });

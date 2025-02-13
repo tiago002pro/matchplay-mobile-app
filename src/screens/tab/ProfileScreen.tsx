@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Box, Pressable, ScrollView } from "native-base";
 
 import { THEME } from "../../styles/theme";
@@ -35,22 +35,24 @@ export function ProfileScreen() {
 
   if (!person || !gamerProfile || !gamerPeriod) {
     console.log(`Loading`);
+    // doLogout()
   }
 
   return(
-    <ScrollView flex={1}>
-      <View style={styles.container}>
-        {person && <ProfileImagePicker person={person} setPerson={setPerson} />}
+    <SafeAreaView style={styles.safeAreaView}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          {person && <ProfileImagePicker person={person} setPerson={setPerson} />}
 
-        <Box style={styles.userName}>
-          <Text style={styles.text}>Nome de usuário:</Text>
-          <Text style={styles.name}>{person?.name}</Text>
-        </Box>
+          <Box style={styles.section}>
+            <Text style={styles.text}>Nome de usuário:</Text>
+            <Text style={styles.name}>{person?.name}</Text>
+          </Box>
 
-        <PrimaryButton
-          label="Sair"
-          action={doLogout}
-        />
+          <PrimaryButton
+            label="Sair"
+            action={doLogout}
+          />
 
         {
           gamerPeriod &&
@@ -74,32 +76,40 @@ export function ProfileScreen() {
             </Box>
           </Pressable>
         }
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: THEME.colors.background,
-    display: `flex`,
-    gap: 30,
-    padding: THEME.sizes.paddingPage,
+  safeAreaView: {
+    flex: 1,
   },
-  userName: {
+  scrollView: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
     alignItems: 'center',
+    padding: THEME.sizes.paddingPage,
+    backgroundColor: THEME.colors.background,
+    gap: THEME.sizes.paddingPage * 2,
+  },
+  section: {
     display: `flex`,
-    gap: 5,
+    gap: 10,
   },
   name: {
+    textAlign: 'center',
     fontSize: THEME.fontSizes.lg * 2,
+    lineHeight: THEME.fontSizes.lg * 2,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: THEME.colors.white,
   },
   text: {
     textAlign: 'center',
-    color: '#FFF',
+    color: THEME.colors.white,
   },
   gamerPeriodBtn: {
     gap: 10,

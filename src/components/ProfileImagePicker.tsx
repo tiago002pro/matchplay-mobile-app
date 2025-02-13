@@ -62,7 +62,6 @@ export function ProfileImagePicker({ person, setPerson }:ProfileImagePickerProps
 const styles = StyleSheet.create({
   imageContainer: {
     width: widthScreen,
-    height: widthScreen,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { ImageBackground, SafeAreaView, StyleSheet, View } from "react-native";
 import { Box, Button, FormControl, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
@@ -27,45 +27,50 @@ export function SignInScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground style={styles.background} source={backgroundLogin}>
-        <FormControl>
-          <PrimaryInput
-            type={'email-address'}
-            label={'E-mail'}
-            value={email}
-            onChangeText={setEmail}
-          />
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <ImageBackground style={styles.background} source={backgroundLogin}>
+          <FormControl>
+            <PrimaryInput
+              type={'email-address'}
+              label={'E-mail'}
+              value={email}
+              onChangeText={setEmail}
+            />
 
-          <PrimaryInput
-            key={'Senha'}
-            label={'Senha'}
-            value={password}
-            onChangeText={setPassword}
-            isPassword={true}
-          />
+            <PrimaryInput
+              key={'Senha'}
+              label={'Senha'}
+              value={password}
+              onChangeText={setPassword}
+              isPassword={true}
+            />
 
-          <PrimaryButton
-            label={'Entrar'}
-            action={signIn}
-          />
+            <PrimaryButton
+              label={'Entrar'}
+              action={signIn}
+            />
 
-          <Box style={styles.signupBtnArea}>
-            <Text style={styles.text}>Não tem conta?</Text>
-            <Button
-              onPress={goToSignupScreen}
-              bg={THEME.colors.primary}
-            >
-              Cadastre-se
-            </Button>
-          </Box>
-        </FormControl>
-      </ImageBackground>
-    </View>
+            <Box style={styles.signupBtnArea}>
+              <Text style={styles.text}>Não tem conta?</Text>
+              <Button
+                onPress={goToSignupScreen}
+                bg={THEME.colors.primary}
+              >
+                Cadastre-se
+              </Button>
+            </Box>
+          </FormControl>
+        </ImageBackground>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
@@ -73,8 +78,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: THEME.sizes.paddingPage,
     backgroundColor: THEME.colors.background,
-    padding: 20,
   },
   signupBtnArea: {
     marginTop: 30,

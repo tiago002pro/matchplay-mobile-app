@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground, SafeAreaView, StyleSheet } from "react-native";
 import { Box, Button, FormControl, Text, View } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
@@ -32,50 +32,55 @@ export function SignUpScreen() {
   }
 
   return(
-    <View style={styles.container}>
-      <ImageBackground style={styles.background} source={backgroundLogin}>
-        <FormControl>
-          <PrimaryInput
-            label={'Nome'}
-            value={name}
-            onChangeText={setName}
-          />
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <ImageBackground style={styles.background} source={backgroundLogin}>
+          <FormControl>
+            <PrimaryInput
+              label={'Nome'}
+              value={name}
+              onChangeText={setName}
+            />
 
-          <PrimaryInput
-            type={'email-address'}
-            label={'E-mail'}
-            value={email}
-            onChangeText={setEmail}
-          />
+            <PrimaryInput
+              type={'email-address'}
+              label={'E-mail'}
+              value={email}
+              onChangeText={setEmail}
+            />
 
-          <PrimaryInput
-            label={'Senha'}
-            value={password}
-            onChangeText={setPassword}
-            isPassword={true}
-          />
+            <PrimaryInput
+              label={'Senha'}
+              value={password}
+              onChangeText={setPassword}
+              isPassword={true}
+            />
 
-          <PrimaryButton
-            label={'Cadastrar'}
-            action={doSignup}
-          />
+            <PrimaryButton
+              label={'Cadastrar'}
+              action={doSignup}
+            />
 
-            <Box style={styles.loginBtnArea}>
-              <Text style={styles.text}>Possuí tem conta?</Text>
-              <Button
-                onPress={goToLoginScreen}
-                bg={THEME.colors.primary}
-              >
-                Faça o login
-              </Button>
-            </Box>
-        </FormControl>
-      </ImageBackground>
-    </View>
+              <Box style={styles.loginBtnArea}>
+                <Text style={styles.text}>Possuí tem conta?</Text>
+                <Button
+                  onPress={goToLoginScreen}
+                  bg={THEME.colors.primary}
+                >
+                  Faça o login
+                </Button>
+              </Box>
+          </FormControl>
+        </ImageBackground>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
@@ -83,8 +88,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: THEME.sizes.paddingPage,
     backgroundColor: THEME.colors.background,
-    padding: 20,
   },
   loginBtnArea: {
     marginTop: 30,

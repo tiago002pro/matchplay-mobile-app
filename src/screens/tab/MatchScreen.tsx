@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
-import { FlatList, Text, View } from "native-base";
+import { FlatList, View } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { THEME } from "../../styles/theme";
+import { MatchCard } from "components/MatchCard";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { PersonService } from "../../service/PersonService";
@@ -101,7 +102,7 @@ export function MatchScreen() {
   };
 
   return(
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <FlatList
           ref={flatListRef}
@@ -113,60 +114,49 @@ export function MatchScreen() {
           onMomentumScrollEnd={handleScrollEnd}
           renderItem={({item}) =>
             <View style={styles.cardContainer}>
-              <View style={styles.card}>
-                <Text style={styles.name}>{item.name} / {item.id}</Text>
+              <MatchCard
+                person={item}
+                pointerEvents={`none`}
+              />
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.dislikeButton} onPress={handleDislike}>
+                  <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
+                  <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
+                </TouchableOpacity>
               </View>
             </View>
           }
         />
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.dislikeButton} onPress={handleDislike}>
-          <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
-          <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: `center`,
+    padding: THEME.sizes.paddingPage,
+    backgroundColor: THEME.colors.background,
   },
   profiles: {
     display: `flex`,
     flexDirection: `row`,
   },
   cardContainer: {
-    width,
-    justifyContent: 'center',
-    alignContent: `center`,
-  },
-  card: {
-    margin: THEME.sizes.paddingPage,
-    height: height - THEME.sizes.paddingPage - (THEME.sizes.heightTabBar + THEME.sizes.paddingPage),
+    width: width - (THEME.sizes.paddingPage * 2),
+    height: height - (THEME.sizes.heightTabBar + THEME.sizes.paddingPage * 2),
+    alignItems: "center",
     backgroundColor: THEME.colors.background,
     borderWidth: 2,
     borderColor: THEME.colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
     borderRadius: 10,
-  },
-  name: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: THEME.colors.white,
+    padding: THEME.sizes.paddingPage,
   },
   buttonContainer: {
     flexDirection: "row",
