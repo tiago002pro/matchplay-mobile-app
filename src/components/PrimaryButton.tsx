@@ -7,12 +7,14 @@ type PrimaryButtonProps = {
   action?:any;
   color?:string;
   bg?:any;
+  isDisabled?:boolean;
 }
 
-export function PrimaryButton({ label, action, bg, color, ...props }:PrimaryButtonProps) {
+export function PrimaryButton({ label, action, bg, color, isDisabled, ...props }:PrimaryButtonProps) {
   return (
     <Button
       key={label}
+      isDisabled={isDisabled}
       style={MyButtonStyles.btn}
       onPress={action}
       bg={bg || THEME.colors.background}

@@ -4,5 +4,6 @@ type PrimaryInputProps = {
   value?:any;
   onChangeText?:any;
   isPassword?:boolean;
+  autoCapitalize?:boolean;
   error?:boolean;
 }

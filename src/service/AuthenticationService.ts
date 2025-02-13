@@ -2,6 +2,7 @@ import { IApiResponse } from '../interfaces/IApiResponse';
 import { IRegister, IToken } from '../interfaces/IUser';
 import axiosInstance from './axiosInstance';
 import jwtDecode from 'jwt-decode';
+import { showMessage } from 'react-native-flash-message';
 
 export function AuthenticationService() {
   const root = '/auth';
@@ -30,10 +31,33 @@ export function AuthenticationService() {
   async function signup(registerUser:IRegister):Promise<any> {
     try {
       const response = await axiosInstance.post<IApiResponse<string>>(`${root}/signup`, registerUser)
+      showMessage({
+        message: response.data.result,
+        type: "success",
+        duration: 3000
+      })
+      
       return response.data.result
     } catch (error) {
-      console.log("error", error);
-      throw error;
+      if (error.response) {
+        if (error.response.status == 409) {
+          showMessage({
+            message: "Erro ao criar conta",
+            description: error.response.data.errorMessage,
+            type: "danger",
+            duration: 3000
+          })
+          throw new Error(error.response.data.errorMessage);
+        }
+      } else {
+        showMessage({
+          message: "Erro ao criar conta",
+          description: error.response.data.errorMessage,
+          type: "danger",
+          duration: 3000
+        })
+        throw new Error(error.response.data.errorMessage);
+      }
     }
   }
 

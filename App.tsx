@@ -5,6 +5,7 @@ import Routes from './src/routes';
 import { NativeBaseProvider, StatusBar } from 'native-base';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { LogBox } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 
 export default function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function App() {
           <Routes/>
         </AuthProvider>
       </NavigationContainer>
+      <FlashMessage position="top" />
     </NativeBaseProvider>
   );
 }

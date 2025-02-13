@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: THEME.sizes.paddingPage,
+    padding: THEME.sizes.paddingPage ,
     backgroundColor: THEME.colors.background,
   },
   profiles: {
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: width - (THEME.sizes.paddingPage * 2),
-    height: height - (THEME.sizes.heightTabBar + THEME.sizes.paddingPage * 2),
     alignItems: "center",
     backgroundColor: THEME.colors.background,
     borderWidth: 2,

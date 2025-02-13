@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { THEME } from "../styles/theme";
 
-export const PrimaryInput:React.FC<PrimaryInputProps> = React.memo(({ type, label, value, onChangeText, isPassword, error }) => {
+export const PrimaryInput:React.FC<PrimaryInputProps> = React.memo(({ type, label, value, onChangeText, isPassword, autoCapitalize, error }) => {
   const [showPassword, setShowPassword] = useState<boolean>(isPassword || false);
 
   const rightElement = <TextInput.Icon
@@ -19,19 +19,20 @@ export const PrimaryInput:React.FC<PrimaryInputProps> = React.memo(({ type, labe
       value={value}
       onChangeText={onChangeText}
       mode="outlined"
-      textColor={THEME.colors.white}
+      textColor={error ? THEME.colors.red[500] : THEME.colors.white}
       secureTextEntry={showPassword}
       right={isPassword ? rightElement : null}
+      autoCapitalize={autoCapitalize ? 'words' : "none"}
       outlineStyle={{
-        borderColor: THEME.colors.white,
+        borderColor: error ? THEME.colors.red[500] : THEME.colors.white,
         borderRadius: 10,
       }}
       theme={{
         colors: {
-          placeholder: THEME.colors.white,
-          text: THEME.colors.white,
-          primary: THEME.colors.white,
-          onSurfaceVariant: THEME.colors.white,
+          placeholder: error ? THEME.colors.red[500] : THEME.colors.white,
+          text: error ? THEME.colors.red[500] : THEME.colors.white,
+          primary: error ? THEME.colors.red[500] : THEME.colors.white,
+          onSurfaceVariant: error ? THEME.colors.red[500] : THEME.colors.white,
         },
       }}
       style={{
