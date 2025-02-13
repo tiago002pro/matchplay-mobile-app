@@ -1,10 +1,10 @@
 import { Modal, View, Text, StyleSheet } from "react-native";
-import { IGamerPeriod } from "../../../../interfaces/IPerson";
-import { GamerPeriod } from "../../components/gamer-period/GamerPeriod";
-import { THEME } from "../../../../styles/theme";
-import { PrimaryButton } from "../../../../components/PrimaryButton";
+import { GamerPeriod } from "components/GamerPeriod";
 import { useState } from "react";
-import { GamerPeriodService } from "../../../../service/GamerPeriodService";
+import { IGamerPeriod } from "interfaces/IPerson";
+import { GamerPeriodService } from "service/GamerPeriodService";
+import { PrimaryButton } from "components/PrimaryButton";
+import { THEME } from "styles/theme";
 
 type GamerPeriodModalProps = {
   modalVisible:boolean;

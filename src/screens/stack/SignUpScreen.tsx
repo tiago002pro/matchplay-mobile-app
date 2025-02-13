@@ -1,13 +1,17 @@
-import { Box, Button, FormControl, Text, View } from "native-base";
+import { useState } from "react";
 import { ImageBackground, StyleSheet } from "react-native";
+import { Box, Button, FormControl, Text, View } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+
 import { THEME } from "../../styles/theme";
 import { PrimaryInput } from "../../components/PrimaryInput";
 import { PrimaryButton } from "../../components/PrimaryButton";
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
+
 import { AuthenticationService } from "../../service/AuthenticationService";
+
 import { IRegister } from "../../interfaces/IUser";
+
+import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
 
 export function SignUpScreen() {
   const navigation:any = useNavigation();

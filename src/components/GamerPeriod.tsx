@@ -1,7 +1,7 @@
 import { Box, Button, FlatList, Text } from "native-base"
-import { THEME } from "../../../../styles/theme";
+import { THEME } from "../styles/theme";
 import { View, StyleSheet } from "react-native";
-import { IGamerPeriod, IPeriod } from "../../../../interfaces/IPerson";
+import { IGamerPeriod, IPeriod } from "../interfaces/IPerson";
 
 type DaysOfTheWeekType = {
   id: string;

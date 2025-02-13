@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Box, Pressable, ScrollView } from "native-base";
+
 import { THEME } from "../../styles/theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
+import { GamerPeriod } from "../../components/GamerPeriod";
+import { ProfileImagePicker } from "components/ProfileImagePicker";
+import { GamerPeriodModal } from "modals/gamer-period/GamerPeriodModal";
+
 import { useAuth } from "../../contexts/AuthContext";
-import { useEffect, useState } from "react";
-import ProfileImagePicker from "../profile/components/profile-image-picker/ProfileImagePicker";
 import { PersonService } from "../../service/PersonService";
+
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
-import { GamerPeriod } from "../profile/components/gamer-period/GamerPeriod";
-import { GamerPeriodModal } from "../profile/modals/gamer-period/GamerPeriodModal";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();

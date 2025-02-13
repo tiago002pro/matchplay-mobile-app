@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { GamesService } from "../../service/GamesService";
 import { FlatList } from "native-base";
-import { IRawgGamesResponse } from "../../interfaces/IGames";
-import { RawgGame } from "../../components/RawgGame";
 import { ActivityIndicator } from "react-native-paper";
+
 import { THEME } from "../../styles/theme";
+import { RawgGame } from "../../components/RawgGame";
 import { InputComponent } from "../../components/InputComponent";
+
+import { GamesService } from "../../service/GamesService";
+
+import { IRawgGamesResponse } from "../../interfaces/IGames";
 
 export function GamesScreen() {
   const pageSize = 10;

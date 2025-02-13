@@ -1,11 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Box, Image } from "native-base";
-import { THEME } from "../../../../styles/theme";
+import { THEME } from "styles/theme";
 import { Alert, Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import { PersonService } from "../../../../service/PersonService";
-import { IPerson } from "../../../../interfaces/IPerson";
-import { storage } from "../../../../../firebaseConfig";
+import { PersonService } from "service/PersonService";
+import { IPerson } from "interfaces/IPerson";
+import { storage } from "../../firebaseConfig";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 const widthScreen = Dimensions.get('screen').width;
@@ -15,7 +15,7 @@ type ProfileImagePickerProps = {
   setPerson:any;
 }
 
-export default function ProfileImagePicker({ person, setPerson }:ProfileImagePickerProps) {
+export function ProfileImagePicker({ person, setPerson }:ProfileImagePickerProps) {
   function handleImageProfile() {
     Alert.alert(
       "Selecione uma imagem",

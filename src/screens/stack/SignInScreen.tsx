@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import { THEME } from "../../styles/theme";
 import { Box, Button, FormControl, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+
+import { THEME } from "../../styles/theme";
 import { PrimaryInput } from "../../components/PrimaryInput";
 import { PrimaryButton } from "../../components/PrimaryButton";
-import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
+
 import { useAuth } from "../../contexts/AuthContext";
+
+import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
 
 export function SignInScreen() {
   const navigation:any = useNavigation();

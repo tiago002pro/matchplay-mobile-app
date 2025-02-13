@@ -1,14 +1,17 @@
-import { FlatList, Text, View } from "native-base";
-import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
-import { THEME } from "../../styles/theme";
-import { PersonService } from "../../service/PersonService";
 import { useEffect, useRef, useState } from "react";
-import { IPerson } from "../../interfaces/IPerson";
+import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList, Text, View } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import { THEME } from "../../styles/theme";
+
+import { useAuth } from "../../contexts/AuthContext";
+import { PersonService } from "../../service/PersonService";
+import { MatchService } from "../../service/MatchService";
+
+import { IPerson } from "../../interfaces/IPerson";
 import { IMatchRequest } from "../../interfaces/IMatch";
 import { MatchStatus } from "../../enums/MatchStatus";
-import { useAuth } from "../../contexts/AuthContext";
-import { MatchService } from "../../service/MatchService";
 
 const { width, height } = Dimensions.get("window");
 
