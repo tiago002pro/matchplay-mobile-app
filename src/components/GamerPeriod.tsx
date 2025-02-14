@@ -1,5 +1,5 @@
 import { Box, Button, FlatList, Text } from "native-base"
-import { THEME } from "../styles/theme";
+import { THEME } from "styles/Theme";
 import { View, StyleSheet } from "react-native";
 import { IGamerPeriod, IPeriod } from "../interfaces/IPerson";
 

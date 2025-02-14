@@ -1,7 +1,7 @@
 import { IPerson } from "interfaces/IPerson";
 import { Box, Image, ScrollView, Text, View } from "native-base";
 import { Dimensions, StyleSheet } from "react-native";
-import { THEME } from "styles/theme";
+import { THEME } from "styles/Theme";
 import { GamerPeriod } from "./GamerPeriod";
 import { Ionicons } from "@expo/vector-icons";
 

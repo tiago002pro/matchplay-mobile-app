@@ -4,13 +4,13 @@
     "slug": "matchplay-mobile-app",
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#f17900"
+      "backgroundColor": "#382b73"
     },
     "ios": {
       "supportsTablet": true,
@@ -22,7 +22,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#f17900"
+        "backgroundColor": "#382b73"
       },
       "package": "com.tiagodev002pro.matchplaymobileapp",
       "permissions": [

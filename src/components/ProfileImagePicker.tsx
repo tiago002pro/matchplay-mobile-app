@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Box, Image } from "native-base";
-import { THEME } from "styles/theme";
+import { THEME } from "styles/Theme";
 import { Alert, Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { PersonService } from "service/PersonService";

@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, View } from "react-native";
 import { FlatList } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
 
-import { THEME } from "../../styles/theme";
+import { THEME } from "styles/Theme";
 import { RawgGame } from "../../components/RawgGame";
 import { InputComponent } from "../../components/InputComponent";
 
@@ -108,6 +108,7 @@ export function GamesScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
+    backgroundColor: THEME.colors.background,
   },
   container: {
     flex: 1,

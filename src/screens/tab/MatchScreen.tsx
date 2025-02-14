@@ -3,7 +3,7 @@ import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity } from "react-na
 import { FlatList, View } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { THEME } from "../../styles/theme";
+import { THEME } from "styles/Theme";
 import { MatchCard } from "components/MatchCard";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -137,6 +137,7 @@ export function MatchScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
+    backgroundColor: THEME.colors.background,
   },
   container: {
     flex: 1,

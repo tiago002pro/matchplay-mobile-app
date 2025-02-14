@@ -1,6 +1,6 @@
 import { Button } from "native-base";
 import { StyleSheet } from "react-native";
-import { THEME } from "../styles/theme";
+import { THEME } from "styles/Theme";
 
 type PrimaryButtonProps = {
   label?:string;

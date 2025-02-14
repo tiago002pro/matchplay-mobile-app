@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
-import { THEME } from "../styles/theme";
+import { THEME } from "styles/Theme";
 
 export const PrimaryInput:React.FC<PrimaryInputProps> = React.memo(({ type, label, value, onChangeText, isPassword, autoCapitalize, error }) => {
   const [showPassword, setShowPassword] = useState<boolean>(isPassword || false);

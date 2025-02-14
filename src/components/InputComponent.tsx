@@ -1,6 +1,6 @@
 import { CloseIcon, Input, SearchIcon } from "native-base";
 import { Pressable } from "react-native";
-import { THEME } from "../styles/theme";
+import { THEME } from "styles/Theme";
 
 interface MyInputProps {
   onChangeText?:any;

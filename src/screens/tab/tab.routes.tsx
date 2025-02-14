@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { THEME } from "styles/theme";
+import { THEME } from "styles/Theme";
 import { ProfileScreen } from "./ProfileScreen";
 import { GamesScreen } from "./GamesScreen";
 import { MatchScreen } from "./MatchScreen";
@@ -13,23 +13,24 @@ export default function TabRoutes() {
       screenOptions={{
         headerShown: false,
         headerShadowVisible: false,
+        headerTitle: '',
         tabBarShowLabel: false,
         headerStyle: {
-          backgroundColor: THEME.colors.header,
+          backgroundColor: THEME.colors.background,
         },
         tabBarStyle: {
           backgroundColor: THEME.colors.background,
           borderTopWidth: 0,
           height: THEME.sizes.heightTabBar,
         },
-        tabBarInactiveTintColor: '#fff', 
+        tabBarInactiveTintColor: THEME.colors.font,
         tabBarActiveTintColor: THEME.colors.primary,
         tabBarLabelStyle: {
           marginTop: -5,
           marginBottom: 5,
         },
         headerTitleStyle: {
-          color: '#fff',
+          color: THEME.colors.font,
           fontWeight: '700',
           textTransform: 'capitalize',
         },

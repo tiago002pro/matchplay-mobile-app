@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Box, Pressable, ScrollView } from "native-base";
 
-import { THEME } from "../../styles/theme";
+import { THEME } from "styles/Theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { GamerPeriod } from "../../components/GamerPeriod";
 import { ProfileImagePicker } from "components/ProfileImagePicker";
@@ -85,9 +85,11 @@ export function ProfileScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
+    backgroundColor: THEME.colors.background,
   },
   scrollView: {
     flex: 1,
+    backgroundColor: THEME.colors.background,
   },
   container: {
     flex: 1,

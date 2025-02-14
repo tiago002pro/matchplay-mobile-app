@@ -4,7 +4,7 @@ import { useState } from "react";
 import { IGamerPeriod } from "interfaces/IPerson";
 import { GamerPeriodService } from "service/GamerPeriodService";
 import { PrimaryButton } from "components/PrimaryButton";
-import { THEME } from "styles/theme";
+import { THEME } from "styles/Theme";
 import { showMessage } from 'react-native-flash-message';
 
 type GamerPeriodModalProps = {

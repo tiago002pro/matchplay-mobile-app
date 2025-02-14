@@ -4,7 +4,7 @@ import { Box, Button, FormControl, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { showMessage } from "react-native-flash-message";
 
-import { THEME } from "../../styles/theme";
+import { THEME } from "styles/Theme";
 import { PrimaryInput } from "../../components/PrimaryInput";
 import { PrimaryButton } from "../../components/PrimaryButton";
 
@@ -64,9 +64,9 @@ export function SignInScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <ImageBackground style={styles.background} source={backgroundLogin}>
+    <ImageBackground style={styles.background} source={backgroundLogin}>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
           <FormControl>
             <PrimaryInput
               type={'email-address'}
@@ -102,25 +102,26 @@ export function SignInScreen() {
               </Button>
             </Box>
           </FormControl>
-        </ImageBackground>
-      </View>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: THEME.colors.background,
+  },
   safeAreaView: {
     flex: 1,
+    backgroundColor: THEME.colors.background,
   },
   container: {
-    flex: 1,
-  },
-  background: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: THEME.sizes.paddingPage,
-    backgroundColor: THEME.colors.background,
   },
   signupBtnArea: {
     marginTop: 30,

@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { SignInScreen } from "./SignInScreen";
 import { SignUpScreen } from "./SignUpScreen";
+import { THEME } from "styles/Theme";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -9,6 +10,15 @@ export default function StackRoutes() {
     <Navigator
       screenOptions={{
         headerShown: false,
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: THEME.colors.primary,
+        },
+        headerTitleStyle: {
+          color: THEME.colors.font,
+          fontWeight: '700',
+          textTransform: 'capitalize',
+        },
       }}
     >
       <Screen
