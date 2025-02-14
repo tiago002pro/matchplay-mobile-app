@@ -16,7 +16,7 @@ type GamerPeriodModalProps = {
 
 export function GamerPeriodModal({ modalVisible, setModalVisible, gamerPeriod, setGamerPeriod }:GamerPeriodModalProps) {
   const [data, setData] = useState<IGamerPeriod>(gamerPeriod);
-    const { update } = GamerPeriodService();
+  const { update } = GamerPeriodService();
 
   const save = async () => {
     try {

@@ -34,9 +34,20 @@ export function PersonService() {
     }
   }
 
+  async function update(person:IPerson):Promise<IPerson> {
+    try {
+      const response = await axiosInstance.put<IApiResponse<IPerson>>(`${root}`, person);
+      return response.data.result;
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
   return {
     getById,
     uploadImageProfile,
     getPersonsToMatch,
+    update,
   }
 }

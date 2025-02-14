@@ -6,20 +6,24 @@ import { THEME } from "styles/Theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { GamerPeriod } from "../../components/GamerPeriod";
 import { ProfileImagePicker } from "components/ProfileImagePicker";
-import { GamerPeriodModal } from "modals/gamer-period/GamerPeriodModal";
+import { GamerPeriodModal } from "modals/GamerPeriodModal";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { PersonService } from "../../service/PersonService";
 
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
+import { EditUsernameModal } from "modals/EditUsernameModal";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
   const { getById } = PersonService();
   const [person, setPerson] = useState<IPerson | undefined>(undefined);
+  
   const [gamerProfile, setGamerProfile] = useState<IGamerProfile | undefined>(undefined);
   const [gamerPeriod, setGamerPeriod] = useState<IGamerPeriod | undefined>(undefined);
+
   const [gamerPeriodModalVisible, setGamerPeriodModalVisible] = useState(false);
+  const [editUsernameModalVisible, setEditUsernameModalVisible] = useState(false);
 
   useEffect(() => {
     getPersonByUser()
@@ -44,38 +48,53 @@ export function ProfileScreen() {
         <View style={styles.container}>
           {person && <ProfileImagePicker person={person} setPerson={setPerson} />}
 
-          <Box style={styles.section}>
-            <Text style={styles.text}>Nome de usuário:</Text>
-            <Text style={styles.name}>{person?.name}</Text>
-          </Box>
+          {
+            person &&
+            <Pressable onPress={() => setEditUsernameModalVisible(true)}>
+              <Box style={styles.section}>
+                <Text style={styles.text}>Nome de usuário:</Text>
+                <Text style={styles.name}>{person?.name}</Text>
+              </Box>
+
+              {
+                editUsernameModalVisible &&
+                <EditUsernameModal
+                  modalVisible={editUsernameModalVisible}
+                  setModalVisible={setEditUsernameModalVisible}
+                  person={person}
+                  setPerson={setPerson}
+                />
+              }
+            </Pressable>
+          }
 
           <PrimaryButton
             label="Sair"
             action={doLogout}
           />
 
-        {
-          gamerPeriod &&
-          <Pressable onPress={() => setGamerPeriodModalVisible(true)}>
-            <Box style={styles.gamerPeriodBtn}>
-              <Text style={styles.text}>Selecione dias de jogo</Text>
-              <GamerPeriod
-                gamerPeriod={gamerPeriod}
-                setGamerPeriod={setGamerPeriod}
-                pointerEvents={`none`}
-              />
-              {
-                gamerPeriodModalVisible &&
-                <GamerPeriodModal
-                  modalVisible={gamerPeriodModalVisible}
-                  setModalVisible={setGamerPeriodModalVisible}
+          {
+            gamerPeriod &&
+            <Pressable onPress={() => setGamerPeriodModalVisible(true)}>
+              <Box style={styles.gamerPeriodBtn}>
+                <Text style={styles.text}>Selecione dias de jogo</Text>
+                <GamerPeriod
                   gamerPeriod={gamerPeriod}
                   setGamerPeriod={setGamerPeriod}
+                  pointerEvents={`none`}
                 />
-              }
-            </Box>
-          </Pressable>
-        }
+                {
+                  gamerPeriodModalVisible &&
+                  <GamerPeriodModal
+                    modalVisible={gamerPeriodModalVisible}
+                    setModalVisible={setGamerPeriodModalVisible}
+                    gamerPeriod={gamerPeriod}
+                    setGamerPeriod={setGamerPeriod}
+                  />
+                }
+              </Box>
+            </Pressable>
+          }
         </View>
       </ScrollView>
     </SafeAreaView>
