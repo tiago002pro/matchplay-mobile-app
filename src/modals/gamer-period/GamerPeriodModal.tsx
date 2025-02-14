@@ -5,6 +5,7 @@ import { IGamerPeriod } from "interfaces/IPerson";
 import { GamerPeriodService } from "service/GamerPeriodService";
 import { PrimaryButton } from "components/PrimaryButton";
 import { THEME } from "styles/theme";
+import { showMessage } from 'react-native-flash-message';
 
 type GamerPeriodModalProps = {
   modalVisible:boolean;
@@ -18,9 +19,18 @@ export function GamerPeriodModal({ modalVisible, setModalVisible, gamerPeriod, s
     const { update } = GamerPeriodService();
 
   const save = async () => {
-    const gamerPeriodUpdated = await update(data)
-    setGamerPeriod(gamerPeriodUpdated)
-    closeModal()
+    try {
+      const gamerPeriodUpdated = await update(data)
+      setGamerPeriod(gamerPeriodUpdated)
+      showMessage({
+        message: "Salvo com sucesso.",
+        type: "success",
+        duration: 3000
+      })
+      closeModal()
+    } catch(error) {
+      return
+    }
   }
 
   const closeModal = () => {
