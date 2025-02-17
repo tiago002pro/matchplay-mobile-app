@@ -38,6 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             user: JSON.parse(userJson),
             token: token,
           })
+          setAuthToken(token)
         }
       } catch (error) {
         console.error('Failed to check auth status', error);
