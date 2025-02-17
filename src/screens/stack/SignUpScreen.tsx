@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
   },
   safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   container: {
     flex: 1,
