@@ -5,6 +5,7 @@ import React from "react";
 import { platformIcons } from "shared/platformIcons";
 import { GamerProfileService } from "service/GamerProfileService";
 import { useAuth } from "contexts/AuthContext";
+import { showMessage } from "react-native-flash-message";
 
 const { width } = Dimensions.get('screen');
 const imageW = width * 0.40;
@@ -20,8 +21,13 @@ export function RawgGame({ game }:RawgGameProps) {
       backgroundImage: game.backgroundImage,
       idPlatform: platform.id,
       namePlatform: platform.name,
-    }
-    await addGameToProfile(authState?.user?.gamerProfileId, request);
+    }  
+    const response = await addGameToProfile(authState?.user?.gamerProfileId, request);
+    showMessage({
+      message: response + "!",
+      type: "success",
+      duration: 2000
+    })
   }
 
   return (

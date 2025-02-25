@@ -22,6 +22,7 @@ export function GamesScreen() {
   const [hasMore, setHasMore] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [platforms, setPlatforms] = useState<number[]>([]);
+  const [platformName, setPlatformName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const listRef = useRef<FlatList>(null);
@@ -52,9 +53,10 @@ export function GamesScreen() {
     }
   }
 
-  const setFilter = async (platforms:number[]) => {
+  const setFilter = async (platform) => {
     clearInput()
-    setPlatforms(platforms)
+    setPlatforms(platform.ids)
+    setPlatformName(platform.name)
   }
 
   // Função para carregar mais itens quando o usuário chega ao fim da lista
@@ -72,6 +74,7 @@ export function GamesScreen() {
   function clearInput() {
     setSearch("");
     setPlatforms([]);
+    setPlatformName("");
   }
 
   function scrollToTop() {
@@ -96,13 +99,13 @@ export function GamesScreen() {
             rightElementFunction={clearInput}
           />
 
-          <ScrollView style={styles.filtersContainer} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+          <ScrollView style={styles.filtersContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.filters}>
               {
                 PlatformsFilter.map((platform, index) => {
                   const IconComponent = platformIcons[platform.name];
                   return IconComponent ? (
-                    <Pressable key={index} style={styles.platform} onPress={() => setFilter(platform.ids)}>
+                    <Pressable key={index} style={platform.name === platformName ? styles.platformActive : styles.platform} onPress={() => setFilter(platform)}>
                       <IconComponent style={styles.iconComponent} />
                       <Text style={styles.filterText}>{platform.name}</Text>
                     </Pressable>
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
   filters: {
     flexDirection: `row`,
     justifyContent: `space-between`,
-    gap: 10,
+    gap: 5,
   },
   platform: {
     borderWidth: 2,
@@ -166,6 +169,16 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: `row`,
     alignItems: `center`,
+    borderRadius: 30,
+  },
+  platformActive: {
+    borderWidth: 2,
+    borderColor: THEME.colors.primary,
+    backgroundColor: THEME.colors.primary,
+    padding: 10,
+    flexDirection: `row`,
+    alignItems: `center`,
+    borderRadius: 30,
   },
   iconComponent: {
     width: 15,

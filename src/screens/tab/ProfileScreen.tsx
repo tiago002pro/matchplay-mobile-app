@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Box, Pressable, ScrollView } from "native-base";
 
@@ -15,6 +15,7 @@ import { PersonService } from "../../service/PersonService";
 
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
 import { IGame } from "interfaces/IGames";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
@@ -28,9 +29,12 @@ export function ProfileScreen() {
   const [gamerPeriodModalVisible, setGamerPeriodModalVisible] = useState(false);
   const [editUsernameModalVisible, setEditUsernameModalVisible] = useState(false);
 
-  useEffect(() => {
-    getPersonByUser()
-  }, [])
+  // UseFocusEffect para chamar a API quando a tela de perfil estiver em foco
+  useFocusEffect(
+    React.useCallback(() => {
+      getPersonByUser();  // Chama a função que faz a requisição à API
+    }, [])  // Array vazio garante que a requisição seja feita uma vez ao focar a tela
+  );
 
   async function getPersonByUser() {
     const personId = authState?.user?.personId;
@@ -100,12 +104,10 @@ export function ProfileScreen() {
             </Pressable>
           }
 
-          {
-            games && games.length && <Box style={styles.section}>
-              <Text style={styles.text}>Jogos:</Text>
-              <ProfileGames games={games}/>
-            </Box>
-          }
+          <Box style={styles.section}>
+            <Text style={styles.text}>Jogos:</Text>
+            { games && games.length ? <ProfileGames games={games}/> : <Text style={styles.text}>Nenhum jogo foi adicionado.</Text>}
+          </Box>
         </View>
       </ScrollView>
     </SafeAreaView>

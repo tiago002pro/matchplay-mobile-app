@@ -6,7 +6,7 @@ export function GamerProfileService() {
 
   async function addGameToProfile(id:number, request:any) {
     try {
-      const response = await axiosInstance.post<IApiResponse<any>>(`${root}/${id}/add-game`, request);
+      const response = await axiosInstance.post<IApiResponse<string>>(`${root}/${id}/add-game`, request);
 
       if (response.data.statusCode == 200 && response.data.result) {
         return response.data.result;

@@ -4,6 +4,7 @@ import { Dimensions, StyleSheet } from "react-native";
 import { THEME } from "styles/Theme";
 import { GamerPeriod } from "./GamerPeriod";
 import { Ionicons } from "@expo/vector-icons";
+import { ProfileGames } from "./ProfileGames";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .7;
@@ -42,6 +43,13 @@ export function MatchCard( {person, pointerEvents}:MatchCardProps ) {
             pointerEvents={pointerEvents}
           />
         </Box>
+
+        {
+          person.gamerProfile.games && person.gamerProfile.games.length ? (<Box style={styles.section}>
+            <Text style={styles.text}>Jogos:</Text>
+            <ProfileGames games={person.gamerProfile.games}/>
+          </Box>) : null
+        }
       </View>
     </ScrollView>
   );
