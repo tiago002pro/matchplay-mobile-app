@@ -19,7 +19,8 @@ export function AuthenticationService() {
           name: tokenDecoded.name,
           login: tokenDecoded.email,
           username: tokenDecoded.username,
-          personId: tokenDecoded.personId
+          personId: tokenDecoded.personId,
+          gamerProfileId: tokenDecoded.gamerProfileId,
         }
       }
     } catch (error) {

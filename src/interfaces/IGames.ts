@@ -9,3 +9,16 @@ export interface IRawgGamesResponse {
   hasNext?:boolean;
   games?:RawgGames[];
 }
+
+export interface IRawgPlatformsResponse {
+  count?:number;
+  hasNext?:boolean;
+  platforms?:IPlatform[];
+}
+
+export interface IPlatform {
+  id:number;
+  name:string;
+  gamesCount:number;
+  backgroundImage:string;
+}
