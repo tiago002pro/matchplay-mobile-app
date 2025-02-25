@@ -6,7 +6,7 @@ import { THEME } from "styles/Theme";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { GamerPeriod } from "../../components/GamerPeriod";
 import { ProfileImagePicker } from "components/ProfileImagePicker";
-import { GamerPeriodModal } from "modals/GamerPeriodModal";
+import { EditGamerPeriodModal } from "modals/EditGamerPeriodModal";
 import { EditUsernameModal } from "modals/EditUsernameModal";
 import { ProfileGames } from "components/ProfileGames";
 
@@ -93,7 +93,7 @@ export function ProfileScreen() {
                 />
                 {
                   gamerPeriodModalVisible &&
-                  <GamerPeriodModal
+                  <EditGamerPeriodModal
                     modalVisible={gamerPeriodModalVisible}
                     setModalVisible={setGamerPeriodModalVisible}
                     gamerPeriod={gamerPeriod}

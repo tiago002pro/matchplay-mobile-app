@@ -7,14 +7,14 @@ import { PrimaryButton } from "components/PrimaryButton";
 import { THEME } from "styles/Theme";
 import { showMessage } from 'react-native-flash-message';
 
-type GamerPeriodModalProps = {
+type EditGamerPeriodModalProps = {
   modalVisible:boolean;
   setModalVisible:any;
   gamerPeriod:IGamerPeriod;
   setGamerPeriod:any;
 }
 
-export function GamerPeriodModal({ modalVisible, setModalVisible, gamerPeriod, setGamerPeriod }:GamerPeriodModalProps) {
+export function EditGamerPeriodModal({ modalVisible, setModalVisible, gamerPeriod, setGamerPeriod }:EditGamerPeriodModalProps) {
   const [data, setData] = useState<IGamerPeriod>(gamerPeriod);
   const { update } = GamerPeriodService();
 
