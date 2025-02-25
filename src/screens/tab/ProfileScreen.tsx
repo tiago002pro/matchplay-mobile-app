@@ -7,12 +7,14 @@ import { PrimaryButton } from "../../components/PrimaryButton";
 import { GamerPeriod } from "../../components/GamerPeriod";
 import { ProfileImagePicker } from "components/ProfileImagePicker";
 import { GamerPeriodModal } from "modals/GamerPeriodModal";
+import { EditUsernameModal } from "modals/EditUsernameModal";
+import { ProfileGames } from "components/ProfileGames";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { PersonService } from "../../service/PersonService";
 
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
-import { EditUsernameModal } from "modals/EditUsernameModal";
+import { IGame } from "interfaces/IGames";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
@@ -21,6 +23,7 @@ export function ProfileScreen() {
   
   const [gamerProfile, setGamerProfile] = useState<IGamerProfile | undefined>(undefined);
   const [gamerPeriod, setGamerPeriod] = useState<IGamerPeriod | undefined>(undefined);
+  const [games, setGames] = useState<IGame[] | undefined>(undefined);
 
   const [gamerPeriodModalVisible, setGamerPeriodModalVisible] = useState(false);
   const [editUsernameModalVisible, setEditUsernameModalVisible] = useState(false);
@@ -35,6 +38,7 @@ export function ProfileScreen() {
     setPerson(response);
     setGamerProfile(response.gamerProfile);
     setGamerPeriod(response.gamerProfile.gamerPeriod);
+    setGames(response.gamerProfile.games);
   }
 
   if (!person || !gamerProfile || !gamerPeriod) {
@@ -75,7 +79,7 @@ export function ProfileScreen() {
 
           {
             gamerPeriod &&
-            <Pressable onPress={() => setGamerPeriodModalVisible(true)}>
+            <Pressable onPress={() => setGamerPeriodModalVisible(true)} style={styles.pressable}>
               <Box style={styles.gamerPeriodBtn}>
                 <Text style={styles.text}>Selecione dias de jogo</Text>
                 <GamerPeriod
@@ -95,6 +99,13 @@ export function ProfileScreen() {
               </Box>
             </Pressable>
           }
+
+          {
+            games && games.length && <Box style={styles.section}>
+              <Text style={styles.text}>Jogos:</Text>
+              <ProfileGames games={games}/>
+            </Box>
+          }
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -107,11 +118,9 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.background,
   },
   scrollView: {
-    flex: 1,
     backgroundColor: THEME.colors.background,
   },
   container: {
-    flex: 1,
     alignItems: 'center',
     padding: THEME.sizes.paddingPage,
     backgroundColor: THEME.colors.background,
@@ -131,6 +140,9 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     color: THEME.colors.white,
+  },
+  pressable: {
+    flex: 1,
   },
   gamerPeriodBtn: {
     gap: 10,

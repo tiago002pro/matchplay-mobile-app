@@ -5,13 +5,12 @@ import React from "react";
 import { platformIcons } from "shared/platformIcons";
 import { GamerProfileService } from "service/GamerProfileService";
 import { useAuth } from "contexts/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width } = Dimensions.get('screen');
 const imageW = width * 0.40;
 
 export function RawgGame({ game }:RawgGameProps) {
-  const {  } = useAuth();
+  const { authState } = useAuth();
   const { addGameToProfile } = GamerProfileService();
 
   const saveGame = async (platform) => {
@@ -22,8 +21,7 @@ export function RawgGame({ game }:RawgGameProps) {
       idPlatform: platform.id,
       namePlatform: platform.name,
     }
-    const user:any = await AsyncStorage.getItem('@RNAuth:user');
-    await addGameToProfile(JSON.parse(user).gamerProfileId, request);
+    await addGameToProfile(authState?.user?.gamerProfileId, request);
   }
 
   return (

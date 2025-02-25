@@ -1,7 +1,15 @@
 export interface IGame {
-  id?:number;
-  name?:string;
+  id:number;
+  name:string;
   image?:string;
+  idRawgGame:number;
+  platforms:IGamePlatform[],
+}
+
+export interface IGamePlatform {
+  id:number;
+  name:string;
+  idRawgGame?:number;
 }
 
 export interface IRawgGamesResponse {
