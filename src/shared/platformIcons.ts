@@ -5,7 +5,7 @@ import iOS from "../../assets/icons/ios.svg";
 import Android from "../../assets/icons/android.svg";
 import Apple from "../../assets/icons/apple.svg";
 import Linux from "../../assets/icons/linux.svg";
-import Nitendo from "../../assets/icons/nitendo.svg";
+import Nintendo from "../../assets/icons/nintendo.svg";
 import Atari from "../../assets/icons/atari.svg";
 import Commodore from "../../assets/icons/commodore.svg";
 import SEGA from "../../assets/icons/sega.svg";
@@ -27,23 +27,26 @@ export const platformIcons = {
   "Xbox": Xbox,
   "iOS": iOS,
   "Android": Android,
+  "Apple": Apple,
   "macOS": Apple,
   "Classic Macintosh": Apple,
   "Apple II": Apple,
   "Linux": Linux,
-  "Nintendo Switch": Nitendo,
-  "Nintendo 3DS": Nitendo,
-  "Nintendo DS": Nitendo,
-  "Nintendo DSi": Nitendo,
-  "Wii U": Nitendo,
-  "Wii": Nitendo,
-  "GameCube": Nitendo,
-  "Nintendo 64": Nitendo,
-  "Game Boy Advance": Nitendo,
-  "Game Boy Color": Nitendo,
-  "Game Boy": Nitendo,
-  "SNES": Nitendo,
-  "NES": Nitendo,
+  "Nintendo": Nintendo,
+  "Nintendo Switch": Nintendo,
+  "Nintendo 3DS": Nintendo,
+  "Nintendo DS": Nintendo,
+  "Nintendo DSi": Nintendo,
+  "Wii U": Nintendo,
+  "Wii": Nintendo,
+  "GameCube": Nintendo,
+  "Nintendo 64": Nintendo,
+  "Game Boy Advance": Nintendo,
+  "Game Boy Color": Nintendo,
+  "Game Boy": Nintendo,
+  "SNES": Nintendo,
+  "NES": Nintendo,
+  "Atari": Atari,
   "Atari 7800": Atari,
   "Atari 5200": Atari,
   "Atari 2600": Atari,
@@ -53,7 +56,9 @@ export const platformIcons = {
   "Atari Lynx": Atari,
   "Atari XEGS": Atari,
   "Jaguar": Atari,
+  "Commodore": Commodore,
   "Commodore / Amiga": Commodore,
+  "SEGA": SEGA,
   "Genesis": SEGA,
   "SEGA Saturn": SEGA,
   "SEGA CD": SEGA,
@@ -62,6 +67,6 @@ export const platformIcons = {
   "Dreamcast": SEGA,
   "Game Gear": SEGA,  
   "3DO": _3DO,
-  "Neo Geo": Nitendo,
+  "Neo Geo": Nintendo,
   "web": Web,
 };
