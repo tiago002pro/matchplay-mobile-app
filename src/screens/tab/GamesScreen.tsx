@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { Pressable, Text } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import { THEME } from "styles/Theme";
 import { RawgGame } from "../../components/RawgGame";
@@ -116,26 +117,42 @@ export function GamesScreen() {
           </ScrollView>
         </View>
 
-        <FlatList
-          ref={listRef}
-          data={games}
-          renderItem={renderRawgGame}
-          keyExtractor={(item) => String(item.id)}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          showsHorizontalScrollIndicator={false}
-          initialNumToRender={3} // Carrega apenas 10 itens inicialmente
-          maxToRenderPerBatch={10} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
-          removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-          ListFooterComponent={
-            loading ? <ActivityIndicator
-              size="large"
-              color={THEME.colors.primary}
-              style={{marginTop: 300}}
+        {
+          games && games.length > 0 ?
+          (
+            <FlatList
+            ref={listRef}
+            data={games}
+            renderItem={renderRawgGame}
+            keyExtractor={(item) => String(item.id)}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={3} // Carrega apenas 10 itens inicialmente
+            maxToRenderPerBatch={10} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
+            removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
+            ListFooterComponent={
+              loading ? <ActivityIndicator
+                size="large"
+                color={THEME.colors.primary}
+                style={{marginTop: 300}}
+                />
+              : null
+            }
+          />
+          )
+          :
+          (
+            <View style={styles.emptyDataContainer}>
+              <MaterialIcons
+                name="videogame-asset-off"
+                size={70}
+                color={THEME.colors.font}
               />
-            : null
-          }
-        />
+              <Text style={styles.emptyDataText}>Nenhum jogo encontrado.</Text>
+            </View>
+          )
+        }
       </View>
     </SafeAreaView>
   );
@@ -187,5 +204,15 @@ const styles = StyleSheet.create({
   },
   filterText: {
     color: THEME.colors.font,
+  },
+  emptyDataContainer: {
+    height: `100%`,
+    alignItems: `center`,
+    gap: 10,
+    paddingTop: `50%`
+  },
+  emptyDataText: {
+    color: THEME.colors.font,
+    fontSize: THEME.fontSizes.lg
   },
 });
