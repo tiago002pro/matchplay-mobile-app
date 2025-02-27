@@ -3,6 +3,7 @@ import { PrimaryButton } from "components/PrimaryButton";
 import { IGame, IGamePlatform } from "interfaces/IGames";
 import React, { useEffect } from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { showMessage } from "react-native-flash-message";
 import { GamesService } from "service/GamesService";
 import { platformIcons } from "shared/platformIcons";
 import { THEME } from "styles/Theme";
@@ -14,7 +15,7 @@ type EditGameModalProps = {
 }
 
 export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameModalProps) {
-  const { getRawgGamesGameById, update } = GamesService();
+  const { getRawgGamesGameById, update, deleteGame } = GamesService();
   const [gameData, setGameData] = React.useState<IGame>(game);
   const [gameDataPlatform, setGameDataPlatform] = React.useState<IGamePlatform[]>(game.platforms);
   const [rawgGame, setRawgGame] = React.useState<RawgGames>(null);
@@ -61,6 +62,21 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
       }
     });
   };
+
+  const toggleDeleteGame = async () => {
+    try {
+      const response:any = await deleteGame(game.id);
+      showMessage({
+        message: response,
+        type: "success",
+        duration: 2000
+      })
+    } catch(e) {
+      console.error(e);
+    } finally {
+      closeModal()
+    }
+  }
 
   const closeModal = () => {
     setModalVisible(false)
@@ -109,7 +125,7 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
             <View style={styles.footer}>
               <PrimaryButton
                 label="Remover da listagem"
-                action={() => {}}
+                action={toggleDeleteGame}
                 bg={THEME.colors.red[500]}
               />
               <PrimaryButton label="X" action={() => closeModal()} />

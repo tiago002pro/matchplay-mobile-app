@@ -1,3 +1,4 @@
+import { showMessage } from "react-native-flash-message";
 import { IApiResponse } from "../interfaces/IApiResponse";
 import { IGame, IRawgGamesResponse, IRawgPlatformsResponse } from "../interfaces/IGames";
 import axiosInstance from "./axiosInstance"
@@ -70,10 +71,31 @@ export function GamesService() {
     }
   }
 
+  async function deleteGame(id:Number) {
+    try {
+      const response = await axiosInstance.delete<IApiResponse<String>>(`${root}/${id}`);
+      if (response.data.statusCode == 200 && response.data.result) {
+        return response.data.result;
+      } else {
+        showMessage({
+          message: `Ops, algo deu errado!`,
+          description: response.data.errorMessage,
+          type: "danger",
+          duration: 3000
+        })
+        throw response.data.errorMessage;
+      }
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
   return {
     searchRawgPlatforms,
     searchRawgGames,
     getRawgGamesGameById,
     update,
+    deleteGame,
   }
 }
