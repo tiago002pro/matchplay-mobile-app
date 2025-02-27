@@ -7,15 +7,16 @@ type PrimaryButtonProps = {
   action?:any;
   color?:string;
   bg?:any;
+  borderColor?:any;
   isDisabled?:boolean;
 }
 
-export function PrimaryButton({ label, action, bg, color, isDisabled, ...props }:PrimaryButtonProps) {
+export function PrimaryButton({ label, action, color, bg, borderColor, isDisabled, ...props }:PrimaryButtonProps) {
   return (
     <Button
       key={label}
       isDisabled={isDisabled}
-      style={MyButtonStyles.btn}
+      style={[MyButtonStyles.btn, {borderColor: borderColor ? borderColor : THEME.colors.primary}]}
       onPress={action}
       bg={bg || THEME.colors.background}
       _pressed={{
@@ -34,7 +35,6 @@ export function PrimaryButton({ label, action, bg, color, isDisabled, ...props }
 
 const MyButtonStyles = StyleSheet.create({
   btn: {
-    borderColor: THEME.colors.primary,
     borderWidth: 2,
     borderRadius: 10,
   }

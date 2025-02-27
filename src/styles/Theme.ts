@@ -10,6 +10,9 @@ export const THEME = extendTheme({
     header: '#111111',
     font: '#e0e0e0',
     modalContainerBg: "rgba(0,0,0,0.7)",
+    newPrimary: `#faad7f`,
+    newSecondary: `#35abc0`,
+    newBackgroud: `#382b73`,
   },
   fontSizes: {
     xs: 12,

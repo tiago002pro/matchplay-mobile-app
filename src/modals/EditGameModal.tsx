@@ -127,6 +127,7 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
                 label="Remover da listagem"
                 action={toggleDeleteGame}
                 bg={THEME.colors.red[500]}
+                borderColor={THEME.colors.red[500]}
               />
               <PrimaryButton label="X" action={() => closeModal()} />
             </View>
