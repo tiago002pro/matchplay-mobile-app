@@ -123,6 +123,8 @@ const styles = StyleSheet.create({
     borderColor: THEME.colors.primary,
     paddingStart: 10,
     paddingEnd: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
     marginEnd: 5,
     marginBottom: 5,
     borderRadius: 30

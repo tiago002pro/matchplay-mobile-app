@@ -1,5 +1,5 @@
 import { IApiResponse } from "../interfaces/IApiResponse";
-import { IRawgGamesResponse, IRawgPlatformsResponse } from "../interfaces/IGames";
+import { IGame, IRawgGamesResponse, IRawgPlatformsResponse } from "../interfaces/IGames";
 import axiosInstance from "./axiosInstance"
 
 export function GamesService() {
@@ -40,8 +40,40 @@ export function GamesService() {
     }
   }
 
+  async function getRawgGamesGameById(rawgGameId:number) {
+    try {
+      const response = await axiosInstance.get<IApiResponse<RawgGames>>(`${root}/rawg/${rawgGameId}`);
+      if (response.data.statusCode == 200 && response.data.result) {
+        return response.data.result;
+      } else {
+        console.log("error", response.data.statusCode);
+        throw response.data.errorMessage;
+      }
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
+  async function update(game:IGame) {
+    try {
+      const response = await axiosInstance.put<IApiResponse<RawgGames>>(`${root}`, game);
+      if (response.data.statusCode == 200 && response.data.result) {
+        return response.data.result;
+      } else {
+        console.log("error", response.data.statusCode);
+        throw response.data.errorMessage;
+      }
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
   return {
     searchRawgPlatforms,
     searchRawgGames,
+    getRawgGamesGameById,
+    update,
   }
 }

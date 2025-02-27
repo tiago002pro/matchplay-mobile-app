@@ -1,18 +1,29 @@
 import { IGame } from "interfaces/IGames";
-import { StyleSheet, Text, View } from "react-native";
+import { EditGameModal } from "modals/EditGameModal";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { platformIcons } from "shared/platformIcons";
 import { THEME } from "styles/Theme";
 
 type ProfileGamesProps = {
   games:IGame[];
+  editGameModalVisible:any;
+  setEditGameModalVisible:any;
 }
 
-export function ProfileGames({ games }: ProfileGamesProps) {
+export function ProfileGames({ games, editGameModalVisible, setEditGameModalVisible }: ProfileGamesProps) {
+  const [game, setGame] = useState<IGame>(null);
+
+  function openMpdal(game) {
+    setGame(game)
+    setEditGameModalVisible(true)
+  }
+
   return (
     <View style={styles.container}>
       {
         games.map((game, index) => (
-          <View key={index} style={styles.game}>
+          <Pressable key={index} style={styles.game} onPress={() => openMpdal(game)}>
             <Text style={styles.gameName}>{game.name}</Text>
             {game.platforms.map((platform, index) => {
               const IconComponent = platformIcons[platform.name];
@@ -22,8 +33,16 @@ export function ProfileGames({ games }: ProfileGamesProps) {
                 </View>
               ) : null;
             })}
-          </View>
+          </Pressable>
         ))
+      }
+
+      {
+        editGameModalVisible && <EditGameModal
+          modalVisible={editGameModalVisible}
+          setModalVisible={setEditGameModalVisible}
+          game={game}
+        />
       }
     </View>
   )
@@ -31,7 +50,6 @@ export function ProfileGames({ games }: ProfileGamesProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: THEME.colors.background,
     flexWrap: `wrap`,
     flexDirection: "row",
