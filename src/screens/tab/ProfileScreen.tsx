@@ -15,13 +15,14 @@ import { PersonService } from "../../service/PersonService";
 
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
 import { IGame } from "interfaces/IGames";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
   const { getById } = PersonService();
+  const navigation:any = useNavigation();
+
   const [person, setPerson] = useState<IPerson | undefined>(undefined);
-  
   const [gamerProfile, setGamerProfile] = useState<IGamerProfile | undefined>(undefined);
   const [gamerPeriod, setGamerPeriod] = useState<IGamerPeriod | undefined>(undefined);
   const [games, setGames] = useState<IGame[] | undefined>(undefined);
@@ -46,8 +47,11 @@ export function ProfileScreen() {
     setGames(response.gamerProfile.games);
   }
 
+  const goToGameScreen = () => {
+    navigation.navigate('Games');
+  }
+
   if (!person || !gamerProfile || !gamerPeriod) {
-    console.log(`Loading`);
     // doLogout()
   }
 
@@ -101,7 +105,11 @@ export function ProfileScreen() {
           }
 
           <Box style={styles.section}>
-            <Text style={styles.text}>Jogos:</Text>
+            <Box style={[styles.section, {marginBottom: 5}]}>
+              <Text style={styles.text}>Jogos:</Text>
+              <Text style={styles.text}>(Toque para editar ou remover)</Text>
+            </Box>
+
             {
               games && games.length
                 ? <ProfileGames
@@ -111,6 +119,12 @@ export function ProfileScreen() {
                 />
                 : <Text style={styles.text}>Nenhum jogo foi adicionado.</Text>
             }
+          </Box>
+
+          <Box style={styles.section}>
+            <Pressable style={styles.btnNewGame} onPress={goToGameScreen}>
+              <Text style={styles.text}>Adicione mais jogos na aba de jogos!</Text>
+            </Pressable>
           </Box>
 
           <PrimaryButton
@@ -158,5 +172,13 @@ const styles = StyleSheet.create({
   },
   gamerPeriodBtn: {
     gap: 10,
+  },
+  btnNewGame: {
+    flexDirection: "row",
+    alignItems: `center`,
+    borderWidth: 2,
+    borderColor: THEME.colors.primary,
+    padding: 5,
+    borderRadius: 30
   }
 });
