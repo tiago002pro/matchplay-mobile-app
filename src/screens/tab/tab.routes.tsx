@@ -4,6 +4,7 @@ import { THEME } from "styles/Theme";
 import { ProfileScreen } from "./ProfileScreen";
 import { GamesScreen } from "./GamesScreen";
 import { MatchScreen } from "./MatchScreen";
+import { ChatScreen } from "./ChatScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -61,6 +62,15 @@ export default function TabRoutes() {
         options={{
           tabBarIcon: ({ color, size, focused }) =>
           <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={size}/>
+        }}
+      />
+
+      <Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          tabBarIcon: ({ color, size, focused }) =>
+          <Ionicons name={focused ? 'chatbubble-ellipses-sharp' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
         }}
       />
     </Navigator>

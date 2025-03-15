@@ -1,22 +1,11 @@
 import axiosInstance from "./axiosInstance";
-import { IChat } from "../interfaces/IChat";
 
 export function ChatService() {
   const root = '/chat';
 
-  async function saveMessage(message:IChat) {
+  async function getAllByPersonId(personId:number, search:string, page:number, pageSize:number) {
     try {
-      const response = await axiosInstance.post(`/${root}/save`, message);
-      return response.data;
-    } catch (error) {
-      console.log("error", error);
-      throw error;
-    }
-  }
-
-  async function getAll(senderId:number, receiverId:number) {
-    try {
-      const response = await axiosInstance.get(`/${root}/chat?senderId=${senderId}&receiverId=${receiverId}`);
+      const response = await axiosInstance.get(`${root}/${personId}?search=${search}&page=${page}&pageSize=${pageSize}`);
       return response.data;
     } catch (error) {
       console.log("error", error);
@@ -25,7 +14,6 @@ export function ChatService() {
   }
 
   return {
-    saveMessage,
-    getAll,
+    getAllByPersonId,
   }
 }
