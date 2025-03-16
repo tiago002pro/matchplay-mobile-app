@@ -184,9 +184,8 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     backgroundColor: THEME.colors.primary,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
     borderRadius: 8,
+    padding: THEME.sizes.paddingPage,
   },
   sendButtonText: {
     color: THEME.colors.font,
