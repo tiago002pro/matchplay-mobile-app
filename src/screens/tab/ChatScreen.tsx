@@ -1,6 +1,6 @@
-import { Feather, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Box, Image, View } from "native-base";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, FlatList, Pressable, SafeAreaView } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { THEME } from "styles/Theme";
@@ -10,7 +10,7 @@ import { ChatDTO } from "interfaces/IChatDTO";
 import { ActivityIndicator } from "react-native-paper";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -28,15 +28,19 @@ export function ChatScreen() {
 
   const listRef = useRef<FlatList>(null);
 
-  useEffect(() => {
-    setPage(0);
-    loadChats(true);
-    scrollToTop();
-  }, [search]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (page > 0) {
+        loadChats(false)
+      }
+      else {
+        setPage(0);
+        loadChats(true);
+        scrollToTop();
+      }
+    }, [page, search])
+  );
   
-  useEffect(() => {
-    if (page > 0) loadChats(false)
-  }, [page, search]);
 
   function loadChats(newSearch = false) {
     setLoading(true);

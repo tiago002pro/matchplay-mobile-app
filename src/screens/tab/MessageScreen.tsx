@@ -3,7 +3,7 @@ import { IApiResponse } from "interfaces/IApiResponse";
 import { ChatDTO } from "interfaces/IChatDTO";
 import { IMessageDTO } from "interfaces/IMessage";
 import { IPageable } from "interfaces/IPageable";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { MessageService } from "service/MessageService";
@@ -12,7 +12,7 @@ import { THEME } from "styles/Theme";
 export default function MessageScreen({ route }:any) {
   const { authState } = useAuth();
   const { getMessages } = MessageService();
-  const pageSize = 15;
+  const pageSize = 10;
   const chat: ChatDTO = route.params.chat;
   const senderId = authState.user.personId;
 
@@ -73,13 +73,13 @@ export default function MessageScreen({ route }:any) {
     if (inputText.trim()) {
       const data = {
         chatId: chat.id,
-        senderId: 1,
+        senderId,
         content: inputText
       };
 
       const newMessage:IMessageDTO = {
         id: null,
-        senderId: 1,
+        senderId,
         content: inputText,
         read: false,
         date: new Date().toDateString(),
