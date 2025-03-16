@@ -1,3 +1,4 @@
+import { useAuth } from "contexts/AuthContext";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { ChatDTO } from "interfaces/IChatDTO";
 import { IMessageDTO } from "interfaces/IMessage";
@@ -9,10 +10,11 @@ import { MessageService } from "service/MessageService";
 import { THEME } from "styles/Theme";
 
 export default function MessageScreen({ route }:any) {
+  const { authState } = useAuth();
   const { getMessages } = MessageService();
   const pageSize = 15;
   const chat: ChatDTO = route.params.chat;
-  const senderId = 1
+  const senderId = authState.user.personId;
 
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState<IMessageDTO[]>([]);
@@ -28,7 +30,7 @@ export default function MessageScreen({ route }:any) {
   }, [page]);
 
   function conectWebSocket() {
-    const ws = new WebSocket("ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket?userId=1");
+    const ws = new WebSocket(`ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket?userId=${senderId}`);
     ws.onopen = () => console.log("Conectado ao WebSocket!");
 
     ws.onmessage = (event) => {
