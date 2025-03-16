@@ -5,6 +5,7 @@ import { ProfileScreen } from "./ProfileScreen";
 import { GamesScreen } from "./GamesScreen";
 import { MatchScreen } from "./MatchScreen";
 import { ChatScreen } from "./ChatScreen";
+import ChatRoutes from "routes/chat.routes";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -67,7 +68,7 @@ export default function TabRoutes() {
 
       <Screen
         name="Chat"
-        component={ChatScreen}
+        component={ChatRoutes}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
           <Ionicons name={focused ? 'chatbubble-ellipses-sharp' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
