@@ -4,7 +4,6 @@ import { THEME } from "styles/Theme";
 import { ProfileScreen } from "./ProfileScreen";
 import { GamesScreen } from "./GamesScreen";
 import { MatchScreen } from "./MatchScreen";
-import { ChatScreen } from "./ChatScreen";
 import ChatRoutes from "routes/chat.routes";
 
 const { Navigator, Screen } = createBottomTabNavigator();

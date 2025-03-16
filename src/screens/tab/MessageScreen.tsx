@@ -1,10 +1,12 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "contexts/AuthContext";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { ChatDTO } from "interfaces/IChatDTO";
 import { IMessageDTO } from "interfaces/IMessage";
 import { IPageable } from "interfaces/IPageable";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { MessageService } from "service/MessageService";
 import { THEME } from "styles/Theme";
@@ -91,9 +93,17 @@ export default function MessageScreen({ route }:any) {
     }
   };
 
+  function convertDate(date) {
+    return moment(new Date(date)).calendar(); 
+  }
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Ajuste para o iOS
+      >
         <FlatList
           data={messages}
           inverted={true}
@@ -114,8 +124,27 @@ export default function MessageScreen({ route }:any) {
             : null
           }
           renderItem={({ item }) => (
-            <View style={[styles.message, item.senderId === senderId ? styles.userMessage : styles.otherMessage]}>
-              <Text style={styles.messageText}>{item.content}</Text>
+            <View style={styles.messageContainer}>
+              <View style={[styles.message, item.senderId === senderId ? styles.userMessage : styles.otherMessage]}>
+                <Text style={styles.messageText}>{item.content}</Text>
+              </View>
+              <View style={[styles.readContainer, item.senderId === senderId ? {justifyContent: 'flex-end'} : {justifyContent: 'flex-start'}]}>
+                <Text style={[styles.dateText, item.senderId === senderId ? {textAlign: "right"} : {textAlign: "left"}]}>{convertDate(item.date)}</Text>
+                {
+                  item.read ?
+                  <Ionicons
+                    name="checkmark-done"
+                    size={15}
+                    color={THEME.colors.font}
+                  />
+                  :
+                  <Ionicons
+                    name="checkmark"
+                    size={15}
+                    color={THEME.colors.font}
+                  />
+                }
+              </View>
             </View>
           )}
         />
@@ -127,14 +156,14 @@ export default function MessageScreen({ route }:any) {
             onChangeText={setInputText}
             placeholder="Digite uma mensagem..."
             cursorColor={THEME.colors.font}
-            selectionColor={THEME.colors.secondary}
+            selectionColor={THEME.colors.font}
             placeholderTextColor={THEME.colors.font}
           />
           <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
             <Text style={styles.sendButtonText}>Enviar</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -151,6 +180,9 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     marginBottom: THEME.sizes.paddingPage / 2,
+  },
+  messageContainer: {
+    gap: 0
   },
   message: {
     width: "77%",
@@ -169,6 +201,16 @@ const styles = StyleSheet.create({
   messageText: {
     color: THEME.colors.font,
   },
+  readContainer: {
+    flexDirection: 'row',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  dateText: {
+    color: THEME.colors.font,
+    fontSize: THEME.fontSizes.sm - 4,
+    marginRight: 2,
+  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -180,12 +222,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 10,
     color: THEME.colors.font,
-    padding: THEME.sizes.paddingPage,
+    padding: THEME.sizes.paddingPage / 2,
   },
   sendButton: {
     backgroundColor: THEME.colors.primary,
     borderRadius: 8,
-    padding: THEME.sizes.paddingPage,
+    padding: THEME.sizes.paddingPage / 2,
   },
   sendButtonText: {
     color: THEME.colors.font,
