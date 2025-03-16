@@ -1,7 +1,7 @@
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Box, Image, View } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, SafeAreaView } from "react-native";
+import { Dimensions, FlatList, Pressable, SafeAreaView } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { THEME } from "styles/Theme";
 import moment from "moment";
@@ -10,11 +10,13 @@ import { ChatDTO } from "interfaces/IChatDTO";
 import { ActivityIndicator } from "react-native-paper";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
+import { useNavigation } from "@react-navigation/native";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
 
 export function ChatScreen() {
+  const navigation:any = useNavigation();
   const { getAllByPersonId } = ChatService();
   const pageSize = 10;
 
@@ -40,8 +42,6 @@ export function ChatScreen() {
     setLoading(true);
 
     try {
-      console.log("aac");
-      
       getAllByPersonId(1, search, page, pageSize).then((response:IApiResponse<IPageable<ChatDTO[]>>) => {
         if (response && response.result && response.result.content && response.result.content.length) {
           setChatList((prev) => newSearch ?  response.result.content : [...prev, ...response.result.content]);
@@ -71,6 +71,12 @@ export function ChatScreen() {
     return moment(new Date(date)).startOf('hour').fromNow(); 
   }
 
+  function goToMessage(chat:ChatDTO) {
+    navigation.navigate('MessageScreen', {
+      chat: chat
+    });
+  }
+
   return(
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -94,41 +100,57 @@ export function ChatScreen() {
           }
           renderItem={({item}) => {
             return(
-              <View style={styles.chatContainer}>
-                <View style={styles.imageContainer}>
-                  {
-                    !item?.image && <View style={styles.circle}></View>
-                  }
-                  <Ionicons
-                    name="person-circle-outline"
-                    size={width}
-                    color={THEME.colors.primary}
-                  />
-                  {
-                    item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
-                  }
-                </View>
-                <View style={styles.info}>
-                  <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                  <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
-                  <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
-                </View>
-                <View style={styles.imageContainer}>
-                  <Box style={styles.btnMore}>
-                    <Feather
-                      name="more-vertical"
-                      size={width * .4}
+              <Pressable onPress={() => goToMessage(item)}>
+                <View style={styles.chatContainer}>
+                  <View style={styles.imageContainer}>
+                    {
+                      !item?.image && <View style={styles.circle}></View>
+                    }
+                    <Ionicons
+                      name="person-circle-outline"
+                      size={width}
                       color={THEME.colors.primary}
                     />
-                  </Box>
+                    {
+                      item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
+                    }
+                  </View>
+                  <View style={styles.info}>
+                    <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                    <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
+                    <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
+                  </View>
+                  <View style={styles.imageContainer}>
+                    <Box style={styles.btnMore}>
+                      <Feather
+                        name="more-vertical"
+                        size={width * .4}
+                        color={THEME.colors.primary}
+                      />
+                    </Box>
+                  </View>
+                  <View style={styles.containerLine}>
+                    <View style={styles.line}></View>
+                  </View>
                 </View>
-                <View style={styles.containerLine}>
-                  <View style={styles.line}></View>
-                </View>
-              </View>
+              </Pressable>
             );
           }}
         />
+
+        {
+          !chatList || !chatList.length &&
+          <View style={styles.emptyDataContainer}>
+            <MaterialCommunityIcons
+              name="message-bulleted-off"
+              size={70}
+              color={THEME.colors.font}
+            />
+            <Text style={styles.emptyDataTitle}>Opss..</Text>
+            <Text style={styles.emptyDataText}>Você ainda não conversou</Text>
+            <Text style={styles.emptyDataText}>com ninguém.</Text>
+          </View>
+        }
       </View>
     </SafeAreaView>
   );
@@ -211,5 +233,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: THEME.colors.font,
     opacity: .7,
+  },
+  emptyDataContainer: {
+    height: `100%`,
+    alignItems: `center`,
+    gap: 10,
+    paddingTop: `50%`
+  },
+  emptyDataTitle: {
+    color: THEME.colors.font,
+    fontSize: THEME.fontSizes.xl + 5,
+    fontWeight: 700,
+  },
+  emptyDataText: {
+    color: THEME.colors.font,
+    fontSize: THEME.fontSizes.lg,
   },
 });
