@@ -1,16 +1,20 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import ChatApp from "@screens/tab/MessageScreen";
 import { ChatScreen } from "@screens/tab/ChatScreen";
 import { returnBtn } from "components/ReturnBtn";
 import { THEME } from "styles/Theme";
 import MessageScreen from "@screens/tab/MessageScreen";
+import { Dimensions, View } from "react-native";
+import { Button } from "native-base";
+import { MatchersScreen } from "@screens/stack/MatchersScreen";
 
 const { Navigator, Screen } = createStackNavigator();
+const { width } = Dimensions.get("window");
+const widthHeaderBtn = (width / 2) - (THEME.sizes.paddingPage);
 
 export default function ChatRoutes() {
   return (
     <Navigator
-      screenOptions={{
+      screenOptions={({ navigation, route }) => ({
         headerShown: true,
         headerShadowVisible: false,
         headerStyle: {
@@ -22,19 +26,57 @@ export default function ChatRoutes() {
           fontWeight: '700',
           textTransform: 'capitalize',
         },
-      }}
+        headerRight: () => <HeaderButtons navigation={navigation} currentScreen={route.name}/>
+      })}
     >
       <Screen
         name="ChatScreen"
         component={ChatScreen}
-        options={({ }:any) => ({ title: "" })}
+        options={() => ({ title: null })}
+      />
+
+      <Screen
+        name="MatchersScreen"
+        component={MatchersScreen}
+        options={() => ({ title: null })}
       />
 
       <Screen
         name="MessageScreen"
         component={MessageScreen}
-        options={({ route }:any) => ({ title: route.params.chat.name, chat: route.params.chat, headerLeft: returnBtn })}
+        options={({ route }:any) => ({ title: route.params.chat.name, chat: route.params.chat, headerLeft: returnBtn, headerRight: null })}
       />
     </Navigator>
   )
 }
+
+const HeaderButtons = ({ navigation, currentScreen }) => (
+  <View style={{
+    paddingStart: THEME.sizes.paddingPage,
+    paddingEnd: THEME.sizes.paddingPage,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width,
+  }}>
+    <Button
+      onPress={() => navigation.replace('ChatScreen')}
+      color={THEME.colors.font}
+      w={widthHeaderBtn}
+      style={{
+        backgroundColor: (currentScreen == 'ChatScreen') ? THEME.colors.primary : 'transparent'
+      }}
+    >
+      Chat
+    </Button>
+    <Button
+      onPress={() => navigation.replace('MatchersScreen')}
+      color={THEME.colors.font}
+      w={widthHeaderBtn}
+      style={{
+        backgroundColor: (currentScreen == 'MatchersScreen') ? THEME.colors.primary : 'transparent'
+      }}
+    >
+      Matchers
+    </Button>
+  </View>
+);

@@ -1,7 +1,7 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image, View } from "native-base";
 import React, { useRef, useState } from "react";
-import { Dimensions, FlatList, Pressable, SafeAreaView } from "react-native";
+import { Dimensions, FlatList, Pressable, SafeAreaView, TouchableOpacity } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { THEME } from "styles/Theme";
 import moment from "moment";
@@ -15,7 +15,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
 
-export function ChatScreen() {
+export function MatchersScreen() {
   const navigation:any = useNavigation();
   const { getAllByPersonId } = ChatService();
   const pageSize = 10;
@@ -114,20 +114,15 @@ export function ChatScreen() {
                   </View>
                   <View style={styles.info}>
                     <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                    <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
                     <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
                   </View>
-                  <View style={styles.imageContainer}>
-                    <Pressable style={styles.btnMore}>
-                      <Feather
-                        name="more-vertical"
-                        size={width * .4}
-                        color={THEME.colors.primary}
-                      />
-                    </Pressable>
-                  </View>
-                  <View style={styles.containerLine}>
-                    <View style={styles.line}></View>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.dislikeButton} onPress={() => {}}>
+                      <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.likeButton} onPress={() => {}}>
+                      <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </Pressable>
@@ -144,8 +139,8 @@ export function ChatScreen() {
               color={THEME.colors.font}
             />
             <Text style={styles.emptyDataTitle}>Opss..</Text>
-            <Text style={styles.emptyDataText}>Você ainda não conversou</Text>
-            <Text style={styles.emptyDataText}>com ninguém.</Text>
+            <Text style={styles.emptyDataText}>Você ainda não teve</Text>
+            <Text style={styles.emptyDataText}>nenhum match.</Text>
           </View>
         }
       </View>
@@ -166,33 +161,30 @@ const styles = StyleSheet.create({
     color: THEME.colors.font,
   },
   chatContainer: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingStart: THEME.sizes.paddingPage,
+    paddingRight: THEME.sizes.paddingPage, 
+    paddingTop: (THEME.sizes.paddingPage * 2),
+    paddingBottom: (THEME.sizes.paddingPage * 2),
+    borderWidth: 1,
+    borderColor: THEME.colors.primary,
+    marginBottom: THEME.sizes.paddingPage,
+    borderRadius: THEME.sizes.paddingPage,
   },
   imageContainer: {
     width: width,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  btnMore: {
-    borderRadius: (width * .4),
-    padding: 5,
-    backgroundColor: "rgba(171, 104, 248, 0.12)",
-  },
   userImage: {
-    width: width - width * .1,
-    height: width - width * .1,
-    borderRadius: width - width * .1,
+    width: width - width * .20,
+    height: width - width * .20,
+    borderRadius: width - width * .20,
     position: 'absolute',
     backgroundColor: THEME.colors.primary,
   },
   info: {
-    width: widthScreen - (width * 2) - (THEME.sizes.paddingPage * 2) - 5,
-    marginLeft: 5,
+    width: widthScreen - (width * 2) - (THEME.sizes.paddingPage * 2) - (100 - THEME.sizes.paddingPage * 2),
     flexDirection: 'column',
     gap: 7,
   },
@@ -211,18 +203,19 @@ const styles = StyleSheet.create({
     color: THEME.colors.font,
     opacity: .7,
   },
-  containerLine: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom: 0,
-    position: 'absolute',
+  buttonContainer: {
+    flexDirection: "row",
+    width: 100,
   },
-  line: {
-    width: widthScreen * .75,
-    borderBottomWidth: 1,
-    borderColor: THEME.colors.font,
-    opacity: .3,
+  dislikeButton: {
+    justifyContent: `center`,
+    alignItems: 'flex-end',
+    width: 50,
+  },
+  likeButton: {
+    justifyContent: `center`,
+    alignItems: 'flex-end',
+    width: 50,
   },
   emptyDataContainer: {
     height: `100%`,
