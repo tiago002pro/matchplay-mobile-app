@@ -11,6 +11,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { EmptyData } from "components/EmptyData";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -130,19 +131,11 @@ export function MatchersScreen() {
           }}
         />
 
-        {
-          !chatList || !chatList.length &&
-          <View style={styles.emptyDataContainer}>
-            <MaterialCommunityIcons
-              name="message-bulleted-off"
-              size={70}
-              color={THEME.colors.font}
-            />
-            <Text style={styles.emptyDataTitle}>Opss..</Text>
-            <Text style={styles.emptyDataText}>Você ainda não teve</Text>
-            <Text style={styles.emptyDataText}>nenhum match.</Text>
-          </View>
-        }
+        <EmptyData 
+          dataList={chatList}
+          title="Opss..."
+          text="Você ainda não teve nenhum match."
+        />
       </View>
     </SafeAreaView>
   );
@@ -216,20 +209,5 @@ const styles = StyleSheet.create({
     justifyContent: `center`,
     alignItems: 'flex-end',
     width: 50,
-  },
-  emptyDataContainer: {
-    height: `100%`,
-    alignItems: `center`,
-    gap: 10,
-    paddingTop: `50%`
-  },
-  emptyDataTitle: {
-    color: THEME.colors.font,
-    fontSize: THEME.fontSizes.xl + 5,
-    fontWeight: 700,
-  },
-  emptyDataText: {
-    color: THEME.colors.font,
-    fontSize: THEME.fontSizes.lg,
   },
 });

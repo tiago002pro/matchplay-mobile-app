@@ -1,4 +1,4 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { Image, View } from "native-base";
 import React, { useRef, useState } from "react";
 import { Dimensions, FlatList, Pressable, SafeAreaView } from "react-native";
@@ -11,6 +11,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { EmptyData } from "components/EmptyData";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -135,19 +136,11 @@ export function ChatScreen() {
           }}
         />
 
-        {
-          !chatList || !chatList.length &&
-          <View style={styles.emptyDataContainer}>
-            <MaterialCommunityIcons
-              name="message-bulleted-off"
-              size={70}
-              color={THEME.colors.font}
-            />
-            <Text style={styles.emptyDataTitle}>Opss..</Text>
-            <Text style={styles.emptyDataText}>Você ainda não conversou</Text>
-            <Text style={styles.emptyDataText}>com ninguém.</Text>
-          </View>
-        }
+        <EmptyData
+          dataList={chatList}
+          title="Opss..."
+          text="Você ainda não conversou com ninguém."
+        />
       </View>
     </SafeAreaView>
   );
@@ -223,20 +216,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: THEME.colors.font,
     opacity: .3,
-  },
-  emptyDataContainer: {
-    height: `100%`,
-    alignItems: `center`,
-    gap: 10,
-    paddingTop: `50%`
-  },
-  emptyDataTitle: {
-    color: THEME.colors.font,
-    fontSize: THEME.fontSizes.xl + 5,
-    fontWeight: 700,
-  },
-  emptyDataText: {
-    color: THEME.colors.font,
-    fontSize: THEME.fontSizes.lg,
   },
 });

@@ -13,6 +13,7 @@ import { MatchService } from "../../service/MatchService";
 import { IPerson } from "../../interfaces/IPerson";
 import { IMatchRequest } from "../../interfaces/IMatch";
 import { MatchStatus } from "../../enums/MatchStatus";
+import { EmptyData } from "components/EmptyData";
 
 const { width, height } = Dimensions.get("window");
 
@@ -130,6 +131,12 @@ export function MatchScreen() {
           }
         />
       </View>
+
+      <EmptyData
+        dataList={profiles}
+        title="Opss..."
+        text="Nenhum perfil foi encontrado."
+      />
     </SafeAreaView>
   );
 }

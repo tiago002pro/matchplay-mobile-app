@@ -13,6 +13,7 @@ import { PlatformsFilter } from "shared/platformsFilter";
 import { GamesService } from "../../service/GamesService";
 
 import { IRawgGamesResponse } from "../../interfaces/IGames";
+import { EmptyData } from "components/EmptyData";
 
 export function GamesScreen() {
   const pageSize = 10;
@@ -117,42 +118,32 @@ export function GamesScreen() {
           </ScrollView>
         </View>
 
-        {
-          games && games.length > 0 ?
-          (
-            <FlatList
-            ref={listRef}
-            data={games}
-            renderItem={renderRawgGame}
-            keyExtractor={(item) => String(item.id)}
-            onEndReached={loadMore}
-            onEndReachedThreshold={0.5}
-            showsHorizontalScrollIndicator={false}
-            initialNumToRender={3} // Carrega apenas 10 itens inicialmente
-            maxToRenderPerBatch={10} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
-            removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-            ListFooterComponent={
-              loading ? <ActivityIndicator
-                size="large"
-                color={THEME.colors.primary}
-                style={{marginTop: 300}}
-                />
-              : null
-            }
-          />
-          )
-          :
-          (
-            <View style={styles.emptyDataContainer}>
-              <MaterialIcons
-                name="videogame-asset-off"
-                size={70}
-                color={THEME.colors.font}
+        <FlatList
+          ref={listRef}
+          data={games}
+          renderItem={renderRawgGame}
+          keyExtractor={(item) => String(item.id)}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
+          showsHorizontalScrollIndicator={false}
+          initialNumToRender={3} // Carrega apenas 10 itens inicialmente
+          maxToRenderPerBatch={10} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
+          removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
+          ListFooterComponent={
+            loading ? <ActivityIndicator
+              size="large"
+              color={THEME.colors.primary}
+              style={{marginTop: 300}}
               />
-              <Text style={styles.emptyDataText}>Nenhum jogo encontrado.</Text>
-            </View>
-          )
-        }
+            : null
+          }
+        />
+
+        <EmptyData
+          dataList={games}
+          title="Opss..."
+          text="Nenhum jogo encontrado."
+        />
       </View>
     </SafeAreaView>
   );
@@ -204,15 +195,5 @@ const styles = StyleSheet.create({
   },
   filterText: {
     color: THEME.colors.font,
-  },
-  emptyDataContainer: {
-    height: `100%`,
-    alignItems: `center`,
-    gap: 10,
-    paddingTop: `50%`
-  },
-  emptyDataText: {
-    color: THEME.colors.font,
-    fontSize: THEME.fontSizes.lg
   },
 });
