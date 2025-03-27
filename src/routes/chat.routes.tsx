@@ -2,10 +2,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { ChatScreen } from "@screens/tab/ChatScreen";
 import { returnBtn } from "components/ReturnBtn";
 import { THEME } from "styles/Theme";
-import MessageScreen from "@screens/tab/MessageScreen";
+import MessageScreen from "@screens/stack/MessageScreen";
 import { Dimensions, View } from "react-native";
 import { Button } from "native-base";
-import { MatchersScreen } from "@screens/stack/MatchersScreen";
+import { MatchersScreen } from "@screens/tab/MatchersScreen";
 
 const { Navigator, Screen } = createStackNavigator();
 const { width } = Dimensions.get("window");

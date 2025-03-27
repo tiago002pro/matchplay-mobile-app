@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { THEME } from "styles/Theme";
-import { ProfileScreen } from "./ProfileScreen";
-import { GamesScreen } from "./GamesScreen";
-import { MatchScreen } from "./MatchScreen";
 import ChatRoutes from "routes/chat.routes";
 import { Button, View } from "react-native";
+import { ProfileScreen } from "@screens/tab/ProfileScreen";
+import { GamesScreen } from "@screens/tab/GamesScreen";
+import { MatchScreen } from "@screens/tab/MatchScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
