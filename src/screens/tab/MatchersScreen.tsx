@@ -1,27 +1,30 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image, View } from "native-base";
 import React, { useRef, useState } from "react";
-import { Dimensions, FlatList, Pressable, SafeAreaView, TouchableOpacity } from "react-native";
+import { Dimensions, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { THEME } from "styles/Theme";
 import moment from "moment";
-import { ChatService } from "service/ChatService";
-import { ChatDTO } from "interfaces/IChatDTO";
 import { ActivityIndicator } from "react-native-paper";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { EmptyData } from "components/EmptyData";
+import { MatchersDTO } from "interfaces/IMatch";
+import { MatchService } from "service/MatchService";
+import { MatchStatus } from "enums/MatchStatus";
+import { MatchedStatus } from "enums/MatchedStatus";
+import { useAuth } from "contexts/AuthContext";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
 
 export function MatchersScreen() {
-  const navigation:any = useNavigation();
-  const { getAllByPersonId } = ChatService();
+  const { authState } = useAuth();
+  const { searchMatchers, manageMatches } = MatchService();
   const pageSize = 10;
 
-  const [chatList, setChatList] = useState<ChatDTO[]>([]);
+  const [machersList, setMachersList] = useState<MatchersDTO[]>([]);
   const [page, setPage] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [hasMore, setHasMore] = useState<boolean>(false);
@@ -32,24 +35,24 @@ export function MatchersScreen() {
   useFocusEffect(
     React.useCallback(() => {
       if (page > 0) {
-        loadChats(false)
+        loadMatchers(false)
       }
       else {
         setPage(0);
-        loadChats(true);
+        loadMatchers(true);
         scrollToTop();
       }
     }, [page, search])
   );
   
 
-  function loadChats(newSearch = false) {
+  function loadMatchers(newSearch = false) {
     setLoading(true);
-
     try {
-      getAllByPersonId(1, search, page, pageSize).then((response:IApiResponse<IPageable<ChatDTO[]>>) => {
+      const statusList: MatchStatus[] = [MatchStatus.LIKE, MatchStatus.SUPERLIKE];
+      searchMatchers(authState?.user?.personId, statusList, page, pageSize).then((response:IApiResponse<IPageable<MatchersDTO[]>>) => {
         if (response && response.result && response.result.content && response.result.content.length) {
-          setChatList((prev) => newSearch ?  response.result.content : [...prev, ...response.result.content]);
+          setMachersList((prev) => newSearch ?  response.result.content : [...prev, ...response.result.content]);
           setHasMore(!response.result.last)
         }
       })
@@ -57,6 +60,18 @@ export function MatchersScreen() {
       console.error("Erro ao buscar jogos:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function manage(matchersDTO: MatchersDTO, matchedStatus: MatchedStatus) {
+    setLoading(true);
+    try {
+      await manageMatches(matchersDTO.id, matchedStatus)
+    } catch (error) {
+      console.error("Erro ao buscar jogos:", error);
+    } finally {
+      setLoading(false);
+      setMachersList((prevList) => prevList.filter((matcher) => matcher.id !== matchersDTO.id));
     }
   }
 
@@ -76,19 +91,13 @@ export function MatchersScreen() {
     return moment(new Date(date)).startOf('hour').fromNow(); 
   }
 
-  function goToMessage(chat:ChatDTO) {
-    navigation.navigate('MessageScreen', {
-      chat: chat
-    });
-  }
-
   return(
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <FlatList
           ref={listRef}
-          data={chatList}
-          keyExtractor={(item:ChatDTO) => String(item.id)}
+          data={machersList}
+          keyExtractor={(item:MatchersDTO) => String(item.id)}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           showsHorizontalScrollIndicator={false}
@@ -105,34 +114,32 @@ export function MatchersScreen() {
           }
           renderItem={({item}) => {
             return(
-              <Pressable onPress={() => goToMessage(item)}>
-                <View style={styles.chatContainer}>
-                  <View style={styles.imageContainer}>
-                    <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
-                    {
-                      item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
-                    }
-                  </View>
-                  <View style={styles.info}>
-                    <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                    <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
-                  </View>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.dislikeButton} onPress={() => {}}>
-                      <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.likeButton} onPress={() => {}}>
-                      <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
-                    </TouchableOpacity>
-                  </View>
+              <View style={styles.chatContainer}>
+                <View style={styles.imageContainer}>
+                  <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
+                  {
+                    item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
+                  }
                 </View>
-              </Pressable>
+                <View style={styles.info}>
+                  <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                  <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.dislikeButton} onPress={() => manage(item, MatchedStatus.DANIED)}>
+                    <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.likeButton} onPress={() => manage(item, MatchedStatus.ACCEPTED)}>
+                    <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
+                  </TouchableOpacity>
+                </View>
+              </View>
             );
           }}
         />
 
         <EmptyData 
-          dataList={chatList}
+          dataList={machersList}
           title="Opss..."
           text="Você ainda não teve nenhum match."
         />

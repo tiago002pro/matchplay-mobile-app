@@ -12,12 +12,14 @@ import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { EmptyData } from "components/EmptyData";
+import { useAuth } from "contexts/AuthContext";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
 
 export function ChatScreen() {
   const navigation:any = useNavigation();
+  const { authState } = useAuth();
   const { getAllByPersonId } = ChatService();
   const pageSize = 10;
 
@@ -47,7 +49,7 @@ export function ChatScreen() {
     setLoading(true);
 
     try {
-      getAllByPersonId(1, search, page, pageSize).then((response:IApiResponse<IPageable<ChatDTO[]>>) => {
+      getAllByPersonId(authState?.user?.personId, search, page, pageSize).then((response:IApiResponse<IPageable<ChatDTO[]>>) => {
         if (response && response.result && response.result.content && response.result.content.length) {
           setChatList((prev) => newSearch ?  response.result.content : [...prev, ...response.result.content]);
           setHasMore(!response.result.last)
@@ -115,7 +117,11 @@ export function ChatScreen() {
                   </View>
                   <View style={styles.info}>
                     <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                    <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
+                    {
+                      item.lastMessage
+                        ? <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
+                        : <Text style={styles.lastMessage} numberOfLines={2}>Vazio... dizer olá?</Text>
+                    }
                     <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
                   </View>
                   <View style={styles.imageContainer}>
