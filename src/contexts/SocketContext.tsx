@@ -7,6 +7,7 @@ const SocketContext = createContext(null);
 export const SocketProvider = ({ children }) => {
   const { authState } = useAuth();
   const [socket, setSocket] = useState(null);
+  const [newMessage, setNewMessage] = useState<IMessageDTO>(null);
 
   useEffect(() => {
     if (!authState?.user?.personId) return; // Só conecta se o usuário estiver logado
@@ -17,6 +18,7 @@ export const SocketProvider = ({ children }) => {
     ws.onmessage = (event) => {
       const data: IMessageDTO = JSON.parse(event.data);
       console.log("📩 Nova mensagem recebida:", data);
+      setNewMessage(data);
     };
     ws.onerror = (error) => console.error("❌ Erro no WebSocket:", error);
     ws.onclose = () => console.log("🔌 Conexão WebSocket fechada.");
@@ -30,7 +32,7 @@ export const SocketProvider = ({ children }) => {
   }, [authState?.user?.personId]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, newMessage }}>
       {children}
     </SocketContext.Provider>
   );

@@ -14,7 +14,7 @@ import { THEME } from "styles/Theme";
 
 export default function MessageScreen({ route }:any) {
   const { authState } = useAuth();
-  const { socket } = useSocket();
+  const { socket, newMessage } = useSocket();
   const { getMessages, readAllMessages } = MessageService();
   const pageSize = 10;
   const chat: ChatDTO = route.params.chat;
@@ -32,17 +32,12 @@ export default function MessageScreen({ route }:any) {
   }, [page]);
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.onmessage = (event) => {
-      const data:IMessageDTO = JSON.parse(event.data);
-      setMessages((prevMessages) => [data, ...prevMessages]);
-    };
-
-    return () => {
-      socket.onmessage = null;
-    };
-  }, [socket]);
+    if (!newMessage) return;
+  
+    if (newMessage.chatId === chat.id) {
+      setMessages((prevMessages) => [newMessage, ...prevMessages]);
+    }
+  }, [newMessage, chat.id]);
 
   useEffect(() => {
     readAllMessages(chat.id, chat.personId).then(() => {});
@@ -85,6 +80,7 @@ export default function MessageScreen({ route }:any) {
         content: inputText,
         isRead: false,
         date: new Date().toDateString(),
+        chatId: chat.id,
       }
 
       setMessages((prevMessages) => [newMessage, ...prevMessages]);

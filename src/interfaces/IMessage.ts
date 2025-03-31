@@ -4,4 +4,5 @@ export interface IMessageDTO {
   content:string;
   isRead:boolean;
   date:string;
+  chatId:number;
 }

@@ -13,7 +13,6 @@ import { IPageable } from "interfaces/IPageable";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { EmptyData } from "components/EmptyData";
 import { useAuth } from "contexts/AuthContext";
-import { IMessageDTO } from "interfaces/IMessage";
 import { useSocket } from "contexts/SocketContext";
 
 const widthScreen = Dimensions.get('screen').width;
@@ -22,7 +21,7 @@ const width = widthScreen * .2;
 export function ChatScreen() {
   const navigation:any = useNavigation();
   const { authState } = useAuth();
-  const { socket } = useSocket();
+  const { newMessage } = useSocket();
   const { getAllByPersonId } = ChatService();
   const pageSize = 10;
 
@@ -48,28 +47,21 @@ export function ChatScreen() {
   );
 
   useEffect(() => {
-    if (!socket) return;
+    if (!newMessage) return;
 
-    socket.onmessage = (event) => {
-      const data:IMessageDTO = JSON.parse(event.data);
-      setChatList((prev) =>
-        prev.map((item) =>
-          item.personId === data.senderId
+    setChatList((prev) =>
+      prev.map((item) =>
+        item.personId === newMessage.senderId
           ? {
               ...item,
               unreadCount: item.unreadCount + 1,
-              lastMessage: data.content,
-              dateLastMessage: data.date,
+              lastMessage: newMessage.content,
+              dateLastMessage: newMessage.date,
             }
           : item
-        )
       )
-    };
-
-    return () => {
-      socket.onmessage = null;
-    };
-  }, [socket]);
+    );
+  }, [newMessage]);
 
   function loadChats(newSearch = false) {
     setLoading(true);
