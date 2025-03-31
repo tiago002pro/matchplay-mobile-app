@@ -6,10 +6,14 @@ import { Button, View } from "react-native";
 import { ProfileScreen } from "@screens/tab/ProfileScreen";
 import { GamesScreen } from "@screens/tab/GamesScreen";
 import { MatchScreen } from "@screens/tab/MatchScreen";
+import { useState } from "react";
+import { TabIcon } from "components/TabIcon";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
 export default function TabRoutes() {
+  const [ unreadCount, setUnreadCount ] = useState(0);
+
   return(
     <Navigator
       screenOptions={{
@@ -71,7 +75,7 @@ export default function TabRoutes() {
         component={ChatRoutes}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
-          <Ionicons name={focused ? 'chatbubble-ellipses-sharp' : 'chatbubble-ellipses-outline'} color={color} size={size}/>,
+          <TabIcon unreadCount={unreadCount} focused={focused} color={color} size={size} />,
           headerRight: () => (
             <View style={{ flexDirection: 'row' }}>
               <Button

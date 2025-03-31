@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "contexts/AuthContext";
+import { useSocket } from "contexts/SocketContext";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { ChatDTO } from "interfaces/IChatDTO";
 import { IMessageDTO } from "interfaces/IMessage";
@@ -13,12 +14,12 @@ import { THEME } from "styles/Theme";
 
 export default function MessageScreen({ route }:any) {
   const { authState } = useAuth();
-  const { getMessages } = MessageService();
+  const { socket } = useSocket();
+  const { getMessages, readAllMessages } = MessageService();
   const pageSize = 10;
   const chat: ChatDTO = route.params.chat;
   const senderId = authState.user.personId;
 
-  const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState<IMessageDTO[]>([]);
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(false);
@@ -26,27 +27,26 @@ export default function MessageScreen({ route }:any) {
   const [inputText, setInputText] = useState("");
   
   useEffect(() => {
-    conectWebSocket();
     if (page > 0) loadMessages(false);
     else loadMessages(true);
   }, [page]);
 
-  function conectWebSocket() {
-    const ws = new WebSocket(`ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket?userId=${senderId}`);
-    ws.onopen = () => console.log("Conectado ao WebSocket!");
+  useEffect(() => {
+    if (!socket) return;
 
-    ws.onmessage = (event) => {
+    socket.onmessage = (event) => {
       const data:IMessageDTO = JSON.parse(event.data);
       setMessages((prevMessages) => [data, ...prevMessages]);
     };
 
-    ws.onerror = (error) => console.log("Erro no WebSocket:", error);
-    ws.onclose = () => console.log("Conexão WebSocket fechada.");
+    return () => {
+      socket.onmessage = null;
+    };
+  }, [socket]);
 
-    setSocket(ws);
-
-    return () => ws.close();
-  }
+  useEffect(() => {
+    readAllMessages(chat.id, chat.personId).then(() => {});
+  }, [messages]);
 
   function loadMessages(newSearch = false) {
     setLoading(true);
@@ -83,7 +83,7 @@ export default function MessageScreen({ route }:any) {
         id: null,
         senderId,
         content: inputText,
-        read: false,
+        isRead: false,
         date: new Date().toDateString(),
       }
 
@@ -131,18 +131,12 @@ export default function MessageScreen({ route }:any) {
               <View style={[styles.readContainer, item.senderId === senderId ? {justifyContent: 'flex-end'} : {justifyContent: 'flex-start'}]}>
                 <Text style={[styles.dateText, item.senderId === senderId ? {textAlign: "right"} : {textAlign: "left"}]}>{convertDate(item.date)}</Text>
                 {
-                  item.read ?
-                  <Ionicons
-                    name="checkmark-done"
-                    size={15}
-                    color={THEME.colors.font}
-                  />
-                  :
-                  <Ionicons
-                    name="checkmark"
-                    size={15}
-                    color={THEME.colors.font}
-                  />
+                  item.senderId === senderId
+                    && <Ionicons
+                      name={item.isRead ? "checkmark-done" : "checkmark"}
+                      size={15}
+                      color={item.isRead ? THEME.colors.secondary : THEME.colors.font}
+                    />
                 }
               </View>
             </View>

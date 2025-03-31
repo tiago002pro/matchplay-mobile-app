@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     height: width - width * .20,
     borderRadius: width - width * .20,
     position: 'absolute',
-    backgroundColor: THEME.colors.primary,
+    backgroundColor: THEME.colors.secondary,
   },
   info: {
     width: widthScreen - (width * 2) - (THEME.sizes.paddingPage * 2) - (100 - THEME.sizes.paddingPage * 2),

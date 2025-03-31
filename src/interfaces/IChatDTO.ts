@@ -3,7 +3,8 @@ export interface ChatDTO {
   personId:number;
   name:string;
   lastMessage:string;
-  dateLastMessage:Date;
+  dateLastMessage:string;
   image?:string;
   date:Date;
+  unreadCount:number;
 }

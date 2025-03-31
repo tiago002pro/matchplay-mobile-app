@@ -5,5 +5,5 @@ export interface IChat {
   recipientId?:number;
   text?:string;
   date?:Date;
-  read?:boolean;
+  isRead?:boolean;
 }

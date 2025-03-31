@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { Image, View } from "native-base";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList, Pressable, SafeAreaView } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { THEME } from "styles/Theme";
@@ -13,6 +13,8 @@ import { IPageable } from "interfaces/IPageable";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { EmptyData } from "components/EmptyData";
 import { useAuth } from "contexts/AuthContext";
+import { IMessageDTO } from "interfaces/IMessage";
+import { useSocket } from "contexts/SocketContext";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -20,6 +22,7 @@ const width = widthScreen * .2;
 export function ChatScreen() {
   const navigation:any = useNavigation();
   const { authState } = useAuth();
+  const { socket } = useSocket();
   const { getAllByPersonId } = ChatService();
   const pageSize = 10;
 
@@ -43,7 +46,30 @@ export function ChatScreen() {
       }
     }, [page, search])
   );
-  
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.onmessage = (event) => {
+      const data:IMessageDTO = JSON.parse(event.data);
+      setChatList((prev) =>
+        prev.map((item) =>
+          item.personId === data.senderId
+          ? {
+              ...item,
+              unreadCount: item.unreadCount + 1,
+              lastMessage: data.content,
+              dateLastMessage: data.date,
+            }
+          : item
+        )
+      )
+    };
+
+    return () => {
+      socket.onmessage = null;
+    };
+  }, [socket]);
 
   function loadChats(newSearch = false) {
     setLoading(true);
@@ -113,6 +139,12 @@ export function ChatScreen() {
                     <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
                     {
                       item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
+                    }
+                    {
+                      item.unreadCount > 0 &&
+                        <View style={styles.notification}>
+                          <Text style={styles.notificationText}>{item.unreadCount.toString()}</Text>
+                        </View>
                     }
                   </View>
                   <View style={styles.info}>
@@ -187,7 +219,23 @@ const styles = StyleSheet.create({
     height: width - width * .1,
     borderRadius: width - width * .1,
     position: 'absolute',
+    backgroundColor: THEME.colors.secondary,
+  },
+  notification: {
+    position: "absolute",
+    right: 0,
+    top: -45,
     backgroundColor: THEME.colors.primary,
+    borderRadius: width - width * .7,
+    width: width - width * .7,
+    height: width - width * .7,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  notificationText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: THEME.colors.font,
   },
   info: {
     width: widthScreen - (width * 2) - (THEME.sizes.paddingPage * 2) - 5,
