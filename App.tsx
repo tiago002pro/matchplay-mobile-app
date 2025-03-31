@@ -8,6 +8,7 @@ import { AuthProvider } from './src/contexts/AuthContext';
 import { LogBox } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { SocketProvider } from 'contexts/SocketContext';
+import { UnreadMessagesProvider } from 'contexts/UnreadMessagesContext';
 
 export default function App() {
   useEffect(() => {
@@ -21,8 +22,10 @@ export default function App() {
       <NavigationContainer>
         <AuthProvider>
           <SocketProvider>
-            <StatusBar barStyle={'light-content'} />
-            <Routes />
+            <UnreadMessagesProvider>
+              <StatusBar barStyle={'light-content'} />
+              <Routes />
+            </UnreadMessagesProvider>
           </SocketProvider>
         </AuthProvider>
       </NavigationContainer>

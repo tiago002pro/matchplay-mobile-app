@@ -6,13 +6,31 @@ import { Button, View } from "react-native";
 import { ProfileScreen } from "@screens/tab/ProfileScreen";
 import { GamesScreen } from "@screens/tab/GamesScreen";
 import { MatchScreen } from "@screens/tab/MatchScreen";
-import { useState } from "react";
+import { useEffect } from "react";
 import { TabIcon } from "components/TabIcon";
+import { MessageService } from "service/MessageService";
+import { useAuth } from "contexts/AuthContext";
+import { useUnreadMessages } from "contexts/UnreadMessagesContext";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
 export default function TabRoutes() {
-  const [ unreadCount, setUnreadCount ] = useState(0);
+  const { authState } = useAuth();
+  const { getUnreadCount } = MessageService();
+  const { unreadCount, setUnreadCount } = useUnreadMessages();
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await getUnreadCount(authState?.user?.personId);
+        setUnreadCount(response.result);
+      } catch (error) {
+        console.error("Erro ao buscar mensagens não lidas:", error);
+      }
+    };
+
+    fetchUnreadCount();
+  }, []);
 
   return(
     <Navigator

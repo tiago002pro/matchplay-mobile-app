@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "contexts/AuthContext";
 import { useSocket } from "contexts/SocketContext";
+import { useUnreadMessages } from "contexts/UnreadMessagesContext";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { ChatDTO } from "interfaces/IChatDTO";
 import { IMessageDTO } from "interfaces/IMessage";
@@ -15,7 +16,9 @@ import { THEME } from "styles/Theme";
 export default function MessageScreen({ route }:any) {
   const { authState } = useAuth();
   const { socket, newMessage } = useSocket();
-  const { getMessages, readAllMessages } = MessageService();
+  const { setUnreadCount } = useUnreadMessages();
+
+  const { getMessages, readAllMessages, getUnreadCount } = MessageService();
   const pageSize = 10;
   const chat: ChatDTO = route.params.chat;
   const senderId = authState.user.personId;
@@ -41,6 +44,9 @@ export default function MessageScreen({ route }:any) {
 
   useEffect(() => {
     readAllMessages(chat.id, chat.personId).then(() => {});
+    getUnreadCount(senderId).then((response) => {
+      setUnreadCount(response.result)
+    })
   }, [messages]);
 
   function loadMessages(newSearch = false) {
