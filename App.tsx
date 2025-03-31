@@ -7,6 +7,7 @@ import { NativeBaseProvider, StatusBar } from 'native-base';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { LogBox } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
+import { SocketProvider } from 'contexts/SocketContext';
 
 export default function App() {
   useEffect(() => {
@@ -19,8 +20,10 @@ export default function App() {
     <NativeBaseProvider>
       <NavigationContainer>
         <AuthProvider>
-          <StatusBar barStyle={'light-content'}/>
-          <Routes/>
+          <SocketProvider>
+            <StatusBar barStyle={'light-content'} />
+            <Routes />
+          </SocketProvider>
         </AuthProvider>
       </NavigationContainer>
       <FlashMessage position="top" />
