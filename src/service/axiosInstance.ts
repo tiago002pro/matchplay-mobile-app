@@ -4,7 +4,7 @@ import getEnvVars from "../config/env";
 const { API_URL } = getEnvVars;
 
 const axiosInstance  = axios.create({
-  baseURL: API_URL,
+  baseURL: "https://api.matchplay.cloud/api/matchplay",
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",

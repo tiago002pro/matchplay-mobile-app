@@ -15,7 +15,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!authState?.user?.personId) return; // Só conecta se o usuário estiver logado
 
-    let ws = new WebSocket(`${WEBSOCKET_URL}?userId=${authState?.user?.personId}`);
+    let ws = new WebSocket(`ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket?userId=${authState?.user?.personId}`);
 
     ws.onopen = () => console.log("✅ Conectado ao WebSocket!");
     ws.onmessage = (event) => {
