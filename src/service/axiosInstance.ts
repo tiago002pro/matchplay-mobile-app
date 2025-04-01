@@ -1,10 +1,10 @@
 import axios from "axios";
-import getEnvVars from "../config/env";
+import Constants from "expo-constants";
 
-const { API_URL } = getEnvVars;
+const { API_URL } = Constants.expoConfig.extra;
 
 const axiosInstance  = axios.create({
-  baseURL: "https://api.matchplay.cloud/api/matchplay",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",
