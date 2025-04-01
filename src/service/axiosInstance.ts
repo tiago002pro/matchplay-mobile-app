@@ -1,10 +1,8 @@
 import axios from "axios";
-import Constants from "expo-constants";
-
-const { API_URL } = Constants.expoConfig.extra;
+import { EXPO_PUBLIC_API_URL } from "@env";
 
 const axiosInstance  = axios.create({
-  baseURL: API_URL,
+  baseURL: EXPO_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",

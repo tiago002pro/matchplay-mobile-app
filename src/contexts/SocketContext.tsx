@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { IMessageDTO } from "interfaces/IMessage";
-import Constants from "expo-constants";
 
-const { WEBSOCKET_URL } = Constants.expoConfig.extra;
+import { EXPO_PUBLIC_WEBSOCKET_URL } from "@env";
 
 const SocketContext = createContext(null);
 
@@ -15,7 +14,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!authState?.user?.personId) return; // Só conecta se o usuário estiver logado
 
-    let ws = new WebSocket(`${WEBSOCKET_URL}?userId=${authState?.user?.personId}`);
+    let ws = new WebSocket(`${EXPO_PUBLIC_WEBSOCKET_URL}?userId=${authState?.user?.personId}`);
 
     ws.onopen = () => console.log("✅ Conectado ao WebSocket!");
     ws.onmessage = (event) => {

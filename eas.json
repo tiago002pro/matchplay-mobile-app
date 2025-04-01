@@ -4,6 +4,11 @@
   },
   "build": {
     "development": {
+      "env": {
+        "EXPO_PUBLIC_ENVIRONMENT": "development",
+        "EXPO_PUBLIC_API_URL": "http://localhost:9090/api/matchplay",
+        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://localhost:9091/api/matchplay/buildrun-livechat-websocket"
+      },
       "distribution": "internal",
       "android": {
         "buildType": "apk"
@@ -22,6 +27,11 @@
       }
     },
     "production": {
+      "env": {
+        "EXPO_PUBLIC_ENVIRONMENT": "production",
+        "EXPO_PUBLIC_API_URL": "https://api.matchplay.cloud/api/matchplay",
+        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket"
+      },
       "distribution": "store",
       "android": {
         "buildType": "app-bundle"
