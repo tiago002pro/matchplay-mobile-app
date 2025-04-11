@@ -17,6 +17,9 @@ export default ({ config }) => {
     extra: {
       ...envConfig[ENV],
       environment: ENV,
+      eas: {
+        projectId: "e500cf03-efe4-4f15-afa4-fb851c399e56",
+      },
     },
   };
 };
