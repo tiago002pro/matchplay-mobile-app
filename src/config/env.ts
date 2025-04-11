@@ -5,7 +5,7 @@ const ENV = {
   },
   prod: {
     API_URL: "https://api.matchplay.cloud:9090/api/matchplay",
-    WEBSOCKET_URL: "wss://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket",
+    WEBSOCKET_URL: "ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket",
   },
 };
 
