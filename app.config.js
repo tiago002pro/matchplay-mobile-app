@@ -1,21 +1,11 @@
 export default ({ config }) => {
   const ENV = process.env.EXPO_PUBLIC_ENVIRONMENT || "development";
 
-  const envConfig = {
-    development: {
-      API_URL: "http://localhost:9090/api/matchplay",
-      WEBSOCKET_URL: "ws://localhost:9091/api/matchplay/buildrun-livechat-websocket",
-    },
-    production: {
-      API_URL: "https://api.matchplay.cloud:9090/api/matchplay",
-      WEBSOCKET_URL: "wss://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket",
-    },
-  };
-
   return {
     ...config,
     extra: {
-      ...envConfig[ENV],
+      API_URL: process.env.EXPO_PUBLIC_API_URL,
+      WEBSOCKET_URL: process.env.EXPO_PUBLIC_WEBSOCKET_URL,
       environment: ENV,
       eas: {
         projectId: "e500cf03-efe4-4f15-afa4-fb851c399e56",
