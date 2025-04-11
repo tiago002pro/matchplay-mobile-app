@@ -2,17 +2,20 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "jsx": "react-native",
+    "allowJs": true,
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
-      "@screens/*": ["screens/*"]
+      "@screens/*": [
+        "screens/*"
+      ]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
     "metro.config.js",
+    "expo-env.d.ts"
   ]
 }
