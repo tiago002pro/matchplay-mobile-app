@@ -1,7 +1,7 @@
 {
   "name": "matchplay-mobile-app",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "scripts": {
     "start": "expo start",
     "start:production": "cross-env EXPO_PUBLIC_ENVIRONMENT=production EXPO_PUBLIC_API_URL=https://api.matchplay.cloud:9090/api/matchplay EXPO_PUBLIC_WEBSOCKET_URL=wss://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket npx expo start --clear",
