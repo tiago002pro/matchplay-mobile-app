@@ -6,8 +6,8 @@
     "development": {
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "development",
-        "EXPO_PUBLIC_API_URL": "http://localhost:9090/api/matchplay",
-        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://localhost:9091/api/matchplay/buildrun-livechat-websocket"
+        "EXPO_PUBLIC_API_URL": "http://192.168.18.10:9090/api/matchplay",
+        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://192.168.18.10:9091/api/matchplay/buildrun-livechat-websocket"
       },
       "distribution": "internal",
       "android": {

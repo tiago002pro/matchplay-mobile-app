@@ -9,6 +9,7 @@ import { LogBox } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { SocketProvider } from 'contexts/SocketContext';
 import { UnreadMessagesProvider } from 'contexts/UnreadMessagesContext';
+import NotificationSetup from 'notification/NotificationSetup';
 
 export default function App() {
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function App() {
             <UnreadMessagesProvider>
               <StatusBar barStyle={'light-content'} />
               <Routes />
+              <NotificationSetup />
             </UnreadMessagesProvider>
           </SocketProvider>
         </AuthProvider>

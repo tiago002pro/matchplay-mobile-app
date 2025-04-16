@@ -22,6 +22,7 @@ export default function MessageScreen({ route }:any) {
   const pageSize = 10;
   const chat: ChatDTO = route.params.chat;
   const senderId = authState.user.personId;
+  const senderName = authState.user.name;
 
   const [messages, setMessages] = useState<IMessageDTO[]>([]);
   const [page, setPage] = useState<number>(0);
@@ -77,6 +78,7 @@ export default function MessageScreen({ route }:any) {
       const data = {
         chatId: chat.id,
         senderId,
+        senderName: senderName,
         content: inputText
       };
 

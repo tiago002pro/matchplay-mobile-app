@@ -29,7 +29,8 @@
         "ACCESS_WIFI_STATE",
         "ACCESS_NETWORK_STATE",
         "READ_MEDIA_IMAGES",
-        "READ_MEDIA_VIDEO"
+        "READ_MEDIA_VIDEO",
+        "NOTIFICATIONS"
       ]
     },
     "web": {
@@ -52,6 +53,13 @@
               }
             }
           }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/adaptive-icon.png",
+          "color": "#ffffff"
         }
       ]
     ],
