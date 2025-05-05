@@ -34,6 +34,7 @@ export default function TabRoutes() {
 
   return(
     <Navigator
+      initialRouteName="Match"
       screenOptions={{
         headerShown: false,
         headerShadowVisible: false,
