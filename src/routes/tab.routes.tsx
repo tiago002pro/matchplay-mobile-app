@@ -1,16 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { THEME } from "styles/Theme";
 import ChatRoutes from "routes/chat.routes";
-import { Button, View } from "react-native";
 import { ProfileScreen } from "@screens/tab/ProfileScreen";
 import { GamesScreen } from "@screens/tab/GamesScreen";
 import { MatchScreen } from "@screens/tab/MatchScreen";
 import { useEffect } from "react";
-import { TabIcon } from "components/TabIcon";
 import { MessageService } from "service/MessageService";
 import { useAuth } from "contexts/AuthContext";
 import { useUnreadMessages } from "contexts/UnreadMessagesContext";
+import { MatchersScreen } from "@screens/tab/MatchersScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -37,37 +35,41 @@ export default function TabRoutes() {
       initialRouteName="Match"
       screenOptions={{
         headerShown: false,
-        headerShadowVisible: false,
-        headerTitle: '',
-        tabBarShowLabel: false,
-        headerStyle: {
-          backgroundColor: THEME.colors.background,
-        },
         tabBarStyle: {
-          backgroundColor: THEME.colors.background,
+          backgroundColor: '#1a1a2e',
           borderTopWidth: 0,
-          height: THEME.sizes.heightTabBar,
+          height: 80,
+          paddingBottom: 20,
+          paddingTop: 10,
         },
-        tabBarInactiveTintColor: THEME.colors.font,
-        tabBarActiveTintColor: THEME.colors.primary,
+        tabBarActiveTintColor: '#8B5CF6',
+        tabBarInactiveTintColor: '#666',
         tabBarLabelStyle: {
+          fontSize: 12,
+          fontFamily: 'Inter-SemiBold',
           marginTop: -5,
           marginBottom: 5,
         },
-        headerTitleStyle: {
-          color: THEME.colors.font,
-          fontWeight: '700',
-          textTransform: 'capitalize',
-        },
+        headerShadowVisible: false,
+        tabBarShowLabel: false,
       }}
     >
 
       <Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Match"
+        component={MatchScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
-            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={size}/>
+          <Ionicons name={focused ? 'flash-sharp' : 'flash-outline'} color={color} size={size}/>
+        }}
+      />
+
+      <Screen
+        name="Matchers"
+        component={MatchersScreen}
+        options={{
+          tabBarIcon: ({ color, size, focused }) =>
+          <Ionicons name={focused ? 'heart-sharp' : 'heart-outline'} color={color} size={size}/>
         }}
       />
 
@@ -81,34 +83,20 @@ export default function TabRoutes() {
       />
 
       <Screen
-        name="Match"
-        component={MatchScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) =>
-          <Ionicons name={focused ? 'people-sharp' : 'people-outline'} color={color} size={size}/>
-        }}
-      />
-
-      <Screen
         name="Chat"
         component={ChatRoutes}
         options={{
           tabBarIcon: ({ color, size, focused }) =>
-          <TabIcon unreadCount={unreadCount} focused={focused} color={color} size={size} />,
-          headerRight: () => (
-            <View style={{ flexDirection: 'row' }}>
-              <Button
-                onPress={() => {}}
-                title="Chat"
-                color={THEME.colors.font}
-              />
-              <Button
-                onPress={() =>{}}
-                title="Match"
-                color={THEME.colors.font}
-              />
-            </View>
-          ),
+            <Ionicons name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'} color={color} size={size}/>
+        }}
+      />
+
+      <Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color, size, focused }) =>
+            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={size}/>
         }}
       />
     </Navigator>

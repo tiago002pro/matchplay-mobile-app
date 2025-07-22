@@ -13,8 +13,8 @@ import { GamesService } from "../../service/GamesService";
 
 import { IRawgGamesResponse } from "../../interfaces/IGames";
 import { EmptyData } from "components/EmptyData";
-import { LinearGradient } from "expo-linear-gradient";
 import { Filter } from "lucide-react-native";
+import { GradientBackground } from "components/GradientBackground";
 
 export function GamesScreen() {
   const pageSize = 10;
@@ -138,10 +138,7 @@ export function GamesScreen() {
 
   return(
     <SafeAreaView style={styles.safeAreaView}>
-      <LinearGradient
-        colors={['#1a1a2e', '#16213e', '#0f3460']}
-        style={styles.container}
-      >
+      <GradientBackground>
         <View style={styles.searchContainer}>
           <View style={styles.input}>
             <InputComponent
@@ -190,7 +187,7 @@ export function GamesScreen() {
           title="Opss..."
           text="Nenhum jogo encontrado."
         />
-      </LinearGradient>
+      </GradientBackground>
     </SafeAreaView>
   );
 }

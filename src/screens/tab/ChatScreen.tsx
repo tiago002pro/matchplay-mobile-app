@@ -14,6 +14,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { EmptyData } from "components/EmptyData";
 import { useAuth } from "contexts/AuthContext";
 import { useSocket } from "contexts/SocketContext";
+import { GradientBackground } from "components/GradientBackground";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -103,87 +104,87 @@ export function ChatScreen() {
   }
 
   return(
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <FlatList
-          ref={listRef}
-          data={chatList}
-          keyExtractor={(item:ChatDTO) => String(item.id)}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          showsHorizontalScrollIndicator={false}
-          initialNumToRender={3} // Carrega apenas 10 itens inicialmente
-          maxToRenderPerBatch={pageSize} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
-          removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-          ListFooterComponent={
-            loading ? <ActivityIndicator
-              size="large"
-              color={THEME.colors.primary}
-              style={{marginTop: 300}}
-              />
-            : null
-          }
-          renderItem={({item}) => {
-            return(
-              <Pressable onPress={() => goToMessage(item)}>
-                <View style={styles.chatContainer}>
-                  <View style={styles.imageContainer}>
-                    <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
-                    {
-                      item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
-                    }
-                    {
-                      item.unreadCount > 0 &&
-                        <View style={styles.notification}>
-                          <Text style={styles.notificationText}>{item.unreadCount.toString()}</Text>
-                        </View>
-                    }
+    <GradientBackground>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <FlatList
+            ref={listRef}
+            data={chatList}
+            keyExtractor={(item:ChatDTO) => String(item.id)}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={3} // Carrega apenas 10 itens inicialmente
+            maxToRenderPerBatch={pageSize} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
+            removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
+            ListFooterComponent={
+              loading ? <ActivityIndicator
+                size="large"
+                color={THEME.colors.primary}
+                style={{marginTop: 300}}
+                />
+              : null
+            }
+            renderItem={({item}) => {
+              return(
+                <Pressable onPress={() => goToMessage(item)}>
+                  <View style={styles.chatContainer}>
+                    <View style={styles.imageContainer}>
+                      <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
+                      {
+                        item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
+                      }
+                      {
+                        item.unreadCount > 0 &&
+                          <View style={styles.notification}>
+                            <Text style={styles.notificationText}>{item.unreadCount.toString()}</Text>
+                          </View>
+                      }
+                    </View>
+                    <View style={styles.info}>
+                      <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                      {
+                        item.lastMessage
+                          ? <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
+                          : <Text style={styles.lastMessage} numberOfLines={2}>Vazio... dizer olá?</Text>
+                      }
+                      <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
+                    </View>
+                    <View style={styles.imageContainer}>
+                      <Pressable style={styles.btnMore}>
+                        <Feather
+                          name="more-vertical"
+                          size={width * .4}
+                          color={THEME.colors.primary}
+                        />
+                      </Pressable>
+                    </View>
+                    <View style={styles.containerLine}>
+                      <View style={styles.line}></View>
+                    </View>
                   </View>
-                  <View style={styles.info}>
-                    <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                    {
-                      item.lastMessage
-                        ? <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
-                        : <Text style={styles.lastMessage} numberOfLines={2}>Vazio... dizer olá?</Text>
-                    }
-                    <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
-                  </View>
-                  <View style={styles.imageContainer}>
-                    <Pressable style={styles.btnMore}>
-                      <Feather
-                        name="more-vertical"
-                        size={width * .4}
-                        color={THEME.colors.primary}
-                      />
-                    </Pressable>
-                  </View>
-                  <View style={styles.containerLine}>
-                    <View style={styles.line}></View>
-                  </View>
-                </View>
-              </Pressable>
-            );
-          }}
-        />
+                </Pressable>
+              );
+            }}
+          />
 
-        <EmptyData
-          dataList={chatList}
-          title="Opss..."
-          text="Você ainda não conversou com ninguém."
-        />
-      </View>
-    </SafeAreaView>
+          <EmptyData
+            dataList={chatList}
+            title="Opss..."
+            text="Você ainda não conversou com ninguém."
+          />
+        </View>
+      </SafeAreaView>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   container: {
-    padding: THEME.sizes.paddingPage,
-    backgroundColor: THEME.colors.background,
+    flex: 1,
   },
   text: {
     color: THEME.colors.font,

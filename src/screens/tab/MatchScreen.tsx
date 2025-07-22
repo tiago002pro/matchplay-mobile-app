@@ -14,6 +14,7 @@ import { IPerson } from "../../interfaces/IPerson";
 import { IMatchRequest } from "../../interfaces/IMatch";
 import { MatchStatus } from "../../enums/MatchStatus";
 import { EmptyData } from "components/EmptyData";
+import { GradientBackground } from "components/GradientBackground";
 
 const { width, height } = Dimensions.get("window");
 
@@ -103,54 +104,53 @@ export function MatchScreen() {
   };
 
   return(
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <FlatList
-          ref={flatListRef}
-          data={profiles}
-          keyExtractor={(data:any) => data.id}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={handleScrollEnd}
-          renderItem={({item}) =>
-            <View style={styles.cardContainer}>
-              <MatchCard
-                person={item}
-                pointerEvents={`none`}
-              />
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.dislikeButton} onPress={handleDislike}>
-                  <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
-                  <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
-                </TouchableOpacity>
+    <GradientBackground>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <FlatList
+            ref={flatListRef}
+            data={profiles}
+            keyExtractor={(data:any) => data.id}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={handleScrollEnd}
+            renderItem={({item}) =>
+              <View style={styles.cardContainer}>
+                <MatchCard
+                  person={item}
+                  pointerEvents={`none`}
+                />
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.dislikeButton} onPress={handleDislike}>
+                    <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
+                    <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          }
-        />
-      </View>
+            }
+          />
+        </View>
 
-      <EmptyData
-        dataList={profiles}
-        title="Opss..."
-        text="Nenhum perfil foi encontrado."
-      />
-    </SafeAreaView>
+        <EmptyData
+          dataList={profiles}
+          title="Opss..."
+          text="Nenhum perfil foi encontrado."
+        />
+      </SafeAreaView>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: THEME.sizes.paddingPage ,
-    backgroundColor: THEME.colors.background,
   },
   profiles: {
     display: `flex`,

@@ -5,7 +5,6 @@ import { THEME } from "styles/Theme";
 import MessageScreen from "@screens/stack/MessageScreen";
 import { Dimensions, View } from "react-native";
 import { Button } from "native-base";
-import { MatchersScreen } from "@screens/tab/MatchersScreen";
 
 const { Navigator, Screen } = createStackNavigator();
 const { width } = Dimensions.get("window");
@@ -14,30 +13,22 @@ const widthHeaderBtn = (width / 2) - (THEME.sizes.paddingPage);
 export default function ChatRoutes() {
   return (
     <Navigator
-      screenOptions={({ navigation, route }) => ({
-        headerShown: true,
+      screenOptions={{
+        headerShown: false,
         headerShadowVisible: false,
         headerStyle: {
-          backgroundColor: THEME.colors.background,
+          backgroundColor: THEME.colors.primary,
         },
-        headerTitleAlign: 'center',
         headerTitleStyle: {
           color: THEME.colors.font,
           fontWeight: '700',
           textTransform: 'capitalize',
         },
-        headerRight: () => <HeaderButtons navigation={navigation} currentScreen={route.name}/>
-      })}
+      }}
     >
       <Screen
         name="ChatScreen"
         component={ChatScreen}
-        options={() => ({ title: null })}
-      />
-
-      <Screen
-        name="MatchersScreen"
-        component={MatchersScreen}
         options={() => ({ title: null })}
       />
 

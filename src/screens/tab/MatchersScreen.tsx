@@ -15,6 +15,7 @@ import { MatchService } from "service/MatchService";
 import { MatchStatus } from "enums/MatchStatus";
 import { MatchedStatus } from "enums/MatchedStatus";
 import { useAuth } from "contexts/AuthContext";
+import { GradientBackground } from "components/GradientBackground";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -92,70 +93,70 @@ export function MatchersScreen() {
   }
 
   return(
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <FlatList
-          ref={listRef}
-          data={machersList}
-          keyExtractor={(item:MatchersDTO) => String(item.id)}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          showsHorizontalScrollIndicator={false}
-          initialNumToRender={3} // Carrega apenas 10 itens inicialmente
-          maxToRenderPerBatch={pageSize} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
-          removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-          ListFooterComponent={
-            loading ? <ActivityIndicator
-              size="large"
-              color={THEME.colors.primary}
-              style={{marginTop: 300}}
-              />
-            : null
-          }
-          renderItem={({item}) => {
-            return(
-              <View style={styles.chatContainer}>
-                <View style={styles.imageContainer}>
-                  <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
-                  {
-                    item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
-                  }
+    <GradientBackground>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <FlatList
+            ref={listRef}
+            data={machersList}
+            keyExtractor={(item:MatchersDTO) => String(item.id)}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={3} // Carrega apenas 10 itens inicialmente
+            maxToRenderPerBatch={pageSize} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
+            removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
+            ListFooterComponent={
+              loading ? <ActivityIndicator
+                size="large"
+                color={THEME.colors.primary}
+                style={{marginTop: 300}}
+                />
+              : null
+            }
+            renderItem={({item}) => {
+              return(
+                <View style={styles.chatContainer}>
+                  <View style={styles.imageContainer}>
+                    <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
+                    {
+                      item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
+                    }
+                  </View>
+                  <View style={styles.info}>
+                    <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
+                    <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.dislikeButton} onPress={() => manage(item, MatchedStatus.DANIED)}>
+                      <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.likeButton} onPress={() => manage(item, MatchedStatus.ACCEPTED)}>
+                      <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={styles.info}>
-                  <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                  <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.dislikeButton} onPress={() => manage(item, MatchedStatus.DANIED)}>
-                    <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.likeButton} onPress={() => manage(item, MatchedStatus.ACCEPTED)}>
-                    <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
 
-        <EmptyData 
-          dataList={machersList}
-          title="Opss..."
-          text="Você ainda não teve nenhum match."
-        />
-      </View>
-    </SafeAreaView>
+          <EmptyData 
+            dataList={machersList}
+            title="Opss..."
+            text="Você ainda não teve nenhum match."
+          />
+        </View>
+      </SafeAreaView>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   container: {
-    padding: THEME.sizes.paddingPage,
-    backgroundColor: THEME.colors.background,
+    flex: 1,
   },
   text: {
     color: THEME.colors.font,

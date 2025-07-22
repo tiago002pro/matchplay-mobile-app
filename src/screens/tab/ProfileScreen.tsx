@@ -16,6 +16,7 @@ import { PersonService } from "../../service/PersonService";
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
 import { IGame } from "interfaces/IGames";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { GradientBackground } from "components/GradientBackground";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
@@ -56,100 +57,99 @@ export function ProfileScreen() {
   }
 
   return(
-    <SafeAreaView style={styles.safeAreaView}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.container}>
-          {person && <ProfileImagePicker person={person} setPerson={setPerson} />}
+    <GradientBackground>
+      <SafeAreaView style={styles.safeAreaView}>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.container}>
+            {person && <ProfileImagePicker person={person} setPerson={setPerson} />}
 
-          {
-            person &&
-            <Pressable onPress={() => setEditUsernameModalVisible(true)}>
-              <Box style={styles.section}>
-                <Text style={styles.text}>Nome de usuário:</Text>
-                <Text style={styles.name}>{person?.name}</Text>
+            {
+              person &&
+              <Pressable onPress={() => setEditUsernameModalVisible(true)}>
+                <Box style={styles.section}>
+                  <Text style={styles.text}>Nome de usuário:</Text>
+                  <Text style={styles.name}>{person?.name}</Text>
+                </Box>
+
+                {
+                  editUsernameModalVisible &&
+                  <EditUsernameModal
+                    modalVisible={editUsernameModalVisible}
+                    setModalVisible={setEditUsernameModalVisible}
+                    person={person}
+                    setPerson={setPerson}
+                  />
+                }
+              </Pressable>
+            }
+
+            {
+              gamerPeriod &&
+              <Pressable onPress={() => setGamerPeriodModalVisible(true)} style={styles.pressable}>
+                <Box style={styles.gamerPeriodBtn}>
+                  <Text style={styles.text}>Selecione dias de jogo</Text>
+                  <GamerPeriod
+                    gamerPeriod={gamerPeriod}
+                    setGamerPeriod={setGamerPeriod}
+                    pointerEvents={`none`}
+                  />
+                  {
+                    gamerPeriodModalVisible &&
+                    <EditGamerPeriodModal
+                      modalVisible={gamerPeriodModalVisible}
+                      setModalVisible={setGamerPeriodModalVisible}
+                      gamerPeriod={gamerPeriod}
+                      setGamerPeriod={setGamerPeriod}
+                    />
+                  }
+                </Box>
+              </Pressable>
+            }
+
+            <Box style={styles.section}>
+              <Box style={[styles.section, {marginBottom: 5}]}>
+                <Text style={styles.text}>Jogos:</Text>
+                <Text style={styles.text}>(Toque para editar ou remover)</Text>
               </Box>
 
               {
-                editUsernameModalVisible &&
-                <EditUsernameModal
-                  modalVisible={editUsernameModalVisible}
-                  setModalVisible={setEditUsernameModalVisible}
-                  person={person}
-                  setPerson={setPerson}
-                />
-              }
-            </Pressable>
-          }
-
-          {
-            gamerPeriod &&
-            <Pressable onPress={() => setGamerPeriodModalVisible(true)} style={styles.pressable}>
-              <Box style={styles.gamerPeriodBtn}>
-                <Text style={styles.text}>Selecione dias de jogo</Text>
-                <GamerPeriod
-                  gamerPeriod={gamerPeriod}
-                  setGamerPeriod={setGamerPeriod}
-                  pointerEvents={`none`}
-                />
-                {
-                  gamerPeriodModalVisible &&
-                  <EditGamerPeriodModal
-                    modalVisible={gamerPeriodModalVisible}
-                    setModalVisible={setGamerPeriodModalVisible}
-                    gamerPeriod={gamerPeriod}
-                    setGamerPeriod={setGamerPeriod}
+                games && games.length
+                  ? <ProfileGames
+                    games={games}
+                    editGameModalVisible={editGameModalVisible}
+                    setEditGameModalVisible={setEditGameModalVisible}
                   />
-                }
-              </Box>
-            </Pressable>
-          }
-
-          <Box style={styles.section}>
-            <Box style={[styles.section, {marginBottom: 5}]}>
-              <Text style={styles.text}>Jogos:</Text>
-              <Text style={styles.text}>(Toque para editar ou remover)</Text>
+                  : <Text style={styles.text}>Nenhum jogo foi adicionado.</Text>
+              }
             </Box>
 
-            {
-              games && games.length
-                ? <ProfileGames
-                  games={games}
-                  editGameModalVisible={editGameModalVisible}
-                  setEditGameModalVisible={setEditGameModalVisible}
-                />
-                : <Text style={styles.text}>Nenhum jogo foi adicionado.</Text>
-            }
-          </Box>
+            <Box style={styles.section}>
+              <Pressable style={styles.btnNewGame} onPress={goToGameScreen}>
+                <Text style={styles.text}>Adicione mais jogos na aba de jogos!</Text>
+              </Pressable>
+            </Box>
 
-          <Box style={styles.section}>
-            <Pressable style={styles.btnNewGame} onPress={goToGameScreen}>
-              <Text style={styles.text}>Adicione mais jogos na aba de jogos!</Text>
-            </Pressable>
-          </Box>
-
-          <PrimaryButton
-            label="Sair"
-            action={doLogout}
-            bg={THEME.colors.primary}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            <PrimaryButton
+              label="Sair"
+              action={doLogout}
+              bg={THEME.colors.primary}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   scrollView: {
-    backgroundColor: THEME.colors.background,
+    flex: 1,
   },
   container: {
     alignItems: 'center',
-    padding: THEME.sizes.paddingPage,
-    backgroundColor: THEME.colors.background,
     gap: THEME.sizes.paddingPage * 2,
   },
   section: {
