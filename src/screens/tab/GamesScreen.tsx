@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { Pressable, Text } from "native-base";
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
-import { MaterialIcons } from "@expo/vector-icons";
 
 import { THEME } from "styles/Theme";
 import { RawgGame } from "../../components/RawgGame";
@@ -14,6 +13,8 @@ import { GamesService } from "../../service/GamesService";
 
 import { IRawgGamesResponse } from "../../interfaces/IGames";
 import { EmptyData } from "components/EmptyData";
+import { LinearGradient } from "expo-linear-gradient";
+import { Filter } from "lucide-react-native";
 
 export function GamesScreen() {
   const pageSize = 10;
@@ -26,6 +27,7 @@ export function GamesScreen() {
   const [platforms, setPlatforms] = useState<number[]>([]);
   const [platformName, setPlatformName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const listRef = useRef<FlatList>(null);
 
@@ -75,6 +77,10 @@ export function GamesScreen() {
 
   function clearInput() {
     setSearch("");
+    clearPlatforms();
+  }
+
+  function clearPlatforms() {
     setPlatforms([]);
     setPlatformName("");
   }
@@ -85,38 +91,77 @@ export function GamesScreen() {
     }
   }
 
+  const renderFilters = () => (
+    <View style={styles.filtersContainer}>
+      <Text style={styles.filterTitle}>Plataforma</Text>
+        <View style={styles.filterOptions}>
+          <TouchableOpacity
+            style={[styles.filterChip, !platformName && styles.filterChipActive]}
+            onPress={clearPlatforms}
+          >
+            <Text style={[styles.filterChipText, !platformName && styles.filterChipTextActive]}>
+              Todas
+            </Text>
+          </TouchableOpacity>
+
+        {
+          PlatformsFilter.map((platform, index) => {
+            const IconComponent = platformIcons[platform.name];
+            return IconComponent ? (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.filterChip,
+                  platform.name === platformName && styles.filterChipActive
+                ]}
+                onPress={() => setFilter(platform)}
+              >
+                <IconComponent style={styles.iconComponent} />
+                <Text
+                  style={[
+                    styles.filterChipText,
+                    platform.name === platformName && styles.filterChipTextActive]}
+                  >
+                  {platform.name}
+                </Text>
+              </TouchableOpacity>
+            ) : null;
+          })
+        }
+      </View>
+    </View>
+  );
+
   const renderRawgGame = useCallback(({ item }:any) => {
     return <RawgGame game={item} />
   }, [games])
 
   return(
     <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <View style={styles.input}>
-          <InputComponent
-            key={'GAMES'}
-            onChangeText={onChangeSearch}
-            placeholder={"Busque jogos"}
-            value={search}
-            rightElementFunction={clearInput}
-          />
+      <LinearGradient
+        colors={['#1a1a2e', '#16213e', '#0f3460']}
+        style={styles.container}
+      >
+        <View style={styles.searchContainer}>
+          <View style={styles.input}>
+            <InputComponent
+              key={'GAMES'}
+              onChangeText={onChangeSearch}
+              placeholder={"Busque jogos"}
+              value={search}
+              rightElementFunction={clearInput}
+            />
+          </View>
 
-          <ScrollView style={styles.filtersContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.filters}>
-              {
-                PlatformsFilter.map((platform, index) => {
-                  const IconComponent = platformIcons[platform.name];
-                  return IconComponent ? (
-                    <Pressable key={index} style={platform.name === platformName ? styles.platformActive : styles.platform} onPress={() => setFilter(platform)}>
-                      <IconComponent style={styles.iconComponent} />
-                      <Text style={styles.filterText}>{platform.name}</Text>
-                    </Pressable>
-                  ) : null;
-                })
-              }
-            </View>
-          </ScrollView>
+          <TouchableOpacity
+            style={[styles.filterButton, showFilters && styles.filterButtonActive]}
+            onPress={() => setShowFilters(!showFilters)}
+          >
+            <Filter size={20} color={showFilters ? "#FFFFFF" : "#8B5CF6"} />
+          </TouchableOpacity>
         </View>
+
+        {showFilters && renderFilters()}
 
         <FlatList
           ref={listRef}
@@ -126,6 +171,7 @@ export function GamesScreen() {
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           initialNumToRender={3} // Carrega apenas 10 itens inicialmente
           maxToRenderPerBatch={10} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
           removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
@@ -144,7 +190,7 @@ export function GamesScreen() {
           title="Opss..."
           text="Nenhum jogo encontrado."
         />
-      </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -152,48 +198,80 @@ export function GamesScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: THEME.colors.background,
   },
   container: {
-    padding: THEME.sizes.paddingPage,
-    backgroundColor: THEME.colors.background,
+    paddingStart: THEME.sizes.paddingPage,
+    paddingEnd: THEME.sizes.paddingPage,
+    paddingTop: THEME.sizes.paddingPage,
+    backgroundColor: "#1a1a2e",
+    flex: 1,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    marginBottom: THEME.sizes.paddingPage,
+    gap: THEME.sizes.paddingPage / 2,
   },
   input: {
-    width: `100%`,
-    marginBottom: THEME.sizes.paddingPage,
+    flex: 1,
   },
   filtersContainer: {
-    flexDirection: `row`,
-    marginTop: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: THEME.sizes.paddingPage,
+    padding: THEME.sizes.paddingPage,
+    marginBottom: THEME.sizes.paddingPage,
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.2)',
   },
-  filters: {
-    flexDirection: `row`,
-    justifyContent: `space-between`,
-    gap: 5,
+  filterTitle: {
+    fontSize: THEME.fontSizes.md,
+    fontFamily: 'Inter-SemiBold',
+    color: THEME.colors.font,
+    marginBottom: THEME.sizes.paddingPage,
   },
-  platform: {
-    borderWidth: 2,
-    borderColor: THEME.colors.primary,
-    padding: 10,
+  filterOptions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: THEME.sizes.paddingPage / 2,
+  },
+  filterChip: {
     flexDirection: `row`,
     alignItems: `center`,
-    borderRadius: 30,
+    paddingHorizontal: THEME.sizes.paddingPage / 2,
+    paddingVertical: THEME.sizes.paddingPage / 2,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.3)',
   },
-  platformActive: {
-    borderWidth: 2,
-    borderColor: THEME.colors.primary,
-    backgroundColor: THEME.colors.primary,
-    padding: 10,
-    flexDirection: `row`,
-    alignItems: `center`,
-    borderRadius: 30,
+  filterChipActive: {
+    backgroundColor: '#8B5CF6',
+    borderColor: '#8B5CF6',
+  },
+  filterChipText: {
+    fontSize: THEME.fontSizes.sm,
+    fontFamily: 'Inter-SemiBold',
+    color: '#CCCCCC',
+  },
+  filterChipTextActive: {
+    color: THEME.colors.font,
   },
   iconComponent: {
     width: 15,
     height: 15,
     marginRight: 5,
   },
-  filterText: {
-    color: THEME.colors.font,
+  filterButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.3)',
+  },
+  filterButtonActive: {
+    backgroundColor: '#8B5CF6',
+    borderColor: '#8B5CF6',
   },
 });

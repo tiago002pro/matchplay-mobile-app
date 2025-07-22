@@ -3,7 +3,8 @@ export interface IGame {
   name:string;
   image?:string;
   idRawgGame:number;
-  platforms:IGamePlatform[],
+  platforms:IGamePlatform[];
+  releaseDate:string;
 }
 
 export interface IGamePlatform {

@@ -7,6 +7,8 @@ type RawgGames = {
   name:string;
   backgroundImage?:string;
   platforms:Platform[];
+  releaseDate:string;
+  metacritic:number;
 }
 
 type Platform = {
