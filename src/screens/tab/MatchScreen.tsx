@@ -211,10 +211,10 @@ const styles = StyleSheet.create({
     borderColor: THEME.colors.primary,
   },
   emptyState: {
+    width: width,
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 100,
+    paddingTop: 120,
   },
   emptyIcon: {
     width: 80,

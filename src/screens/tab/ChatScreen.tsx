@@ -105,14 +105,14 @@ export function ChatScreen() {
 
   const renderChat = ({ item }) => (
     <TouchableOpacity
-      style={styles.matchCard}
+      style={styles.chat}
       onPress={() => goToMessage(item)}
     >
       <LinearGradient
         colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.05)']}
-        style={styles.matchCardGradient}
+        style={styles.chatGradient}
       >
-        <View style={styles.matchHeader}>
+        <View style={styles.chatHeader}>
           <View style={styles.avatarContainer}>
             <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} />
             { item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} /> }
@@ -203,19 +203,18 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 30,
   },
-
-  matchCard: {
+  chat: {
     marginBottom: 16,
     borderRadius: 16,
     overflow: 'hidden',
   },
-  matchCardGradient: {
+  chatGradient: {
     padding: 16,
     borderWidth: 1,
     borderColor: 'rgba(139, 92, 246, 0.2)',
     borderRadius: 16,
   },
-  matchHeader: {
+  chatHeader: {
     flexDirection: 'row',
     alignItems: 'center',
   },
