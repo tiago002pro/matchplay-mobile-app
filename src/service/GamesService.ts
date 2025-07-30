@@ -41,6 +41,22 @@ export function GamesService() {
     }
   }
 
+  async function getByIdRawgGameAndGamerProfile(gamerProfileId:number, idRawgGame:number) {
+    try {
+      const response = await axiosInstance.get<IApiResponse<IGame>>(`${root}/gamer-profile/${gamerProfileId}?idRawgGame=${idRawgGame}`);
+
+      if (response.data.statusCode == 200) {
+        return response.data.result;
+      } else {
+        console.log("error", response.data.statusCode);
+        throw response.data.errorMessage;
+      }
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  }
+
   async function getRawgGamesGameById(rawgGameId:number) {
     try {
       const response = await axiosInstance.get<IApiResponse<RawgGames>>(`${root}/rawg/${rawgGameId}`);
@@ -94,6 +110,7 @@ export function GamesService() {
   return {
     searchRawgPlatforms,
     searchRawgGames,
+    getByIdRawgGameAndGamerProfile,
     getRawgGamesGameById,
     update,
     deleteGame,

@@ -1,7 +1,6 @@
-import { Feather } from "@expo/vector-icons";
 import { Image, View } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, Pressable, SafeAreaView } from "react-native";
+import { Dimensions, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { THEME } from "styles/Theme";
 import moment from "moment";
@@ -11,10 +10,11 @@ import { ActivityIndicator } from "react-native-paper";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { IPageable } from "interfaces/IPageable";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { EmptyData } from "components/EmptyData";
 import { useAuth } from "contexts/AuthContext";
 import { useSocket } from "contexts/SocketContext";
 import { GradientBackground } from "components/GradientBackground";
+import { LinearGradient } from "expo-linear-gradient";
+import { MessageCircle } from "lucide-react-native";
 
 const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
@@ -103,88 +103,94 @@ export function ChatScreen() {
     });
   }
 
-  return(
-    <GradientBackground>
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.container}>
-          <FlatList
-            ref={listRef}
-            data={chatList}
-            keyExtractor={(item:ChatDTO) => String(item.id)}
-            onEndReached={loadMore}
-            onEndReachedThreshold={0.5}
-            showsHorizontalScrollIndicator={false}
-            initialNumToRender={3} // Carrega apenas 10 itens inicialmente
-            maxToRenderPerBatch={pageSize} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
-            removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-            ListFooterComponent={
-              loading ? <ActivityIndicator
-                size="large"
-                color={THEME.colors.primary}
-                style={{marginTop: 300}}
-                />
-              : null
+  const renderChat = ({ item }) => (
+    <TouchableOpacity
+      style={styles.matchCard}
+      onPress={() => goToMessage(item)}
+    >
+      <LinearGradient
+        colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.05)']}
+        style={styles.matchCardGradient}
+      >
+        <View style={styles.matchHeader}>
+          <View style={styles.avatarContainer}>
+            <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} />
+            { item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} /> }
+            {
+              item.unreadCount > 0 &&
+              <View style={styles.notification}>
+                <Text style={styles.notificationText}>{item.unreadCount.toString()}</Text>
+              </View>
             }
-            renderItem={({item}) => {
-              return(
-                <Pressable onPress={() => goToMessage(item)}>
-                  <View style={styles.chatContainer}>
-                    <View style={styles.imageContainer}>
-                      <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.userImage} />
-                      {
-                        item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.userImage} />
-                      }
-                      {
-                        item.unreadCount > 0 &&
-                          <View style={styles.notification}>
-                            <Text style={styles.notificationText}>{item.unreadCount.toString()}</Text>
-                          </View>
-                      }
-                    </View>
-                    <View style={styles.info}>
-                      <Text style={styles.name} numberOfLines={2}>{item.name}</Text>
-                      {
-                        item.lastMessage
-                          ? <Text style={styles.lastMessage} numberOfLines={2}>{item.lastMessage}</Text>
-                          : <Text style={styles.lastMessage} numberOfLines={2}>Vazio... dizer olá?</Text>
-                      }
-                      <Text style={styles.date} numberOfLines={2}>{convertDate(item.dateLastMessage)}</Text>
-                    </View>
-                    <View style={styles.imageContainer}>
-                      <Pressable style={styles.btnMore}>
-                        <Feather
-                          name="more-vertical"
-                          size={width * .4}
-                          color={THEME.colors.primary}
-                        />
-                      </Pressable>
-                    </View>
-                    <View style={styles.containerLine}>
-                      <View style={styles.line}></View>
-                    </View>
-                  </View>
-                </Pressable>
-              );
-            }}
-          />
+            <View style={styles.onlineIndicator} />
+          </View>
 
-          <EmptyData
-            dataList={chatList}
-            title="Opss..."
-            text="Você ainda não conversou com ninguém."
-          />
+          <View style={styles.matchInfo}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.matchName}>
+                {item.name}
+              </Text>
+              <Text style={styles.timestamp}>
+                {convertDate(new Date())}
+              </Text>
+            </View>
+          </View>
         </View>
-      </SafeAreaView>
-    </GradientBackground>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+
+  const renderLoading = () => (
+    loading ?
+      <ActivityIndicator
+        size="large"
+        color={THEME.colors.primary}
+        style={{marginTop: 300}}
+      />
+      : null
+  );
+  
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <LinearGradient
+        colors={['#8B5CF6', '#EC4899']}
+        style={styles.emptyIcon}
+      >
+        <MessageCircle size={40} color="#FFFFFF" />
+      </LinearGradient>
+      <Text style={styles.emptyTitle}>Opss...</Text>
+      <Text style={styles.emptyText}>
+        Você ainda não falou com ninguem!
+      </Text>
+    </View>
+  );
+
+  return(
+    <SafeAreaView style={styles.container}>
+      <GradientBackground>
+        <FlatList
+          ref={listRef}
+          data={chatList}
+          keyExtractor={(item:ChatDTO) => String(item.id)}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
+          showsHorizontalScrollIndicator={false}
+          initialNumToRender={3} // Carrega apenas 10 itens inicialmente
+          maxToRenderPerBatch={pageSize} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
+          removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
+          ListFooterComponent={renderLoading}
+          renderItem={renderChat}
+          ListEmptyComponent={renderEmptyState}
+        />
+      </GradientBackground>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-  },
   container: {
     flex: 1,
+    backgroundColor: '#1a1a2e',
   },
   text: {
     color: THEME.colors.font,
@@ -197,27 +203,37 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 30,
   },
-  imageContainer: {
-    width: width,
-    justifyContent: 'center',
+
+  matchCard: {
+    marginBottom: 16,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  matchCardGradient: {
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.2)',
+    borderRadius: 16,
+  },
+  matchHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  btnMore: {
-    borderRadius: (width * .4),
-    padding: 5,
-    backgroundColor: "rgba(171, 104, 248, 0.12)",
+  avatarContainer: {
+    position: 'relative',
+    marginRight: 16,
   },
-  userImage: {
-    width: width - width * .1,
-    height: width - width * .1,
-    borderRadius: width - width * .1,
-    position: 'absolute',
-    backgroundColor: THEME.colors.secondary,
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: 'rgba(139, 92, 246, 0.5)',
   },
   notification: {
     position: "absolute",
-    right: 0,
-    top: -45,
+    right: -10,
+    top: -5,
     backgroundColor: THEME.colors.primary,
     borderRadius: width - width * .7,
     width: width - width * .7,
@@ -230,38 +246,101 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: THEME.colors.font,
   },
-  info: {
-    width: widthScreen - (width * 2) - (THEME.sizes.paddingPage * 2) - 5,
-    marginLeft: 5,
-    flexDirection: 'column',
-    gap: 7,
+  onlineIndicator: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#10B981',
+    borderWidth: 2,
+    borderColor: '#1a1a2e',
   },
-  name: {
-    fontSize: THEME.fontSizes.md,
-    color: THEME.colors.font,
-    fontWeight: 500,
-  },
-  lastMessage: {
-    fontSize: THEME.fontSizes.md - 3,
-    color: THEME.colors.font,
-    opacity: .9,
-  },
-  date: {
-    fontSize: THEME.fontSizes.sm - 5,
-    color: THEME.colors.font,
-    opacity: .7,
-  },
-  containerLine: {
-    width: '100%',
+  matchTypeIndicator: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#1a1a2e',
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 0,
-    position: 'absolute',
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.3)',
   },
-  line: {
-    width: widthScreen * .75,
-    borderBottomWidth: 1,
-    borderColor: THEME.colors.font,
-    opacity: .3,
+  matchInfo: {
+    flex: 1,
+    marginRight: 16,
+  },
+  nameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  matchName: {
+    fontSize: 18,
+    fontFamily: 'Inter-SemiBold',
+    color: '#FFFFFF',
+  },
+  timestamp: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#999',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  chatButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.3)',
+  },
+  unmatchButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
+  },
+  emptyIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  emptyTitle: {
+    fontSize: 24,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    fontFamily: 'Inter-Regular',
+    color: '#CCCCCC',
+    textAlign: 'center',
+    lineHeight: 24,
+    paddingHorizontal: 40,
   },
 });

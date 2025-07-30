@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
-import { FlatList, View } from "native-base";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FlatList } from "native-base";
 
 import { THEME } from "styles/Theme";
 import { MatchCard } from "components/MatchCard";
@@ -13,8 +12,10 @@ import { MatchService } from "../../service/MatchService";
 import { IPerson } from "../../interfaces/IPerson";
 import { IMatchRequest } from "../../interfaces/IMatch";
 import { MatchStatus } from "../../enums/MatchStatus";
-import { EmptyData } from "components/EmptyData";
 import { GradientBackground } from "components/GradientBackground";
+import { LinearGradient } from "expo-linear-gradient";
+import { UserSearch } from "lucide-react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
@@ -25,6 +26,7 @@ export function MatchScreen() {
   const [personId, setPersonId] = useState<number | undefined>(undefined);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [profiles, setProfiles] = useState<IPerson[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const flatListRef:any = useRef(null);
 
   useEffect(() => {
@@ -38,8 +40,16 @@ export function MatchScreen() {
   }
 
   const getProfiles = async () => { 
-    const data:IPerson[] = await getPersonsToMatch();
-    setProfiles(data)
+    setLoading(true);
+    
+    try {
+      const data:IPerson[] = await getPersonsToMatch();
+      setProfiles(data)
+    } catch (error) {
+      console.error("Erro ao buscar jogos:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleDislike = async () => {
@@ -48,6 +58,10 @@ export function MatchScreen() {
 
   const handleLike = async () => {
     await createMatch(MatchStatus.LIKE)
+  };
+
+  const handleSuperlike = async () => {
+    await createMatch(MatchStatus.SUPERLIKE)
   };
 
   async function createMatch(status:MatchStatus) {
@@ -103,67 +117,68 @@ export function MatchScreen() {
     }
   };
 
-  return(
-    <GradientBackground>
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.container}>
-          <FlatList
-            ref={flatListRef}
-            data={profiles}
-            keyExtractor={(data:any) => data.id}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onMomentumScrollEnd={handleScrollEnd}
-            renderItem={({item}) =>
-              <View style={styles.cardContainer}>
-                <MatchCard
-                  person={item}
-                  pointerEvents={`none`}
-                />
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.dislikeButton} onPress={handleDislike}>
-                    <MaterialCommunityIcons name="google-controller-off" size={40} color={THEME.colors.red[400]} />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
-                    <MaterialCommunityIcons name="google-controller" size={40} color={THEME.colors.green[500]} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            }
-          />
-        </View>
+  const renderMatchCard = ({ item }) => (
+    <MatchCard
+      person={item}
+      pointerEvents={'none'}
+      onLike={handleLike}
+      onDislike={handleDislike}
+      onSuperLike={handleSuperlike}
+    />
+  );
 
-        <EmptyData
-          dataList={profiles}
-          title="Opss..."
-          text="Nenhum perfil foi encontrado."
+  const renderLoading = () => (
+    loading ?
+      <ActivityIndicator
+        size="large"
+        color={THEME.colors.primary}
+        style={{marginTop: 300}}
+      />
+      : null
+  );
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <LinearGradient
+        colors={['#8B5CF6', '#EC4899']}
+        style={styles.emptyIcon}
+      >
+        <UserSearch size={40} color="#FFFFFF" />
+      </LinearGradient>
+      <Text style={styles.emptyTitle}>Nenhum match ainda</Text>
+      <Text style={styles.emptyText}>
+        Continue deslizando para encontrar seu parceiro de jogo perfeito!
+      </Text>
+    </View>
+  );
+
+  return(
+    <SafeAreaView style={styles.container}>
+      <GradientBackground withoutPadding={true}>
+        <FlatList
+          ref={flatListRef}
+          data={profiles}
+          keyExtractor={(_, index) => index.toString()}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={handleScrollEnd}
+          ListFooterComponent={renderLoading}
+          renderItem={renderMatchCard}
+          ListEmptyComponent={renderEmptyState}
         />
-      </SafeAreaView>
-    </GradientBackground>
+      </GradientBackground>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-  },
   container: {
     flex: 1,
-    alignItems: 'center',
-  },
-  profiles: {
-    display: `flex`,
-    flexDirection: `row`,
+    backgroundColor: '#1a1a2e',
   },
   cardContainer: {
-    width: width - (THEME.sizes.paddingPage * 2),
-    alignItems: "center",
-    backgroundColor: THEME.colors.background,
-    borderWidth: 2,
-    borderColor: THEME.colors.primary,
-    borderRadius: 10,
-    padding: THEME.sizes.paddingPage,
+    flex: 1,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -194,5 +209,34 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 2,
     borderColor: THEME.colors.primary,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
+  },
+  emptyIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  emptyTitle: {
+    fontSize: 24,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    fontFamily: 'Inter-Regular',
+    color: '#CCCCCC',
+    textAlign: 'center',
+    lineHeight: 24,
+    paddingHorizontal: 40,
   },
 });

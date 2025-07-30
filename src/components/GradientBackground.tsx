@@ -6,13 +6,14 @@ import { THEME } from "styles/Theme";
 
 interface GradientBackgroundProps extends ViewProps {
   children: React.ReactNode;
+  withoutPadding?: boolean;
 }
 
-export const GradientBackground = ({ children, style, ...rest }: GradientBackgroundProps) => {
+export const GradientBackground = ({ children, withoutPadding, style, ...rest }: GradientBackgroundProps) => {
   return (
     <LinearGradient
       colors={['#1a1a2e', '#16213e', '#0f3460']}
-      style={[styles.container, style]}
+      style={[ styles.container, style, !withoutPadding && { paddingTop: THEME.sizes.paddingPage, paddingHorizontal: THEME.sizes.paddingPage } ]}
       {...rest}
     >
       {children}
@@ -23,7 +24,5 @@ export const GradientBackground = ({ children, style, ...rest }: GradientBackgro
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: THEME.sizes.paddingPage, 
-    paddingHorizontal: THEME.sizes.paddingPage, 
   },
 });

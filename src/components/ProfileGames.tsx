@@ -41,7 +41,7 @@ export function ProfileGames({ games, editGameModalVisible, setEditGameModalVisi
         editGameModalVisible && <EditGameModal
           modalVisible={editGameModalVisible}
           setModalVisible={setEditGameModalVisible}
-          game={game}
+          idRawgGame={game.id}
         />
       }
     </View>
@@ -50,7 +50,6 @@ export function ProfileGames({ games, editGameModalVisible, setEditGameModalVisi
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: THEME.colors.background,
     flexWrap: `wrap`,
     flexDirection: "row",
     justifyContent: `center`,

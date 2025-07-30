@@ -4,15 +4,18 @@ export interface IPerson {
   id:number;
   name?:string;
   gender?:string;
-  dateBirth?:Date;
+  dateBirth?:string;
   profileImage?:any;
   userId:number;
   gamerProfile:IGamerProfile;
+  country:string;
+  state:string;
+  city:string;
 }
 
 export interface IGamerProfile {
   id:number;
-  description?:string;
+  bio?:string;
   language?:string;
   gamerPlatform:IGamerPlatform;
   gamerPeriod:IGamerPeriod;

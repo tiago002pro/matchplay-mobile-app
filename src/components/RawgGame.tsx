@@ -1,34 +1,19 @@
 import { Image, Text, View } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { THEME } from "styles/Theme";
-import React from "react";
+import React, { useState } from "react";
 import { platformIcons } from "shared/platformIcons";
-import { GamerProfileService } from "service/GamerProfileService";
-import { useAuth } from "contexts/AuthContext";
-import { showMessage } from "react-native-flash-message";
 import { LinearGradient } from "expo-linear-gradient";
 import { Calendar, Star } from "lucide-react-native";
 import { PrimaryButton } from "./PrimaryButton";
 import moment from "moment";
+import { EditGameModal } from "modals/EditGameModal";
 
 export function RawgGame({ game }:RawgGameProps) {
-  const { authState } = useAuth();
-  const { addGameToProfile } = GamerProfileService();
+  const [addGameModalVisible, setAddGameModalVisible] = useState<boolean>(false);
 
-  const saveGame = async (platform) => {
-    const request = {
-      id: game.id,
-      name: game.name,
-      backgroundImage: game.backgroundImage,
-      idPlatform: platform.id,
-      namePlatform: platform.name,
-    }  
-    const response = await addGameToProfile(authState?.user?.gamerProfileId, request);
-    showMessage({
-      message: response + "!",
-      type: "success",
-      duration: 2000
-    })
+  async function openModal() {
+    setAddGameModalVisible(true)
   }
 
   return (
@@ -101,7 +86,16 @@ export function RawgGame({ game }:RawgGameProps) {
         <PrimaryButton 
           label="Adicionar"
           bg={THEME.colors.primary}
+          action={() => openModal()}
         />
+
+        {
+          addGameModalVisible && <EditGameModal
+            modalVisible={addGameModalVisible}
+            setModalVisible={setAddGameModalVisible}
+            idRawgGame={game.id}
+          />
+        }
       </LinearGradient>
     </TouchableOpacity>
   )

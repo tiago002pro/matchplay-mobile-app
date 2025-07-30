@@ -1,9 +1,11 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { PrimaryButton } from "components/PrimaryButton";
+import { useAuth } from "contexts/AuthContext";
 import { IGame, IGamePlatform } from "interfaces/IGames";
 import React, { useEffect } from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { showMessage } from "react-native-flash-message";
+import { GamerProfileService } from "service/GamerProfileService";
 import { GamesService } from "service/GamesService";
 import { platformIcons } from "shared/platformIcons";
 import { THEME } from "styles/Theme";
@@ -11,13 +13,16 @@ import { THEME } from "styles/Theme";
 type EditGameModalProps = {
   modalVisible:boolean;
   setModalVisible:any;
-  game:IGame;
+  idRawgGame:number;
 }
 
-export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameModalProps) {
-  const { getRawgGamesGameById, update, deleteGame } = GamesService();
-  const [gameData, setGameData] = React.useState<IGame>(game);
-  const [gameDataPlatform, setGameDataPlatform] = React.useState<IGamePlatform[]>(game.platforms);
+export function EditGameModal({ modalVisible, setModalVisible, idRawgGame }:EditGameModalProps) {
+  const { authState } = useAuth();
+  const { getRawgGamesGameById, getByIdRawgGameAndGamerProfile, deleteGame, update } = GamesService();
+  const { addGameToProfile } = GamerProfileService();
+
+  const [game, setGame] = React.useState<IGame>(null);
+  const [gameDataPlatforms, setGameDataPlatforms] = React.useState<IGamePlatform[]>([]);
   const [rawgGame, setRawgGame] = React.useState<RawgGames>(null);
   
   useFocusEffect(
@@ -28,26 +33,47 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
 
   useEffect(() => {
     const fetchData = async () => {
-      setGameData((prev) => {
-        const updatedGame = { ...prev, platforms: gameDataPlatform };
-        update(updatedGame); // Chamamos update com o estado atualizado
+      setGame((prev) => {
+        const updatedGame = { ...prev, platforms: gameDataPlatforms };
+        saveGame(updatedGame); // Chamamos update com o estado atualizado
         return updatedGame; // Retornamos o novo estado para garantir que a atualização ocorra corretamente
       });
     };
   
-    if (gameDataPlatform.length > 0) {
+    if (gameDataPlatforms.length > 0) {
       fetchData();
     }
-  }, [gameDataPlatform]);
+  }, [gameDataPlatforms]);
   
 
   async function loadGame() {
-    const result = await getRawgGamesGameById(game.idRawgGame);
-    setRawgGame(result);
+    const rawgGamesResult: RawgGames = await getRawgGamesGameById(idRawgGame);
+    if (rawgGamesResult) {
+      setRawgGame(rawgGamesResult);
+    }
+
+    if (authState && authState?.user?.gamerProfileId) {
+      const gameResult: IGame = await getByIdRawgGameAndGamerProfile(idRawgGame, authState?.user?.gamerProfileId);
+      
+      if (gameResult) {
+        console.log("gameResult", gameResult);
+        setGame(gameResult);
+        setGameDataPlatforms(gameResult.platforms);
+      } else {
+        setGame({
+          id: null,
+          name: rawgGame.name,
+          image: rawgGame.backgroundImage,
+          idRawgGame: rawgGame.id,
+          platforms: [],
+          releaseDate: rawgGame.releaseDate,
+        });
+      }
+    }
   }
 
   const togglePlatform = (platform) => {
-    setGameDataPlatform((prev) => {
+    setGameDataPlatforms((prev) => {
       const isSelected = prev.some((p) => p.name === platform.name);
 
       if (isSelected) {
@@ -62,6 +88,31 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
       }
     });
   };
+
+  const savePlatforms = async (platform) => {
+    const request = {
+      id: game.id,
+      name: game.name,
+      backgroundImage: game.image,
+      idPlatform: platform.id,
+      namePlatform: platform.name,
+    }  
+    const response = await addGameToProfile(authState?.user?.gamerProfileId, request);
+    showMessage({
+      message: response + "!",
+      type: "success",
+      duration: 2000
+    })
+  }
+
+  const saveGame = async (updatedGame) => {
+    const response = await update(updatedGame);
+    showMessage({
+      message: response + "!",
+      type: "success",
+      duration: 2000
+    })
+  }
 
   const toggleDeleteGame = async () => {
     try {
@@ -96,12 +147,19 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
             <Text style={styles.title}>Editar Jogo:</Text>
 
             <View style={styles.imageArea}>
-              <Image
-                style={styles.image}
-                source={{uri: game.image}}
-                alt={game.name}
-              />
-              <Text style={styles.gameName}>{game.name}</Text>
+              {
+                rawgGame && rawgGame.backgroundImage && rawgGame.name &&
+                <Image
+                  style={styles.image}
+                  source={{uri: rawgGame.backgroundImage}}
+                  alt={rawgGame.name}
+                />
+              }
+              
+              {
+                rawgGame && rawgGame.name &&
+                <Text style={styles.gameName}>{rawgGame.name}</Text>
+              }
             </View>
 
             <Text style={styles.title}>Adicione este jogo ao seu perfil em:</Text>
@@ -109,7 +167,7 @@ export function EditGameModal({ modalVisible, setModalVisible, game }:EditGameMo
             <View style={styles.platformsContainer}>
               {rawgGame && rawgGame.platforms && rawgGame.platforms.map((platform, index) => {
                 const IconComponent = platformIcons[platform.name];
-                const isSelected = gameDataPlatform.some((item) => item.name === platform.name);
+                const isSelected = gameDataPlatforms && gameDataPlatforms.some((item) => item.name === platform.name);
 
                 return IconComponent ? (
                   <Pressable key={index} style={isSelected ? styles.platformActive : styles.platformDisable} onPress={() => togglePlatform(platform)}>

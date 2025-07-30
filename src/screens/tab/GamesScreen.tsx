@@ -12,9 +12,9 @@ import { PlatformsFilter } from "shared/platformsFilter";
 import { GamesService } from "../../service/GamesService";
 
 import { IRawgGamesResponse } from "../../interfaces/IGames";
-import { EmptyData } from "components/EmptyData";
-import { Filter } from "lucide-react-native";
+import { Filter, Gamepad2 } from "lucide-react-native";
 import { GradientBackground } from "components/GradientBackground";
+import { LinearGradient } from "expo-linear-gradient";
 
 export function GamesScreen() {
   const pageSize = 10;
@@ -136,6 +136,31 @@ export function GamesScreen() {
     return <RawgGame game={item} />
   }, [games])
 
+  const renderLoading = () => (
+    loading ?
+      <ActivityIndicator
+        size="large"
+        color={THEME.colors.primary}
+        style={{marginTop: 300}}
+      />
+      : null
+  );
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <LinearGradient
+        colors={['#8B5CF6', '#EC4899']}
+        style={styles.emptyIcon}
+      >
+        <Gamepad2 size={40} color="#FFFFFF" />
+      </LinearGradient>
+      <Text style={styles.emptyTitle}>Opss...</Text>
+      <Text style={styles.emptyText}>
+        Não foi encontrado nenhum jogo
+      </Text>
+    </View>
+  );
+
   return(
     <SafeAreaView style={styles.safeAreaView}>
       <GradientBackground>
@@ -172,20 +197,8 @@ export function GamesScreen() {
           initialNumToRender={3} // Carrega apenas 10 itens inicialmente
           maxToRenderPerBatch={10} //Define o número máximo de itens que serão renderizados em cada ciclo de renderização.
           removeClippedSubviews={true} // Economiza memória ao remover itens fora da tela
-          ListFooterComponent={
-            loading ? <ActivityIndicator
-              size="large"
-              color={THEME.colors.primary}
-              style={{marginTop: 300}}
-              />
-            : null
-          }
-        />
-
-        <EmptyData
-          dataList={games}
-          title="Opss..."
-          text="Nenhum jogo encontrado."
+          ListFooterComponent={renderLoading}
+          ListEmptyComponent={renderEmptyState}
         />
       </GradientBackground>
     </SafeAreaView>
@@ -270,5 +283,34 @@ const styles = StyleSheet.create({
   filterButtonActive: {
     backgroundColor: '#8B5CF6',
     borderColor: '#8B5CF6',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100,
+  },
+  emptyIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  emptyTitle: {
+    fontSize: 24,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    fontFamily: 'Inter-Regular',
+    color: '#CCCCCC',
+    textAlign: 'center',
+    lineHeight: 24,
+    paddingHorizontal: 40,
   },
 });
