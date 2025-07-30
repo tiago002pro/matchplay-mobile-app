@@ -89,9 +89,9 @@ export function MatchersScreen() {
     return moment(new Date(date)).startOf('hour').fromNow(); 
   }
 
-  const getMatchIcon = (matchType: string) => {
+  const getMatchIcon = (matchType: MatchStatus) => {
     switch (matchType) {
-      case 'superlike':
+      case MatchStatus.SUPERLIKE:
         return <Star size={16} color="#06B6D4" />;
       default:
         return <Heart size={16} color="#10B981" />;
@@ -101,7 +101,11 @@ export function MatchersScreen() {
   const renderMatch = ({ item }) => (
     <View style={styles.matchCard}>
       <LinearGradient
-        colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.05)']}
+        colors={
+          !!item.matchType && item.matchType == MatchStatus.SUPERLIKE
+            ? ['rgba(44, 0, 240, 0.29)', 'rgba(202, 16, 171, 0.45)']
+            : ['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.05)']
+        }
         style={styles.matchCardGradient}
       >
         <View style={styles.matchHeader}>

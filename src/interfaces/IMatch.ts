@@ -22,4 +22,5 @@ export interface MatchersDTO {
   name:string;
   image?:string;
   date:Date;
+  matchType:MatchStatus;
 }
