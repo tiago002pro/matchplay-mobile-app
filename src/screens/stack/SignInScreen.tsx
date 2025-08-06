@@ -1,43 +1,61 @@
 import { useState } from "react";
-import { ImageBackground, SafeAreaView, StyleSheet, View } from "react-native";
-import { Box, Button, FormControl, Text } from "native-base";
+import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { showMessage } from "react-native-flash-message";
-
-import { THEME } from "styles/Theme";
-import { PrimaryInput } from "../../components/PrimaryInput";
 import { PrimaryButton } from "../../components/PrimaryButton";
-
 import { useAuth } from "../../contexts/AuthContext";
-
-import backgroundLogin from './../../../assets/images/backgroud_4.jpg';
+import { GradientBackground } from "components/GradientBackground";
+import { Gamepad2, Mail, Lock } from "lucide-react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { InputField } from "components/InputField";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export function SignInScreen() {
-  const navigation:any = useNavigation();
+  const navigation: any = useNavigation();
   const { doLogin } = useAuth();
   const validator = require('validator');
 
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const [validEmail, setValidEmail] = useState<boolean>(true);
-  const [validPassword, setValidPassword] = useState<boolean>(true);
+  const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
+  const [invalidPassword, setInvalidPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
   function goToSignupScreen():void {
     navigation.navigate('SignUpScreen');
   }
 
   async function signIn() {
-    const emailValidated = email.trim().length > 0;
-    const passwordValidated = password.trim().length > 0;
+    setLoading(true);
+    
+    try {
+      validateFormData();
+      await doLogin(formData.email, formData.password)
+    } catch(error) {
+      setInvalidPassword(true)
+      showMessage({
+        message: "Credenciais Inválidas!",
+        description: "Verifique seu e-mail e senha e tente novamente..",
+        type: "danger",
+        duration: 3000
+      })
+      throw new Error("Credenciais Inválidas!");
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    setValidEmail(emailValidated)
-    setValidPassword(passwordValidated)
+  function validateFormData() {
+    const emailValidated = formData.email.trim().length > 0;
+    const passwordValidated = formData.password.trim().length > 0;
 
-    if (!emailValidated || !passwordValidated) return
+    setInvalidEmail(!emailValidated)
+    setInvalidPassword(!passwordValidated)
 
-    const emailIsValid = validator.isEmail(email);
-    setValidEmail(emailIsValid)
+    if (!emailValidated) { throw new Error("E-mail não informado!"); }
+    if (!passwordValidated) { throw new Error("Senha não informada!"); }
+
+    const emailIsValid = validator.isEmail(formData.email);
+    setInvalidEmail(!emailIsValid)
 
     if (!emailIsValid) {
       showMessage({
@@ -48,85 +66,134 @@ export function SignInScreen() {
       })
       throw new Error("E-mail inválido!");
     }
-
-    try {
-      await doLogin(email, password)
-    } catch(error) {
-      setValidPassword(false)
-      showMessage({
-        message: "Credenciais Inválidas!",
-        description: "Verifique seu e-mail e senha e tente novamente..",
-        type: "danger",
-        duration: 3000
-      })
-      throw new Error("Credenciais Inválidas!");
-    }
   }
 
   return (
-    <ImageBackground style={styles.background} source={backgroundLogin}>
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.container}>
-          <FormControl>
-            <PrimaryInput
-              type={'email-address'}
-              label={'E-mail'}
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize={false}
-              error={!validEmail}
-            />
+    <SafeAreaView style={styles.container}>
+      <GradientBackground>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardAvoid}
+        >
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <View style={styles.logoContainer}>
+                <Gamepad2 size={60} color="#8B5CF6" />
+                <LinearGradient
+                  colors={['#8B5CF6', '#EC4899']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.logoGlow}
+                />
+              </View>
+              <Text style={styles.title}>MatchPlay</Text>
+              <Text style={styles.subtitle}>Bem-vindo de volta, Gamer!</Text>
+            </View>
 
-            <PrimaryInput
-              key={'Senha'}
-              label={'Senha'}
-              value={password}
-              onChangeText={setPassword}
-              isPassword={true}
-              autoCapitalize={false}
-              error={!validPassword}
-            />
+            <View style={styles.form}>
+              <InputField
+                icon={Mail}
+                placeholder="Email"
+                value={formData.email}
+                onChangeText={(text) => setFormData({...formData, email: text})}
+                keyboardType="email-address"
+                error={invalidEmail}
+              />
+              
+              <InputField
+                icon={Lock}
+                placeholder="Senha"
+                value={formData.password}
+                onChangeText={(text) => setFormData({...formData, password: text})}
+                isPassword={true}
+                error={invalidPassword}
+              />
 
-            <PrimaryButton
-              label={'Entrar'}
-              action={signIn}
-            />
+              <PrimaryButton
+                label={'Entrar'}
+                action={signIn}
+                loading={loading}
+              />
 
-            <Box style={styles.signupBtnArea}>
-              <Text style={styles.text}>Não tem conta?</Text>
-              <Button
-                onPress={goToSignupScreen}
-                bg={THEME.colors.primary}
+              <TouchableOpacity
+                onPress={() => goToSignupScreen()}
+                style={styles.toggleButton}
+                disabled={loading}
               >
-                Cadastre-se
-              </Button>
-            </Box>
-          </FormControl>
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+                <Text style={styles.toggleText}>
+                  Não tem uma conta? <Text style={styles.toggleLink}>Criar Conta</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </GradientBackground>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: THEME.colors.background,
-  },
-  safeAreaView: {
-    flex: 1,
-  },
   container: {
     flex: 1,
+    backgroundColor: '#1a1a2e',
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
+    gap: 20,
+  },
+  header: {
     alignItems: 'center',
-    padding: THEME.sizes.paddingPage,
+    gap: 10,
   },
-  signupBtnArea: {
-    marginTop: 30,
-    alignItems: 'center'
+  logoContainer: {
+    position: 'relative',
+    marginBottom: 16,
   },
-  text: {
-    color:  THEME.colors.white,
+  logoGlow: {
+    position: 'absolute',
+    top: -10,
+    left: -10,
+    right: -10,
+    bottom: -10,
+    opacity: 0.3,
+    borderRadius: 50,
+  },
+  title: {
+    fontSize: 32,
+    lineHeight: 32,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+    marginBottom: 8,
+    textShadowColor: '#8B5CF6',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    lineHeight: 16,
+    fontFamily: 'Inter-Regular',
+    color: '#CCCCCC',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  form: {
+    gap: 20,
+  },
+  toggleButton: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  toggleText: {
+    color: '#CCCCCC',
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+  },
+  toggleLink: {
+    color: '#8B5CF6',
+    fontFamily: 'Inter-SemiBold',
   },
 })

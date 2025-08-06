@@ -10,6 +10,7 @@ import FlashMessage from 'react-native-flash-message';
 import { SocketProvider } from 'contexts/SocketContext';
 import { UnreadMessagesProvider } from 'contexts/UnreadMessagesContext';
 import NotificationSetup from 'notification/NotificationSetup';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   useEffect(() => {
@@ -19,19 +20,21 @@ export default function App() {
   }, []);
 
   return (
-    <NativeBaseProvider>
-      <NavigationContainer>
-        <AuthProvider>
-          <SocketProvider>
-            <UnreadMessagesProvider>
-              <StatusBar barStyle={'light-content'} />
-              <Routes />
-              <NotificationSetup />
-            </UnreadMessagesProvider>
-          </SocketProvider>
-        </AuthProvider>
-      </NavigationContainer>
-      <FlashMessage position="top" />
-    </NativeBaseProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <AuthProvider>
+            <SocketProvider>
+              <UnreadMessagesProvider>
+                <StatusBar barStyle={'light-content'} />
+                <Routes />
+                <NotificationSetup />
+              </UnreadMessagesProvider>
+            </SocketProvider>
+          </AuthProvider>
+        </NavigationContainer>
+        <FlashMessage position="top" />
+      </NativeBaseProvider>
+    </GestureHandlerRootView> 
   );
 }

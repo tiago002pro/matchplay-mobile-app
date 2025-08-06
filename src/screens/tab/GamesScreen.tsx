@@ -1,16 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Text } from "native-base";
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-
 import { THEME } from "styles/Theme";
 import { RawgGame } from "../../components/RawgGame";
 import { InputComponent } from "../../components/InputComponent";
 import { platformIcons } from "shared/platformIcons";
 import { PlatformsFilter } from "shared/platformsFilter";
-
 import { GamesService } from "../../service/GamesService";
-
 import { IRawgGamesResponse } from "../../interfaces/IGames";
 import { Filter, Gamepad2 } from "lucide-react-native";
 import { GradientBackground } from "components/GradientBackground";

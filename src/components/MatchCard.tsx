@@ -89,7 +89,7 @@ export function MatchCard( { person, pointerEvents, onLike, onDislike, onSuperLi
 
 
             {
-              person.gamerProfile && person.gamerProfile.games && person.gamerProfile.games.length &&
+              !!person?.gamerProfile?.games?.length &&
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>Jogos Favoritos:</Text>
                   <View style={styles.gamesList}>

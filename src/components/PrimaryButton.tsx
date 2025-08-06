@@ -1,41 +1,52 @@
-import { Button } from "native-base";
-import { StyleSheet } from "react-native";
-import { THEME } from "styles/Theme";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Text } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 
 type PrimaryButtonProps = {
-  label?:string;
-  action?:any;
-  color?:string;
-  bg?:any;
-  borderColor?:any;
-  isDisabled?:boolean;
+  label?: string;
+  action?: any;
+  loading?: boolean;
 }
 
-export function PrimaryButton({ label, action, color, bg, borderColor, isDisabled, ...props }:PrimaryButtonProps) {
+export function PrimaryButton({ label, action, loading }:PrimaryButtonProps) {
   return (
-    <Button
-      key={label}
-      isDisabled={isDisabled}
-      style={[MyButtonStyles.btn, {borderColor: borderColor ? borderColor : THEME.colors.primary}]}
-      onPress={action}
-      bg={bg || THEME.colors.background}
-      _pressed={{
-        backgroundColor: THEME.colors.primary,
-      }}
-      _text={{
-        fontSize: THEME.fontSizes.md,
-        color: color || THEME.colors.white,
-      }}
-      {...props}
+    <TouchableOpacity 
+      onPress={action} 
+      style={[styles.authButton, loading && styles.disabledButton]}
+      disabled={loading}
     >
-    {label}
-    </Button>
+      <LinearGradient
+        colors={loading ? ['#666', '#666'] : ['#8B5CF6', '#EC4899']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.authButtonGradient}
+      >
+        {loading
+          ? ( <ActivityIndicator size="small" color="#FFFFFF" /> )
+          : ( <Text style={styles.authButtonText}>{ label }</Text>)
+        }
+      </LinearGradient>
+    </TouchableOpacity>
   );
 }
 
-const MyButtonStyles = StyleSheet.create({
-  btn: {
-    borderWidth: 2,
-    borderRadius: 10,
-  }
+const styles = StyleSheet.create({
+  authButton: {
+    marginTop: 8,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  authButtonGradient: {
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  authButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontFamily: 'Inter-SemiBold',
+  },
+  disabledButton: {
+    opacity: 0.6,
+  },
 })
