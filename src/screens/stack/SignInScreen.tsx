@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { showMessage } from "react-native-flash-message";
 import { PrimaryButton } from "../../components/PrimaryButton";
 import { useAuth } from "../../contexts/AuthContext";
 import { GradientBackground } from "components/GradientBackground";
-import { Gamepad2, Mail, Lock } from "lucide-react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { Mail, Lock } from "lucide-react-native";
 import { InputField } from "components/InputField";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
+const w = Dimensions.get('screen').width;
 
 export function SignInScreen() {
   const navigation: any = useNavigation();
@@ -78,15 +78,8 @@ export function SignInScreen() {
           <View style={styles.content}>
             <View style={styles.header}>
               <View style={styles.logoContainer}>
-                <Gamepad2 size={60} color="#8B5CF6" />
-                <LinearGradient
-                  colors={['#8B5CF6', '#EC4899']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.logoGlow}
-                />
+                <Image source={require('./../../../assets/images/logo.png')} alt={'Logo'} style={styles.logo} />
               </View>
-              <Text style={styles.title}>MatchPlay</Text>
               <Text style={styles.subtitle}>Bem-vindo de volta, Gamer!</Text>
             </View>
 
@@ -116,7 +109,7 @@ export function SignInScreen() {
               />
 
               <TouchableOpacity
-                onPress={() => goToSignupScreen()}
+                onPress={goToSignupScreen}
                 style={styles.toggleButton}
                 disabled={loading}
               >
@@ -153,24 +146,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: 16,
   },
-  logoGlow: {
-    position: 'absolute',
-    top: -10,
-    left: -10,
-    right: -10,
-    bottom: -10,
-    opacity: 0.3,
-    borderRadius: 50,
-  },
-  title: {
-    fontSize: 32,
-    lineHeight: 32,
-    fontFamily: 'Inter-Bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
-    textShadowColor: '#8B5CF6',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
+  logo: {
+    width: w - 100,
+    height: 200,
+    resizeMode: 'contain',
   },
   subtitle: {
     fontSize: 16,

@@ -8,6 +8,7 @@ const { Navigator, Screen } = createStackNavigator();
 export default function StackRoutes() {
   return (
     <Navigator
+      id={undefined}
       screenOptions={{
         headerShown: false,
         headerShadowVisible: false,

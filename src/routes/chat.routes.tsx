@@ -13,6 +13,7 @@ const widthHeaderBtn = (width / 2) - (THEME.sizes.paddingPage);
 export default function ChatRoutes() {
   return (
     <Navigator
+      id={undefined}
       screenOptions={{
         headerShown: false,
         headerShadowVisible: false,
