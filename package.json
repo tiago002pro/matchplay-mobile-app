@@ -1,10 +1,10 @@
 {
   "name": "matchplay-mobile-app",
   "main": "node_modules/expo/AppEntry.js",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "scripts": {
     "start": "expo start",
-    "start:production": "cross-env EXPO_PUBLIC_ENVIRONMENT=production EXPO_PUBLIC_API_URL=https://api.matchplay.cloud:9090/api/matchplay EXPO_PUBLIC_WEBSOCKET_URL=ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket npx expo start --clear",
+    "start:production": "cross-env EXPO_PUBLIC_ENVIRONMENT=production EXPO_PUBLIC_API_URL=http://148.230.124.49:9090/api/matchplay EXPO_PUBLIC_WEBSOCKET_URL=ws://148.230.124.49:9091/api/matchplay/buildrun-livechat-websocket npx expo start --clear",
     "start:dev": "cross-env EXPO_PUBLIC_ENVIRONMENT=development EXPO_PUBLIC_API_URL=http://192.168.18.10:9090/api/matchplay EXPO_PUBLIC_WEBSOCKET_URL=ws://192.168.18.10:9091/api/matchplay/buildrun-livechat-websocket npx expo start --clear",
     "android": "expo run:android",
     "ios": "expo run:ios",

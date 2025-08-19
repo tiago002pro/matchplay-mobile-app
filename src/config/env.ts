@@ -4,8 +4,8 @@ const ENV = {
     WEBSOCKET_URL: "ws://localhost:9091/api/matchplay/buildrun-livechat-websocket",
   },
   prod: {
-    API_URL: "https://api.matchplay.cloud:9090/api/matchplay",
-    WEBSOCKET_URL: "ws://api.matchplay.cloud:9091/api/matchplay/buildrun-livechat-websocket",
+    API_URL: "http://148.230.124.49:9090/api/matchplay",
+    WEBSOCKET_URL: "ws://148.230.124.49:9091/api/matchplay/buildrun-livechat-websocket",
   },
 };
 
