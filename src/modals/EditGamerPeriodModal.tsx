@@ -6,6 +6,7 @@ import { GamerPeriodService } from "service/GamerPeriodService";
 import { PrimaryButton } from "components/PrimaryButton";
 import { THEME } from "styles/Theme";
 import { showMessage } from 'react-native-flash-message';
+import { GradientBackground } from "components/GradientBackground";
 
 type EditGamerPeriodModalProps = {
   modalVisible:boolean;
@@ -38,38 +39,39 @@ export function EditGamerPeriodModal({ modalVisible, setModalVisible, gamerPerio
   }
   
   return(
-    <View style={styles.container}>
-      <Modal
-        animationType="fade" // "slide", "fade" ou "none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.header}>
-              <Text style={styles.title}>Dias de Jogos:</Text>
-              <Text style={styles.subtitle}>
-                Selecione os dias em que você está mais frequentemente disponível para jogar informando para outros usuários quando vocês poderiam jogar juntos!
-              </Text>
-            </View>
-            <GamerPeriod
-              gamerPeriod={data}
-              setGamerPeriod={setData}
-              pointerEvents={`auto`}
-            />
-            <View style={styles.footer}>
-              <PrimaryButton
-                label="Salvar"
-                action={() => save()}
-                bg={THEME.colors.primary}
+    <GradientBackground>
+      <View style={styles.container}>
+        <Modal
+          animationType="fade" // "slide", "fade" ou "none"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.header}>
+                <Text style={styles.title}>Dias de Jogos:</Text>
+                <Text style={styles.subtitle}>
+                  Selecione os dias em que você está mais frequentemente disponível para jogar informando para outros usuários quando vocês poderiam jogar juntos!
+                </Text>
+              </View>
+              <GamerPeriod
+                gamerPeriod={data}
+                setGamerPeriod={setData}
+                pointerEvents={'auto'}
               />
-              <PrimaryButton label="Cancelar" action={() => closeModal()} />
+              <View style={styles.footer}>
+                <PrimaryButton
+                  label="Salvar"
+                  action={() => save()}
+                />
+                <PrimaryButton label="Cancelar" action={() => closeModal()} />
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </GradientBackground>
   );
 }
 
@@ -86,30 +88,30 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    padding: 40,
+    padding: 20,
     borderRadius: 20,
-    backgroundColor: THEME.colors.background,
-    position: `absolute`,
+    position: 'absolute',
     gap: 30,
-    display: `flex`,
-    justifyContent: `center`,
-    alignContent: `center`,
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
     borderWidth: 2,
-    borderColor: THEME.colors.primary,
+    backgroundColor: '#1a1a2e',
+    borderColor: '#0f3460',
   },
   header: {
     gap: 10,
-    position: `relative`
+    position: 'relative'
   },
   title: {
     fontSize: THEME.fontSizes.lg,
     color: THEME.colors.white,
-    textAlign: `center`
+    textAlign: 'center'
   },
   subtitle: {
     fontSize: THEME.fontSizes.sm,
     color: THEME.colors.white,
-    textAlign: `center`,
+    textAlign: 'center',
   },
   footer: {
     gap: 10,

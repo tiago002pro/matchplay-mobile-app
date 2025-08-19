@@ -114,7 +114,7 @@ export function ChatScreen() {
       >
         <View style={styles.chatHeader}>
           <View style={styles.avatarContainer}>
-            <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} />
+            { !item?.image && <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} /> }
             { item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} /> }
             {
               item.unreadCount > 0 &&

@@ -158,7 +158,7 @@ export function GamesScreen() {
   );
 
   return(
-    <SafeAreaView style={styles.safeAreaView}>
+    <SafeAreaView style={styles.container}>
       <GradientBackground>
         <View style={styles.searchContainer}>
           <View style={styles.input}>
@@ -202,15 +202,9 @@ export function GamesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-  },
   container: {
-    paddingStart: THEME.sizes.paddingPage,
-    paddingEnd: THEME.sizes.paddingPage,
-    paddingTop: THEME.sizes.paddingPage,
-    backgroundColor: "#1a1a2e",
     flex: 1,
+    backgroundColor: '#1a1a2e',
   },
   searchContainer: {
     flexDirection: 'row',

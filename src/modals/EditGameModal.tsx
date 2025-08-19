@@ -1,4 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
+import { GradientBackground } from "components/GradientBackground";
 import { PrimaryButton } from "components/PrimaryButton";
 import { useAuth } from "contexts/AuthContext";
 import { IGame, IGamePlatform } from "interfaces/IGames";
@@ -16,7 +17,7 @@ type EditGameModalProps = {
   idRawgGame:number;
 }
 
-export function EditGameModal({ modalVisible, setModalVisible, idRawgGame }:EditGameModalProps) {
+export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: EditGameModalProps) {
   const { authState } = useAuth();
   const { getRawgGamesGameById, getByIdRawgGameAndGamerProfile, deleteGame, update } = GamesService();
   const { addGameToProfile } = GamerProfileService();
@@ -134,65 +135,70 @@ export function EditGameModal({ modalVisible, setModalVisible, idRawgGame }:Edit
   }
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType="fade" // "slide", "fade" ou "none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+    <GradientBackground>
+      <View style={styles.container}>
+        <Modal
+          animationType="fade" // "slide", "fade" ou "none"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
 
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.title}>Editar Jogo:</Text>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.title}>Editar Jogo:</Text>
 
-            <View style={styles.imageArea}>
-              {
-                rawgGame && rawgGame.backgroundImage && rawgGame.name &&
-                <Image
-                  style={styles.image}
-                  source={{uri: rawgGame.backgroundImage}}
-                  alt={rawgGame.name}
+              <View style={styles.imageArea}>
+                {
+                  rawgGame && rawgGame.backgroundImage && rawgGame.name &&
+                  <Image
+                    style={styles.image}
+                    source={{uri: rawgGame.backgroundImage}}
+                    alt={rawgGame.name}
+                  />
+                }
+                
+                {
+                  rawgGame && rawgGame.name &&
+                  <Text style={styles.gameName}>{rawgGame.name}</Text>
+                }
+              </View>
+
+              <Text style={styles.title}>Adicione este jogo ao seu perfil em:</Text>
+
+              <View style={styles.platformsContainer}>
+                {rawgGame && rawgGame.platforms && rawgGame.platforms.map((platform, index) => {
+                  const IconComponent = platformIcons[platform.name];
+                  const isSelected = gameDataPlatforms && gameDataPlatforms.some((item) => item.name === platform.name);
+                  
+                  return IconComponent ? (
+                    <Pressable key={index} style={isSelected ? [styles.platforms, styles.platformActive] : styles.platforms} onPress={() => togglePlatform(platform)}>
+                      <Text style={styles.gameTagText}>{platform.name}</Text>
+                      <IconComponent style={styles.iconComponent} />
+                    </Pressable>
+                  ) : null;
+                })}
+              </View>
+
+              <Text style={styles.title}>Desmarcar todas as plataformas removerá esse jogo da lista</Text>
+
+              <View style={styles.footer}>
+                <PrimaryButton
+                  label="Remover da listagem"
+                  action={toggleDeleteGame}
+                  loading={false}
                 />
-              }
-              
-              {
-                rawgGame && rawgGame.name &&
-                <Text style={styles.gameName}>{rawgGame.name}</Text>
-              }
-            </View>
-
-            <Text style={styles.title}>Adicione este jogo ao seu perfil em:</Text>
-
-            <View style={styles.platformsContainer}>
-              {rawgGame && rawgGame.platforms && rawgGame.platforms.map((platform, index) => {
-                const IconComponent = platformIcons[platform.name];
-                const isSelected = gameDataPlatforms && gameDataPlatforms.some((item) => item.name === platform.name);
-
-                return IconComponent ? (
-                  <Pressable key={index} style={isSelected ? styles.platformActive : styles.platformDisable} onPress={() => togglePlatform(platform)}>
-                    <IconComponent style={styles.iconComponent} />
-                    <Text style={styles.iconName}>{platform.name}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
-
-            <Text style={styles.title}>Desmarcar todas as plataformas removerá esse jogo da lista</Text>
-
-            <View style={styles.footer}>
-              <PrimaryButton
-                label="Remover da listagem"
-                action={toggleDeleteGame}
-                bg={THEME.colors.red[500]}
-                borderColor={THEME.colors.red[500]}
-              />
-              <PrimaryButton label="X" action={() => closeModal()} />
+                <PrimaryButton
+                  label="Fechar"
+                  action={closeModal}
+                  loading={false}
+                />
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </GradientBackground>
   );
 }
 
@@ -209,22 +215,21 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    width: '100%',
-    padding: 40,
+    padding: 20,
     borderRadius: 20,
-    backgroundColor: THEME.colors.background,
-    position: `absolute`,
+    position: 'absolute',
     gap: 30,
-    display: `flex`,
-    justifyContent: `center`,
-    alignContent: `center`,
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
     borderWidth: 2,
-    borderColor: THEME.colors.primary,
+    backgroundColor: '#1a1a2e',
+    borderColor: '#0f3460',
   },
   title: {
     fontSize: THEME.fontSizes.sm,
-    color: THEME.colors.font,
-    textAlign: `center`
+    color: THEME.colors.white,
+    textAlign: 'center',
   },
   imageArea: {
     borderRadius: 200,
@@ -238,22 +243,37 @@ const styles = StyleSheet.create({
     borderRadius: 200,
   },
   gameName: {
-    fontSize: THEME.fontSizes.lg,
     fontWeight: `bold`,
-    color: THEME.colors.font,
-    textAlign: `center`,
+    fontSize: THEME.fontSizes.lg,
+    color: THEME.colors.white,
+    textAlign: 'center'
   },
   platformsContainer: {
     justifyContent: `center`,
     flexDirection: "row",
     flexWrap: `wrap`,
+    gap: 5,
+  },
+  gameTagText: {
+    fontSize: 12,
+    fontFamily: 'Inter-SemiBold',
+    color: THEME.colors.font,
+    marginRight: 10,
+  },
+  platforms: {
+    flexDirection: "row",
+    alignItems: 'center',
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.4)',
   },
   platformActive: {
     flexDirection: "row",
     justifyContent: `center`,
     alignItems: `center`,
-    borderWidth: 2,
-    borderColor: THEME.colors.primary,
     paddingStart: 10,
     paddingEnd: 10,
     paddingTop: 5,
@@ -261,26 +281,11 @@ const styles = StyleSheet.create({
     marginEnd: 5,
     marginBottom: 5,
     borderRadius: 30,
-    backgroundColor: THEME.colors.primary,
-  },
-  platformDisable: {
-    flexDirection: "row",
-    justifyContent: `center`,
-    alignItems: `center`,
-    borderWidth: 2,
-    borderColor: THEME.colors.primary,
-    paddingStart: 10,
-    paddingEnd: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginEnd: 5,
-    marginBottom: 5,
-    borderRadius: 30,
+    backgroundColor: '#8B5CF6',
   },
   iconComponent: {
     width: 15,
     height: 15,
-    marginRight: 10,
   },
   iconName: {
     color: THEME.colors.font,

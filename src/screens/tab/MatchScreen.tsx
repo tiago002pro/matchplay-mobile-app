@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { FlatList } from "native-base";
+import { Dimensions, FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 import { THEME } from "styles/Theme";
 import { MatchCard } from "components/MatchCard";

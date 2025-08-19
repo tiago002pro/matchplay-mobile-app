@@ -1,6 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 
 type PrimaryButtonProps = {
@@ -9,9 +8,9 @@ type PrimaryButtonProps = {
   loading?: boolean;
 }
 
-export function PrimaryButton({ label, action, loading }:PrimaryButtonProps) {
+export function PrimaryButton({ label, action, loading }: PrimaryButtonProps) {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={action} 
       style={[styles.authButton, loading && styles.disabledButton]}
       disabled={loading}
@@ -34,11 +33,12 @@ export function PrimaryButton({ label, action, loading }:PrimaryButtonProps) {
 const styles = StyleSheet.create({
   authButton: {
     marginTop: 8,
-    borderRadius: 12,
+    borderRadius: 30,
     overflow: 'hidden',
   },
   authButtonGradient: {
     paddingVertical: 16,
+    paddingHorizontal: 10,
     alignItems: 'center',
   },
   authButtonText: {

@@ -85,7 +85,6 @@ export function RawgGame({ game }:RawgGameProps) {
 
         <PrimaryButton 
           label="Adicionar"
-          bg={THEME.colors.primary}
           action={() => openModal()}
         />
 

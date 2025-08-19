@@ -30,16 +30,16 @@ export function MatchCard( { person, pointerEvents, onLike, onDislike, onSuperLi
   const renderGameTag = (game) => (
     <View style={styles.gameTag}>
       <Text style={styles.gameTagText}>{game.name}</Text>
-        {game.platforms.map((platform) => {
-          const IconComponent = platformIcons[platform.name];
-          if (!IconComponent) return null;
+      {game.platforms.map((platform) => {
+        const IconComponent = platformIcons[platform.name];
+        if (!IconComponent) return null;
 
-          return (
-            <View key={`${game.name}-${platform.name}`} style={styles.platforms}>
-              <IconComponent style={styles.iconComponent} />
-            </View>
-          );
-        })}
+        return (
+          <View key={`${game.name}-${platform.name}`} style={styles.platforms}>
+            <IconComponent style={styles.iconComponent} />
+          </View>
+        );
+      })}
     </View>
   );
 
@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
   gameTagText: {
     fontSize: 12,
     fontFamily: 'Inter-SemiBold',
-    // color: '#8B5CF6',
     color: THEME.colors.font,
   },
   platforms: {

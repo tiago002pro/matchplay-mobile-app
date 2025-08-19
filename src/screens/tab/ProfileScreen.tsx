@@ -132,7 +132,6 @@ export function ProfileScreen() {
             <PrimaryButton
               label="Sair"
               action={doLogout}
-              bg={THEME.colors.primary}
             />
           </View>
         </ScrollView>

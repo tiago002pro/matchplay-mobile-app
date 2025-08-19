@@ -1,7 +1,7 @@
-import { Box, Button, FlatList, Text } from "native-base"
-import { THEME } from "styles/Theme";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import { IGamerPeriod, IPeriod } from "../interfaces/IPerson";
+import { LinearGradient } from "expo-linear-gradient";
+import { Button } from "native-base";
 
 type DaysOfTheWeekType = {
   id: string;
@@ -52,48 +52,57 @@ export function GamerPeriodTable({ gamerPeriod, updatePeriod }:any) {
   ]
 
   return(
-    <View style={gamerPeriodTablestyles.table}>
-      <View style={gamerPeriodTablestyles.row}>
-        <Box style={gamerPeriodTablestyles.dayWeekCell}></Box>
+    <LinearGradient
+      colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.1)']}
+      style={gamerPeriodTablestyles.profileCardGradient}
+    >
+      <View style={gamerPeriodTablestyles.table}>
+        <View style={gamerPeriodTablestyles.row}>
+          <View style={gamerPeriodTablestyles.dayWeekCell}></View>
 
-        <View style={gamerPeriodTablestyles.period}>
-          <Box style={gamerPeriodTablestyles.headerCell}>
-            <Text style={gamerPeriodTablestyles.header}>Manhã</Text>
-          </Box>
+          <View style={gamerPeriodTablestyles.period}>
+            <View style={gamerPeriodTablestyles.headerCell}>
+              <Text style={gamerPeriodTablestyles.header}>Manhã</Text>
+            </View>
 
-          <Box style={gamerPeriodTablestyles.headerCell}>
-            <Text style={gamerPeriodTablestyles.header}>Tarde</Text>
-          </Box>
+            <View style={gamerPeriodTablestyles.headerCell}>
+              <Text style={gamerPeriodTablestyles.header}>Tarde</Text>
+            </View>
 
-          <Box style={gamerPeriodTablestyles.headerCell}>
-            <Text style={gamerPeriodTablestyles.header}>Noite</Text>
-          </Box>
-        </View>
-      </View>
-
-      <FlatList
-        scrollEnabled={false}
-        nestedScrollEnabled={false}
-        data={daysOfTheWeek}
-        keyExtractor={(data:any) => data.id}
-        renderItem={({ item, index }) =>
-          <View style={[{ marginBottom: 10 }, index === daysOfTheWeek.length - 1 && { marginBottom: 0 }]}>
-            <GamerPeriodRow
-              daysOfTheWeek={item}
-              gamerPeriod={gamerPeriod}
-              updatePeriod={updatePeriod}
-            />
+            <View style={gamerPeriodTablestyles.headerCell}>
+              <Text style={gamerPeriodTablestyles.header}>Noite</Text>
+            </View>
           </View>
-        }
-      />
-    </View>
+        </View>
+        
+
+        <FlatList
+          scrollEnabled={false}
+          nestedScrollEnabled={false}
+          data={daysOfTheWeek}
+          keyExtractor={(data:any) => data.id}
+          renderItem={({ item, index }) =>
+            <View style={[{ marginBottom: 10 }, index === daysOfTheWeek.length - 1 && { marginBottom: 0 }]}>
+              <GamerPeriodRow
+                daysOfTheWeek={item}
+                gamerPeriod={gamerPeriod}
+                updatePeriod={updatePeriod}
+              />
+            </View>
+          }
+        />
+      </View>
+    </LinearGradient>
   );
 }
 
 const gamerPeriodTablestyles = StyleSheet.create({
-  table: {
+  profileCardGradient: {
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.3)',
     borderRadius: 20,
-    backgroundColor: "#1a1a1a",
+  },
+  table: {
     padding: 20,
   },
   row: {
@@ -126,9 +135,9 @@ export function GamerPeriodRow({ daysOfTheWeek, gamerPeriod, updatePeriod }:any)
 
   return(
     <View style={gamerPeriodRowStyles.row}>
-      <Box style={gamerPeriodRowStyles.dayWeekCell}>
+      <View style={gamerPeriodRowStyles.dayWeekCell}>
         <Text style={gamerPeriodRowStyles.dayWeek}>{daysOfTheWeek.name}</Text>
-      </Box>
+      </View>
 
       <FlatList
         scrollEnabled={false}
@@ -137,7 +146,7 @@ export function GamerPeriodRow({ daysOfTheWeek, gamerPeriod, updatePeriod }:any)
         data={period}
         keyExtractor={(data:any) => data.id}
         renderItem={({ item }) =>
-          <Box style={gamerPeriodRowStyles.cell}>
+          <View style={gamerPeriodRowStyles.cell}>
             <Button
               style={[
                 gamerPeriodRowStyles.btn,
@@ -146,7 +155,7 @@ export function GamerPeriodRow({ daysOfTheWeek, gamerPeriod, updatePeriod }:any)
               ]}
               onPress={() => updatePeriod(daysOfTheWeek.key, item.name, gamerPeriod[daysOfTheWeek.key][item.name])}
             />
-          </Box>
+          </View>
         }
       />
     </View>
@@ -167,14 +176,14 @@ const gamerPeriodRowStyles = StyleSheet.create({
     display: `flex`,
     flexDirection: "row",
     gap: 10,
-    justifyContent: `center`
+    justifyContent: 'center'
   },
   cell: {
   },
   btn: {
     width: 50,
     borderRadius: 10,
-    backgroundColor: THEME.colors.primary,
+    backgroundColor: '#8B5CF6',
   },
   btnActive: {
     opacity: 1,

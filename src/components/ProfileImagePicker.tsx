@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Box, Image } from "native-base";
-import { THEME } from "styles/Theme";
 import { Alert, Dimensions, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { PersonService } from "service/PersonService";
@@ -49,7 +48,7 @@ export function ProfileImagePicker({ person, setPerson }:ProfileImagePickerProps
         <Ionicons
           name="person-circle-outline"
           size={widthScreen}
-          color={THEME.colors.primary}
+          color={'rgba(139, 92, 246, 0.1)'}
         />
         {
           person?.profileImage && <Image source={{ uri: person?.profileImage }} alt={'profileImage'} style={styles.userImage} />
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     width: widthScreen - widthScreen * .27,
     height: widthScreen - widthScreen * .27,
     borderWidth: widthScreen * .03,
-    borderColor: THEME.colors.background,
+    borderColor: 'rgba(236, 72, 153, 0.1)',
     zIndex: 999999,
     position: 'absolute',
   },
