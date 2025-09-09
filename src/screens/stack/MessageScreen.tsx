@@ -1,19 +1,23 @@
-import { Ionicons } from "@expo/vector-icons";
+import { GradientBackground } from "components/GradientBackground";
 import { useAuth } from "contexts/AuthContext";
 import { useSocket } from "contexts/SocketContext";
 import { useUnreadMessages } from "contexts/UnreadMessagesContext";
+import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "expo-router";
 import { IApiResponse } from "interfaces/IApiResponse";
 import { ChatDTO } from "interfaces/IChatDTO";
 import { IMessageDTO } from "interfaces/IMessage";
 import { IPageable } from "interfaces/IPageable";
+import { ArrowLeft, MoreVertical, Paperclip, Phone, Send, Smile, Video } from "lucide-react-native";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { MessageService } from "service/MessageService";
 import { THEME } from "styles/Theme";
 
 export default function MessageScreen({ route }:any) {
+  const navigation = useNavigation();
   const { authState } = useAuth();
   const { socket, newMessage } = useSocket();
   const { setUnreadCount } = useUnreadMessages();
@@ -29,6 +33,10 @@ export default function MessageScreen({ route }:any) {
   const [hasMore, setHasMore] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [inputText, setInputText] = useState("");
+
+  const [sending, setSending] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const flatListRef = useRef<FlatList>(null);
   
   useEffect(() => {
     if (page > 0) loadMessages(false);
@@ -61,7 +69,7 @@ export default function MessageScreen({ route }:any) {
         }
       })
     } catch (error) {
-      console.error("Erro ao buscar jogos:", error);
+      console.error("Não foi possível carregar as mensagens:", error);
     } finally {
       setLoading(false);
     }
@@ -73,7 +81,7 @@ export default function MessageScreen({ route }:any) {
     }
   }
 
-  const sendMessage = () => {
+  const handleNewMessage = () => {
     if (inputText.trim()) {
       const data = {
         chatId: chat.id,
@@ -82,7 +90,7 @@ export default function MessageScreen({ route }:any) {
         content: inputText
       };
 
-      const newMessage:IMessageDTO = {
+      const message:IMessageDTO = {
         id: null,
         senderId,
         content: inputText,
@@ -91,8 +99,11 @@ export default function MessageScreen({ route }:any) {
         chatId: chat.id,
       }
 
-      setMessages((prevMessages) => [newMessage, ...prevMessages]);
-      setInputText("");
+      setMessages((prevMessages) => [message, ...prevMessages]);
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+      setInputText('');
       socket.send(JSON.stringify(data));
     }
   };
@@ -101,137 +112,274 @@ export default function MessageScreen({ route }:any) {
     return moment(new Date(date)).calendar(); 
   }
 
+  const renderMessage = ({ item }: { item: IMessageDTO }) => {
+    const isMe = item.senderId === senderId;
+    
+    return (
+      <View style={[styles.messageContainer, isMe ? styles.myMessage : styles.otherMessage]}>
+        <View style={[styles.messageBubble, isMe ? styles.myBubble : styles.otherBubble]}>
+          <Text style={[styles.messageText, isMe ? styles.myMessageText : styles.otherMessageText]}>
+            {item.content}
+          </Text>
+          <Text style={[styles.messageTime, isMe ? styles.myMessageTime : styles.otherMessageTime]}>
+            {convertDate(item.date)}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Ajuste para o iOS
-      >
-        <FlatList
-          data={messages}
-          inverted={true}
-          style={styles.flatListContainer}
-          keyExtractor={(item:IMessageDTO, index) => String(index)}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          showsHorizontalScrollIndicator={false}
-          initialNumToRender={pageSize}
-          maxToRenderPerBatch={pageSize}
-          removeClippedSubviews={true}
-          ListFooterComponent={
-            loading ? <ActivityIndicator
-              size="large"
-              color={THEME.colors.primary}
-              style={{marginTop: 300}}
-              />
-            : null
-          }
-          renderItem={({ item }) => (
-            <View style={styles.messageContainer}>
-              <View style={[styles.message, item.senderId === senderId ? styles.userMessage : styles.otherMessage]}>
-                <Text style={styles.messageText}>{item.content}</Text>
-              </View>
-              <View style={[styles.readContainer, item.senderId === senderId ? {justifyContent: 'flex-end'} : {justifyContent: 'flex-start'}]}>
-                <Text style={[styles.dateText, item.senderId === senderId ? {textAlign: "right"} : {textAlign: "left"}]}>{convertDate(item.date)}</Text>
-                {
-                  item.senderId === senderId
-                    && <Ionicons
-                      name={item.isRead ? "checkmark-done" : "checkmark"}
-                      size={15}
-                      color={item.isRead ? THEME.colors.secondary : THEME.colors.font}
-                    />
-                }
+    <SafeAreaView style={styles.container}>
+      <GradientBackground>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Ajuste para o iOS
+        >
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <ArrowLeft size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+            
+            <View style={styles.headerInfo}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{ senderName }</Text>
+                <Text style={styles.headerStatus}>
+                  {true ? 'Online' : 'Offline'}
+                </Text>
               </View>
             </View>
-          )}
-        />
+            
+            <View style={styles.headerActions}>
+              <TouchableOpacity style={styles.actionButton}>
+                <Phone size={20} color="#8B5CF6" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.actionButton}>
+                <Video size={20} color="#8B5CF6" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.actionButton}>
+                <MoreVertical size={20} color="#8B5CF6" />
+              </TouchableOpacity>
+            </View>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={inputText}
-            onChangeText={setInputText}
-            placeholder="Digite uma mensagem..."
-            cursorColor={THEME.colors.font}
-            selectionColor={THEME.colors.font}
-            placeholderTextColor={THEME.colors.font}
+          <FlatList
+            inverted={true}
+            data={messages}
+            keyExtractor={(item:IMessageDTO, index) => String(index)}
+            renderItem={renderMessage}
+            contentContainerStyle={styles.flatListContainer}
+            showsHorizontalScrollIndicator={false}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={pageSize}
+            maxToRenderPerBatch={pageSize}
+            removeClippedSubviews={true}
+            ListFooterComponent={
+              loading ? <ActivityIndicator
+                size="large"
+                color={THEME.colors.primary}
+                style={{marginTop: 300}}
+                />
+              : null
+            }
           />
-          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-            <Text style={styles.sendButtonText}>Enviar</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+
+          {isTyping && (
+            <View style={styles.typingContainer}>
+              <Text style={styles.typingText}>{ senderName } está digitando...</Text>
+            </View>
+          )}
+
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.inputContainer}
+          >
+            <View style={styles.inputWrapper}>
+              <TouchableOpacity style={styles.inputButton}>
+                <Paperclip size={20} color="#8B5CF6" />
+              </TouchableOpacity>
+              
+
+              <TextInput
+                style={styles.textInput}
+                placeholder="Digite uma mensagem..."
+                placeholderTextColor="#666"
+                value={inputText}
+                onChangeText={setInputText}
+                multiline
+                maxLength={255}
+              />
+              
+              <TouchableOpacity style={styles.inputButton}>
+                <Smile size={20} color="#8B5CF6" />
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[styles.sendButton, (!inputText.trim() || sending) && styles.sendButtonDisabled]}
+                onPress={handleNewMessage}
+                disabled={!inputText.trim() || sending}
+              >
+                <LinearGradient
+                  colors={inputText.trim() && !sending ? ['#8B5CF6', '#EC4899'] : ['#666', '#666']}
+                  style={styles.sendButtonGradient}
+                >
+                  {sending ? (
+                    <ActivityIndicator size={16} color="#FFFFFF" />
+                  ) : (
+                    <Send size={20} color="#FFFFFF" />
+                  )}
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </GradientBackground>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: THEME.colors.background,
-  },
   container: {
     flex: 1,
-    padding: THEME.sizes.paddingPage,
-    backgroundColor: THEME.colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(139, 92, 246, 0.2)',
+  },
+  backButton: {
+    marginRight: 16,
+  },
+  headerInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerText: {
+    flex: 1,
+  },
+  headerName: {
+    fontSize: 18,
+    fontFamily: 'Inter-SemiBold',
+    color: '#FFFFFF',
+  },
+  headerStatus: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#10B981',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  actionButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   flatListContainer: {
     marginBottom: THEME.sizes.paddingPage / 2,
   },
   messageContainer: {
-    gap: 0
+    marginBottom: 16,
+    alignItems: 'flex-end',
   },
-  message: {
-    width: "77%",
-    padding: THEME.sizes.paddingPage,
-    marginVertical: THEME.sizes.paddingPage / 2,
-    borderRadius: 8,
-  },
-  userMessage: {
-    alignSelf: "flex-end",
-    backgroundColor: THEME.colors.secondary,
+  myMessage: {
+    alignItems: 'flex-end',
   },
   otherMessage: {
-    alignSelf: "flex-start",
-    backgroundColor: THEME.colors.gray[800],
+    alignItems: 'flex-start',
+  },
+  messageBubble: {
+    maxWidth: '75%',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  myBubble: {
+    backgroundColor: '#8B5CF6',
+    borderBottomRightRadius: 6,
+  },
+  otherBubble: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderBottomLeftRadius: 6,
   },
   messageText: {
-    color: THEME.colors.font,
+    fontSize: 16,
+    fontFamily: 'Inter-Regular',
+    lineHeight: 22,
   },
-  readContainer: {
-    flexDirection: 'row',
-    display: 'flex',
-    alignItems: 'center',
+  myMessageText: {
+    color: '#FFFFFF',
   },
-  dateText: {
-    color: THEME.colors.font,
-    fontSize: THEME.fontSizes.sm - 4,
-    marginRight: 2,
+  otherMessageText: {
+    color: '#FFFFFF',
+  },
+  messageTime: {
+    fontSize: 10,
+    fontFamily: 'Inter-Regular',
+    marginTop: 4,
+  },
+  myMessageTime: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'right',
+  },
+  otherMessageTime: {
+    color: '#999',
+  },
+  typingContainer: {
+    paddingVertical: 8,
+  },
+  typingText: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#8B5CF6',
+    fontStyle: 'italic',
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(139, 92, 246, 0.2)',
+    paddingVertical: 16,
   },
-  input: {
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 24,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  inputButton: {
+    padding: 8,
+  },
+  textInput: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: THEME.colors.font,
-    borderRadius: 8,
-    marginRight: 10,
-    color: THEME.colors.font,
-    padding: THEME.sizes.paddingPage / 2,
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'Inter-Regular',
+    maxHeight: 100,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
   },
   sendButton: {
-    backgroundColor: THEME.colors.primary,
-    borderRadius: 8,
-    padding: THEME.sizes.paddingPage / 2,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
-  sendButtonText: {
-    color: THEME.colors.font,
-    fontWeight: "bold",
+  sendButtonDisabled: {
+    opacity: 0.5,
   },
-  noMessagesText: {
-    borderColor: THEME.colors.font,
+  sendButtonGradient: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
