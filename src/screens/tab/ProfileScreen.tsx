@@ -14,9 +14,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import { PersonService } from "../../service/PersonService";
 
 import { IGamerPeriod, IGamerProfile, IPerson } from "../../interfaces/IPerson";
-import { IGame } from "interfaces/IGames";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { GradientBackground } from "components/GradientBackground";
+import { Game } from "interfaces/IGames";
 
 export function ProfileScreen() {
   const { authState, doLogout } = useAuth();
@@ -26,7 +26,7 @@ export function ProfileScreen() {
   const [person, setPerson] = useState<IPerson | undefined>(undefined);
   const [gamerProfile, setGamerProfile] = useState<IGamerProfile | undefined>(undefined);
   const [gamerPeriod, setGamerPeriod] = useState<IGamerPeriod | undefined>(undefined);
-  const [games, setGames] = useState<IGame[] | undefined>(undefined);
+  const [games, setGames] = useState<Game[] | undefined>(undefined);
 
   const [editUsernameModalVisible, setEditUsernameModalVisible] = useState<boolean>(false);
   const [gamerPeriodModalVisible, setGamerPeriodModalVisible] = useState<boolean>(false);

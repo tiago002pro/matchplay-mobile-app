@@ -8,6 +8,11 @@ import { Calendar, Star } from "lucide-react-native";
 import { PrimaryButton } from "./PrimaryButton";
 import moment from "moment";
 import { EditGameModal } from "modals/EditGameModal";
+import { RawgGames } from "interfaces/RawgGames";
+
+export type RawgGameProps = {
+  game: RawgGames;
+}
 
 export function RawgGame({ game }:RawgGameProps) {
   const [addGameModalVisible, setAddGameModalVisible] = useState<boolean>(false);

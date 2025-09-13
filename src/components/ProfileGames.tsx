@@ -1,4 +1,4 @@
-import { IGame } from "interfaces/IGames";
+import { Game } from "interfaces/IGames";
 import { EditGameModal } from "modals/EditGameModal";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -6,13 +6,13 @@ import { platformIcons } from "shared/platformIcons";
 import { THEME } from "styles/Theme";
 
 type ProfileGamesProps = {
-  games:IGame[];
-  editGameModalVisible:any;
-  setEditGameModalVisible:any;
+  games: Game[];
+  editGameModalVisible: any;
+  setEditGameModalVisible: any;
 }
 
 export function ProfileGames({ games, editGameModalVisible, setEditGameModalVisible }: ProfileGamesProps) {
-  const [game, setGame] = useState<IGame>(null);
+  const [game, setGame] = useState<Game>(null);
 
   function openMpdal(game) {
     setGame(game)
@@ -41,7 +41,7 @@ export function ProfileGames({ games, editGameModalVisible, setEditGameModalVisi
         editGameModalVisible && <EditGameModal
           modalVisible={editGameModalVisible}
           setModalVisible={setEditGameModalVisible}
-          idRawgGame={game.id}
+          idRawgGame={game.idRawgGame}
         />
       }
     </View>

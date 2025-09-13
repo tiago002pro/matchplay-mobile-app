@@ -1,20 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { Filter, Gamepad2 } from "lucide-react-native";
+import { LinearGradient } from "expo-linear-gradient";
+
 import { THEME } from "styles/Theme";
 import { RawgGame } from "../../components/RawgGame";
 import { InputComponent } from "../../components/InputComponent";
 import { platformIcons } from "shared/platformIcons";
 import { PlatformsFilter } from "shared/platformsFilter";
-import { GamesService } from "../../service/GamesService";
-import { IRawgGamesResponse } from "../../interfaces/IGames";
-import { Filter, Gamepad2 } from "lucide-react-native";
 import { GradientBackground } from "components/GradientBackground";
-import { LinearGradient } from "expo-linear-gradient";
+import { RawgGamesService } from "service/RawgGamesService";
+import { RawgGames, RawgGamesResponse } from "interfaces/RawgGames";
 
 export function GamesScreen() {
   const pageSize = 10;
-  const { searchRawgGames } = GamesService();
+  const { searchGames } = RawgGamesService();
 
   const [games, setGames] = useState<RawgGames[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -43,7 +44,7 @@ export function GamesScreen() {
     setLoading(true);
 
     try {
-      const response:IRawgGamesResponse = await searchRawgGames(page, pageSize, platforms, search);
+      const response:RawgGamesResponse = await searchGames(page, pageSize, platforms, search);
       setGames((prevGames) => newSearch ? response.games : [...prevGames, ...response.games])
       setHasMore(response.hasNext);
     } catch (error) {
@@ -128,7 +129,7 @@ export function GamesScreen() {
     </View>
   );
 
-  const renderRawgGame = useCallback(({ item }:any) => {
+  const renderRawgGame = useCallback(({ item }: { item: RawgGames }) => {
     return <RawgGame game={item} />
   }, [games])
 

@@ -1,49 +1,15 @@
-import { showMessage } from "react-native-flash-message";
-import { IApiResponse } from "../interfaces/IApiResponse";
-import { IGame, IRawgGamesResponse, IRawgPlatformsResponse } from "../interfaces/IGames";
 import axiosInstance from "./axiosInstance"
+import { showMessage } from "react-native-flash-message";
+
+import { IApiResponse } from "../interfaces/IApiResponse";
+import { Game, GamePlatform, NewGameRequest } from "interfaces/IGames";
 
 export function GamesService() {
   const root = '/games'
 
-  async function searchRawgPlatforms(page:number, pageSize:number) {
+  async function getByGamerProfileAndIdRawgGame(gamerProfileId: number, idRawgGame: number) {
     try {
-      const response = await axiosInstance.get<IApiResponse<IRawgPlatformsResponse>>(`${root}/rawg/platforms`, {
-        params: { page,  pageSize }
-      });
-
-      if (response.data.statusCode == 200 && response.data.result) {
-        return response.data.result;
-      } else {
-        console.log("error", response.data.statusCode);
-        throw response.data.errorMessage;
-      }
-    } catch (error) {
-      console.log("error", error);
-      throw error;
-    }
-  }
-
-  async function searchRawgGames(page:number, pageSize:number, platforms:number[], search:string) {
-    const request = {page,  pageSize, platforms, search}
-    try {
-      const response = await axiosInstance.post<IApiResponse<IRawgGamesResponse>>(`${root}/rawg/search`, request);
-
-      if (response.data.statusCode == 200 && response.data.result) {
-        return response.data.result;
-      } else {
-        console.log("error", response.data.statusCode);
-        throw response.data.errorMessage;
-      }
-    } catch (error) {
-      console.log("error", error);
-      throw error;
-    }
-  }
-
-  async function getByIdRawgGameAndGamerProfile(gamerProfileId:number, idRawgGame:number) {
-    try {
-      const response = await axiosInstance.get<IApiResponse<IGame>>(`${root}/gamer-profile/${gamerProfileId}?idRawgGame=${idRawgGame}`);
+      const response = await axiosInstance.get<IApiResponse<Game>>(`${root}/gamer-profile/${gamerProfileId}?idRawgGame=${idRawgGame}`);
 
       if (response.data.statusCode == 200) {
         return response.data.result;
@@ -57,9 +23,10 @@ export function GamesService() {
     }
   }
 
-  async function getRawgGamesGameById(rawgGameId:number) {
+  async function newGame(request: NewGameRequest, idGamerProfile: number) {
     try {
-      const response = await axiosInstance.get<IApiResponse<RawgGames>>(`${root}/rawg/${rawgGameId}`);
+      const response = await axiosInstance.post<IApiResponse<string>>(`${root}/new?idGamerProfile=${idGamerProfile}`, request);
+
       if (response.data.statusCode == 200 && response.data.result) {
         return response.data.result;
       } else {
@@ -72,9 +39,10 @@ export function GamesService() {
     }
   }
 
-  async function update(game:IGame) {
+
+  async function updatePlatforms(id: number, platforms: GamePlatform[]) {
     try {
-      const response = await axiosInstance.put<IApiResponse<RawgGames>>(`${root}`, game);
+      const response = await axiosInstance.put<IApiResponse<string>>(`${root}/${id}`, platforms);
       if (response.data.statusCode == 200 && response.data.result) {
         return response.data.result;
       } else {
@@ -87,7 +55,7 @@ export function GamesService() {
     }
   }
 
-  async function deleteGame(id:Number) {
+  async function deleteGame(id: number) {
     try {
       const response = await axiosInstance.delete<IApiResponse<String>>(`${root}/${id}`);
       if (response.data.statusCode == 200 && response.data.result) {
@@ -108,11 +76,9 @@ export function GamesService() {
   }
 
   return {
-    searchRawgPlatforms,
-    searchRawgGames,
-    getByIdRawgGameAndGamerProfile,
-    getRawgGamesGameById,
-    update,
+    getByGamerProfileAndIdRawgGame,
+    newGame,
+    updatePlatforms,
     deleteGame,
   }
 }

@@ -1,4 +1,4 @@
-import { IGame } from "./IGames";
+import { Game } from "./IGames";
 
 export interface IPerson {
   id:number;
@@ -19,7 +19,7 @@ export interface IGamerProfile {
   language?:string;
   gamerPlatform:IGamerPlatform;
   gamerPeriod:IGamerPeriod;
-  games?:IGame[];
+  games?:Game[];
 }
 
 export interface IGamerPlatform {

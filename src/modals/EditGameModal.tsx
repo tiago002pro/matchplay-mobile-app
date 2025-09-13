@@ -2,103 +2,109 @@ import { useFocusEffect } from "@react-navigation/native";
 import { GradientBackground } from "components/GradientBackground";
 import { PrimaryButton } from "components/PrimaryButton";
 import { useAuth } from "contexts/AuthContext";
-import { IGame, IGamePlatform } from "interfaces/IGames";
-import React, { useEffect } from "react";
+import { Game, GamePlatform, NewGameRequest } from "interfaces/IGames";
+import { RawgGamePlatform, RawgGames } from "interfaces/RawgGames";
+import React from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { showMessage } from "react-native-flash-message";
-import { GamerProfileService } from "service/GamerProfileService";
 import { GamesService } from "service/GamesService";
+import { RawgGamesService } from "service/RawgGamesService";
 import { platformIcons } from "shared/platformIcons";
 import { THEME } from "styles/Theme";
 
 type EditGameModalProps = {
-  modalVisible:boolean;
-  setModalVisible:any;
-  idRawgGame:number;
+  modalVisible: boolean;
+  setModalVisible: any;
+  idRawgGame: number;
 }
 
 export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: EditGameModalProps) {
   const { authState } = useAuth();
-  const { getRawgGamesGameById, getByIdRawgGameAndGamerProfile, deleteGame, update } = GamesService();
-  const { addGameToProfile } = GamerProfileService();
+  const { getByGamerProfileAndIdRawgGame, newGame, updatePlatforms, deleteGame } = GamesService();
+  const { getGameById } = RawgGamesService();
 
-  const [game, setGame] = React.useState<IGame>(null);
-  const [gameDataPlatforms, setGameDataPlatforms] = React.useState<IGamePlatform[]>([]);
+  const [idGamerProfile, setIdGamerProfile] = React.useState<number>(authState?.user?.gamerProfileId || null);
+  const [game, setGame] = React.useState<Game>(null);
+  const [gameDataPlatforms, setGameDataPlatforms] = React.useState<GamePlatform[]>([]);
   const [rawgGame, setRawgGame] = React.useState<RawgGames>(null);
-  
+ 
   useFocusEffect(
     React.useCallback(() => {
       loadGame();
     }, [])
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setGame((prev) => {
-        const updatedGame = { ...prev, platforms: gameDataPlatforms };
-        saveGame(updatedGame); // Chamamos update com o estado atualizado
-        return updatedGame; // Retornamos o novo estado para garantir que a atualização ocorra corretamente
-      });
-    };
-  
-    if (gameDataPlatforms.length > 0) {
-      fetchData();
-    }
-  }, [gameDataPlatforms]);
-  
-
   async function loadGame() {
-    const rawgGamesResult: RawgGames = await getRawgGamesGameById(idRawgGame);
+    const rawgGamesResult: RawgGames = await getGameById(idRawgGame);
+
     if (rawgGamesResult) {
       setRawgGame(rawgGamesResult);
     }
 
-    if (authState && authState?.user?.gamerProfileId) {
-      const gameResult: IGame = await getByIdRawgGameAndGamerProfile(idRawgGame, authState?.user?.gamerProfileId);
-      
+    if (idGamerProfile) {
+      const gameResult: Game = await getByGamerProfileAndIdRawgGame(idGamerProfile, idRawgGame);
+
       if (gameResult) {
-        console.log("gameResult", gameResult);
         setGame(gameResult);
         setGameDataPlatforms(gameResult.platforms);
       } else {
-        setGame({
+        const newGame = {
           id: null,
-          name: rawgGame.name,
-          image: rawgGame.backgroundImage,
-          idRawgGame: rawgGame.id,
+          name: rawgGamesResult?.name,
+          image: rawgGamesResult?.backgroundImage,
+          idRawgGame: rawgGamesResult?.id,
           platforms: [],
-          releaseDate: rawgGame.releaseDate,
-        });
+          releaseDate: rawgGamesResult?.releaseDate,
+        }
+        setGame(newGame);
       }
     }
   }
 
-  const togglePlatform = (platform) => {
+  const togglePlatform = (platform: RawgGamePlatform) => {
     setGameDataPlatforms((prev) => {
       const isSelected = prev.some((p) => p.name === platform.name);
+      let newPlatforms;
 
       if (isSelected) {
-        return prev.filter((p) => p.name !== platform.name);
+        newPlatforms = prev.filter((p) => p.name !== platform.name);
       } else {
-        const newPlatform: IGamePlatform = {
+        const newPlatform: GamePlatform = {
           id: null,
           name: platform.name,
           idRawgGame: platform.id,
-        }
-        return [...prev, newPlatform];
+        };
+        newPlatforms = [...prev, newPlatform];
       }
+
+      setGame((prevGame) => {
+        const updatedGame = { ...prevGame, platforms: newPlatforms };
+
+        if (prevGame && prevGame.id) {
+          updateGame(prevGame.id, updatedGame.platforms);
+        } else {
+          saveGame(platform)
+        }
+
+        return updatedGame;
+      });
+
+      return newPlatforms;
     });
+
   };
 
-  const savePlatforms = async (platform) => {
-    const request = {
-      id: game.id,
+  const saveGame = async (platform: RawgGamePlatform) => { 
+    const request: NewGameRequest = {
+      idRawgGame: game.idRawgGame,
       name: game.name,
       backgroundImage: game.image,
       idPlatform: platform.id,
       namePlatform: platform.name,
-    }  
-    const response = await addGameToProfile(authState?.user?.gamerProfileId, request);
+    }
+
+    const response = await newGame(request, idGamerProfile);
+    
     showMessage({
       message: response + "!",
       type: "success",
@@ -106,8 +112,8 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
     })
   }
 
-  const saveGame = async (updatedGame) => {
-    const response = await update(updatedGame);
+  const updateGame = async (id: number, platforms: GamePlatform[]) => {
+    const response = await updatePlatforms(id, platforms);
     showMessage({
       message: response + "!",
       type: "success",
