@@ -7,9 +7,9 @@ import { Game, GamePlatform, NewGameRequest } from "interfaces/IGames";
 export function GamesService() {
   const root = '/games'
 
-  async function getByGamerProfileAndIdRawgGame(gamerProfileId: number, idRawgGame: number) {
+  async function getByGamerProfileAndIdRawgGame(idGamerProfile: number, idRawgGame: number) {
     try {
-      const response = await axiosInstance.get<IApiResponse<Game>>(`${root}/gamer-profile/${gamerProfileId}?idRawgGame=${idRawgGame}`);
+      const response = await axiosInstance.get<IApiResponse<Game>>(`${root}/gamer-profile/${idGamerProfile}?idRawgGame=${idRawgGame}`);
 
       if (response.data.statusCode == 200) {
         return response.data.result;
@@ -25,7 +25,7 @@ export function GamesService() {
 
   async function newGame(request: NewGameRequest, idGamerProfile: number) {
     try {
-      const response = await axiosInstance.post<IApiResponse<string>>(`${root}/new?idGamerProfile=${idGamerProfile}`, request);
+      const response = await axiosInstance.post<IApiResponse<Game>>(`${root}/new?idGamerProfile=${idGamerProfile}`, request);
 
       if (response.data.statusCode == 200 && response.data.result) {
         return response.data.result;

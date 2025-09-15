@@ -6,14 +6,15 @@ type PrimaryButtonProps = {
   label?: string;
   action?: any;
   loading?: boolean;
+  disabled?: boolean;
 }
 
-export function PrimaryButton({ label, action, loading }: PrimaryButtonProps) {
+export function PrimaryButton({ label, action, loading, disabled }: PrimaryButtonProps) {
   return (
     <TouchableOpacity
       onPress={action} 
-      style={[styles.authButton, loading && styles.disabledButton]}
-      disabled={loading}
+      style={[styles.authButton, (loading || disabled) && styles.disabledButton]}
+      disabled={loading || disabled}
     >
       <LinearGradient
         colors={loading ? ['#666', '#666'] : ['#8B5CF6', '#EC4899']}

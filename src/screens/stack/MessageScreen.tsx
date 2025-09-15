@@ -144,7 +144,7 @@ export default function MessageScreen({ route }:any) {
             
             <View style={styles.headerInfo}>
               <View style={styles.headerText}>
-                <Text style={styles.headerName}>{ senderName }</Text>
+                <Text style={styles.headerName}>{ chat.name }</Text>
                 <Text style={styles.headerStatus}>
                   {true ? 'Online' : 'Offline'}
                 </Text>

@@ -23,7 +23,7 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
   const { getByGamerProfileAndIdRawgGame, newGame, updatePlatforms, deleteGame } = GamesService();
   const { getGameById } = RawgGamesService();
 
-  const [idGamerProfile, setIdGamerProfile] = React.useState<number>(authState?.user?.gamerProfileId || null);
+  const [idGamerProfile, setIdGamerProfile] = React.useState<number>(authState?.user?.idGamerProfile || null);
   const [game, setGame] = React.useState<Game>(null);
   const [gameDataPlatforms, setGameDataPlatforms] = React.useState<GamePlatform[]>([]);
   const [rawgGame, setRawgGame] = React.useState<RawgGames>(null);
@@ -103,10 +103,11 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
       namePlatform: platform.name,
     }
 
-    const response = await newGame(request, idGamerProfile);
+    const response: Game = await newGame(request, idGamerProfile);
+    setGame(response)
     
     showMessage({
-      message: response + "!",
+      message: "Jogo adicionado com sucesso!",
       type: "success",
       duration: 2000
     })
@@ -192,12 +193,11 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
                 <PrimaryButton
                   label="Remover da listagem"
                   action={toggleDeleteGame}
-                  loading={false}
+                  disabled={!!game && !game.id}
                 />
                 <PrimaryButton
                   label="Fechar"
                   action={closeModal}
-                  loading={false}
                 />
               </View>
             </View>

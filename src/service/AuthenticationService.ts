@@ -20,7 +20,7 @@ export function AuthenticationService() {
           login: tokenDecoded.email,
           username: tokenDecoded.username,
           personId: tokenDecoded.personId,
-          gamerProfileId: tokenDecoded.gamerProfileId,
+          idGamerProfile: tokenDecoded.idGamerProfile,
         }
       }
     } catch (error) {

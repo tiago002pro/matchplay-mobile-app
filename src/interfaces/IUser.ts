@@ -5,7 +5,7 @@ export interface IUser {
   password:string;
   role:UserRole;
   personId:number;
-  gamerProfileId:number;
+  idGamerProfile:number;
   expoNotificationToken?:string;
 }
 
