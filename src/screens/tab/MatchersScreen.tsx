@@ -42,20 +42,20 @@ export function MatchersScreen() {
       }
     }, [page, search])
   );
-  
+
 
   function loadMatchers(newSearch = false) {
     setLoading(true);
     try {
       const statusList: MatchStatus[] = [MatchStatus.LIKE, MatchStatus.SUPERLIKE];
-      searchMatchers(authState?.user?.personId, statusList, page, pageSize).then((response:IApiResponse<IPageable<MatchersDTO[]>>) => {
+      searchMatchers(authState?.user?.personId, statusList, page, pageSize).then((response: IApiResponse<IPageable<MatchersDTO[]>>) => {
         if (response && response.result && response.result.content && response.result.content.length) {
-          setMachersList((prev) => newSearch ?  response.result.content : [...prev, ...response.result.content]);
+          setMachersList((prev) => newSearch ? response.result.content : [...prev, ...response.result.content]);
           setHasMore(!response.result.last)
         }
       })
     } catch (error) {
-      console.error("Erro ao buscar jogos:", error);
+      console.error("Erro ao buscar os matchers:", error);
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,7 @@ export function MatchersScreen() {
     try {
       await manageMatches(matchersDTO.id, matchedStatus)
     } catch (error) {
-      console.error("Erro ao buscar jogos:", error);
+      console.error("Erro ao buscar gerenciar o match:", error);
     } finally {
       setLoading(false);
       setMachersList((prevList) => prevList.filter((matcher) => matcher.id !== matchersDTO.id));
@@ -86,7 +86,7 @@ export function MatchersScreen() {
   }
 
   function convertDate(date) {
-    return moment(new Date(date)).startOf('hour').fromNow(); 
+    return moment(new Date(date)).startOf('hour').fromNow();
   }
 
   const getMatchIcon = (matchType: MatchStatus) => {
@@ -110,8 +110,8 @@ export function MatchersScreen() {
       >
         <View style={styles.matchHeader}>
           <View style={styles.avatarContainer}>
-            { !item?.image && <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} /> }
-            { !!item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} /> }
+            {!item?.image && <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} />}
+            {!!item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} />}
             <View style={styles.onlineIndicator} />
             <View style={styles.matchTypeIndicator}>
               {getMatchIcon(item.matchType)}
@@ -130,14 +130,14 @@ export function MatchersScreen() {
           </View>
 
           <View style={styles.actionButtons}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.chatButton}
               onPress={() => manage(item, MatchedStatus.ACCEPTED)}
             >
               <Heart size={20} color="#8B5CF6" />
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={styles.unmatchButton}
               onPress={() => manage(item, MatchedStatus.DANIED)}
             >
@@ -154,7 +154,7 @@ export function MatchersScreen() {
       <ActivityIndicator
         size="large"
         color={THEME.colors.primary}
-        style={{marginTop: 300}}
+        style={{ marginTop: 300 }}
       />
       : null
   );
@@ -174,13 +174,13 @@ export function MatchersScreen() {
     </View>
   );
 
-  return(
+  return (
     <SafeAreaView style={styles.container}>
       <GradientBackground>
         <FlatList
           ref={listRef}
           data={machersList}
-          keyExtractor={(item:MatchersDTO) => String(item.id)}
+          keyExtractor={(item: MatchersDTO) => String(item.id)}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           showsHorizontalScrollIndicator={false}

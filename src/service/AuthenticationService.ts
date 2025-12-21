@@ -7,11 +7,11 @@ import { showMessage } from 'react-native-flash-message';
 export function AuthenticationService() {
   const root = '/auth';
 
-  async function signIn(email:string, password:string):Promise<any> {
+  async function signIn(email: string, password: string): Promise<any> {
     try {
       const response = await axiosInstance.post<IApiResponse<IToken>>(`${root}/signin`, { email, password })
-      const tokenDecoded:any = jwtDecode(response.data.result?.token || '');
-      
+      const tokenDecoded: any = jwtDecode(response.data.result?.token || '');
+
       return {
         token: response.data.result?.token,
         user: {
@@ -29,7 +29,7 @@ export function AuthenticationService() {
     }
   }
 
-  async function signup(registerUser:IRegister):Promise<any> {
+  async function signup(registerUser: IRegister): Promise<any> {
     try {
       const response = await axiosInstance.post<IApiResponse<string>>(`${root}/signup`, registerUser)
       showMessage({
@@ -37,7 +37,7 @@ export function AuthenticationService() {
         type: "success",
         duration: 3000
       })
-      
+
       return response.data.result
     } catch (error) {
       if (error.response) {
@@ -65,5 +65,13 @@ export function AuthenticationService() {
   return {
     signIn,
     signup,
+    validateToken: async (personId: number) => {
+      try {
+        await axiosInstance.get(`${root.replace('/auth', '/person')}/${personId}`);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
   }
 }

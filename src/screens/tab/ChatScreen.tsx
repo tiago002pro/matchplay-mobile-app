@@ -20,7 +20,7 @@ const widthScreen = Dimensions.get('screen').width;
 const width = widthScreen * .2;
 
 export function ChatScreen() {
-  const navigation:any = useNavigation();
+  const navigation: any = useNavigation();
   const { authState } = useAuth();
   const { newMessage } = useSocket();
   const { getAllByPersonId } = ChatService();
@@ -54,11 +54,11 @@ export function ChatScreen() {
       prev.map((item) =>
         item.personId === newMessage.senderId
           ? {
-              ...item,
-              unreadCount: item.unreadCount + 1,
-              lastMessage: newMessage.content,
-              dateLastMessage: newMessage.date,
-            }
+            ...item,
+            unreadCount: item.unreadCount + 1,
+            lastMessage: newMessage.content,
+            dateLastMessage: newMessage.date,
+          }
           : item
       )
     );
@@ -68,14 +68,14 @@ export function ChatScreen() {
     setLoading(true);
 
     try {
-      getAllByPersonId(authState?.user?.personId, search, page, pageSize).then((response:IApiResponse<IPageable<ChatDTO[]>>) => {
+      getAllByPersonId(authState?.user?.personId, search, page, pageSize).then((response: IApiResponse<IPageable<ChatDTO[]>>) => {
         if (response && response.result && response.result.content && response.result.content.length) {
-          setChatList((prev) => newSearch ?  response.result.content : [...prev, ...response.result.content]);
+          setChatList((prev) => newSearch ? response.result.content : [...prev, ...response.result.content]);
           setHasMore(!response.result.last)
         }
       })
     } catch (error) {
-      console.error("Erro ao buscar jogos:", error);
+      console.error("Erro ao buscar os chats:", error);
     } finally {
       setLoading(false);
     }
@@ -94,10 +94,10 @@ export function ChatScreen() {
   }
 
   function convertDate(date) {
-    return moment(new Date(date)).startOf('hour').fromNow(); 
+    return moment(new Date(date)).startOf('hour').fromNow();
   }
 
-  function goToMessage(chat:ChatDTO) {
+  function goToMessage(chat: ChatDTO) {
     navigation.navigate('MessageScreen', {
       chat: chat
     });
@@ -114,8 +114,8 @@ export function ChatScreen() {
       >
         <View style={styles.chatHeader}>
           <View style={styles.avatarContainer}>
-            { !item?.image && <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} /> }
-            { item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} /> }
+            {!item?.image && <Image source={require('./../../../assets/images/hacker.png')} alt={'profileImage'} style={styles.avatar} />}
+            {item?.image && <Image source={{ uri: item?.image }} alt={'profileImage'} style={styles.avatar} />}
             {
               item.unreadCount > 0 &&
               <View style={styles.notification}>
@@ -145,11 +145,11 @@ export function ChatScreen() {
       <ActivityIndicator
         size="large"
         color={THEME.colors.primary}
-        style={{marginTop: 300}}
+        style={{ marginTop: 300 }}
       />
       : null
   );
-  
+
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <LinearGradient
@@ -165,13 +165,13 @@ export function ChatScreen() {
     </View>
   );
 
-  return(
+  return (
     <SafeAreaView style={styles.container}>
       <GradientBackground>
         <FlatList
           ref={listRef}
           data={chatList}
-          keyExtractor={(item:ChatDTO) => String(item.id)}
+          keyExtractor={(item: ChatDTO) => String(item.id)}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           showsHorizontalScrollIndicator={false}

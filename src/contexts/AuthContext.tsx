@@ -11,15 +11,17 @@ interface AuthState {
 
 interface AuthContextProps {
   authState: AuthState;
-  doLogin: (email:string, password:string) => Promise<void>;
+  doLogin: (email: string, password: string) => Promise<void>;
   doLogout: () => Promise<void>;
   getToken: () => any;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { signIn } = AuthenticationService();
+  const { signIn, validateToken } = AuthenticationService();
+  const [loading, setLoading] = useState(true);
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
     user: null,
@@ -31,23 +33,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         const userJson = await AsyncStorage.getItem('@RNAuth:user');
         const token = await AsyncStorage.getItem('@RNAuth:token');
-        
+
         if (userJson && token) {
-          setAuthState({
-            isAuthenticated: true,
-            user: JSON.parse(userJson),
-            token: token,
-          })
-          setAuthToken(token)
+          const user = JSON.parse(userJson);
+          setAuthToken(token);
+
+          const isValid = await validateToken(user.personId);
+
+          if (isValid) {
+            setAuthState({
+              isAuthenticated: true,
+              user: user,
+              token: token,
+            });
+          } else {
+            await AsyncStorage.clear();
+            setAuthToken(null);
+          }
         }
       } catch (error) {
         console.error('Failed to check auth status', error);
+        await AsyncStorage.clear();
+        setAuthToken(null);
+      } finally {
+        setLoading(false);
       }
     };
     checkAuthStatus();
   }, [])
 
-  async function doLogin(email:string, password:string) {
+  async function doLogin(email: string, password: string) {
     try {
       const response = await signIn(email, password)
       setAuthState({
@@ -82,7 +97,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ authState, doLogin, doLogout, getToken }}>
+    <AuthContext.Provider value={{ authState, doLogin, doLogout, getToken, loading }}>
       {children}
     </AuthContext.Provider>
   );

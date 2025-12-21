@@ -26,7 +26,7 @@ export function MatchScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [profiles, setProfiles] = useState<IPerson[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const flatListRef:any = useRef(null);
+  const flatListRef: any = useRef(null);
 
   useEffect(() => {
     loadIdPerson()
@@ -38,14 +38,14 @@ export function MatchScreen() {
     setPersonId(personId);
   }
 
-  const getProfiles = async () => { 
+  const getProfiles = async () => {
     setLoading(true);
-    
+
     try {
-      const data:IPerson[] = await getPersonsToMatch();
+      const data: IPerson[] = await getPersonsToMatch();
       setProfiles(data)
     } catch (error) {
-      console.error("Erro ao buscar jogos:", error);
+      console.error("Erro ao buscar usuários para o Match:", error);
     } finally {
       setLoading(false);
     }
@@ -63,8 +63,8 @@ export function MatchScreen() {
     await createMatch(MatchStatus.SUPERLIKE)
   };
 
-  async function createMatch(status:MatchStatus) {
-    const match:IMatchRequest = {
+  async function createMatch(status: MatchStatus) {
+    const match: IMatchRequest = {
       personId: personId,
       matchedId: profiles[currentIndex].id,
       status,
@@ -74,7 +74,7 @@ export function MatchScreen() {
     romoveItemOfList()
 
     if (profiles && profiles.length > 0) {
-      if (currentIndex > profiles.length -1) {
+      if (currentIndex > profiles.length - 1) {
         moveToNextItem();
       } else {
         getProfiles()
@@ -103,10 +103,10 @@ export function MatchScreen() {
     }
   };
 
-  const handleScrollEnd = async (event:any) => {
+  const handleScrollEnd = async (event: any) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / width);
-    
+
     setCurrentIndex(index);
 
     if (currentIndex == profiles.length - 1) {
@@ -131,7 +131,7 @@ export function MatchScreen() {
       <ActivityIndicator
         size="large"
         color={THEME.colors.primary}
-        style={{marginTop: 300}}
+        style={{ marginTop: 300 }}
       />
       : null
   );
@@ -151,7 +151,7 @@ export function MatchScreen() {
     </View>
   );
 
-  return(
+  return (
     <SafeAreaView style={styles.container}>
       <GradientBackground withoutPadding={true}>
         <FlatList
