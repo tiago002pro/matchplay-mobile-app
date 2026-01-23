@@ -14,34 +14,40 @@ const heightScreen = Dimensions.get('screen').height;
 const width = widthScreen * .7;
 
 type MatchCardProps = {
-  person:IPerson;
-  pointerEvents:any
+  person: IPerson;
+  pointerEvents: any
   onLike: () => {},
   onDislike: () => {},
   onSuperLike: () => {}
 }
 
-export function MatchCard( { person, pointerEvents, onLike, onDislike, onSuperLike } : MatchCardProps ) {
+export function MatchCard({ person, pointerEvents, onLike, onDislike, onSuperLike }: MatchCardProps) {
 
   const getYears = (dateBirth: string) => {
     return moment().diff(dateBirth, 'years');
   }
 
-  const renderGameTag = (game) => (
-    <View style={styles.gameTag}>
-      <Text style={styles.gameTagText}>{game.name}</Text>
-      {game.platforms.map((platform) => {
-        const IconComponent = platformIcons[platform.name];
-        if (!IconComponent) return null;
+  const renderGameTag = (game) => {
+    const renderedIcons = new Set();
 
-        return (
-          <View key={`${game.name}-${platform.name}`} style={styles.platforms}>
-            <IconComponent style={styles.iconComponent} />
-          </View>
-        );
-      })}
-    </View>
-  );
+    return (
+      <View style={styles.gameTag}>
+        <Text style={styles.gameTagText}>{game.name}</Text>
+        {game.platforms.map((platform) => {
+          const IconComponent = platformIcons[platform.name];
+          if (!IconComponent || renderedIcons.has(IconComponent)) return null;
+
+          renderedIcons.add(IconComponent);
+
+          return (
+            <View key={`${game.name}-${platform.name}`} style={styles.platforms}>
+              <IconComponent style={styles.iconComponent} />
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -66,36 +72,36 @@ export function MatchCard( { person, pointerEvents, onLike, onDislike, onSuperLi
             <View style={styles.basicInfo}>
               {
                 person.name &&
-                  <Text style={styles.profileName}>
-                    {person.name}{!!person.dateBirth ? ', ' + getYears(person.dateBirth) : ''}
-                  </Text>
+                <Text style={styles.profileName}>
+                  {person.name}{!!person.dateBirth ? ', ' + getYears(person.dateBirth) : ''}
+                </Text>
               }
 
               {
                 person.city && person.state &&
-                  <View style={styles.locationContainer}>
-                    <MapPin size={16} color="#EC4899" />
-                      <Text style={styles.locationText}>
-                        {person.city}, {person.state}
-                      </Text>
-                  </View>
+                <View style={styles.locationContainer}>
+                  <MapPin size={16} color="#EC4899" />
+                  <Text style={styles.locationText}>
+                    {person.city}, {person.state}
+                  </Text>
+                </View>
               }
             </View>
 
             {
-              !!person.gamerProfile.bio && 
-                <Text style={styles.bio}>{person.gamerProfile.bio}</Text>
+              !!person.gamerProfile.bio &&
+              <Text style={styles.bio}>{person.gamerProfile.bio}</Text>
             }
 
 
             {
               !!person?.gamerProfile?.games?.length &&
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Jogos Favoritos:</Text>
-                  <View style={styles.gamesList}>
-                    { person.gamerProfile.games.map(renderGameTag) }
-                  </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Jogos Favoritos:</Text>
+                <View style={styles.gamesList}>
+                  {person.gamerProfile.games.map(renderGameTag)}
                 </View>
+              </View>
             }
           </ScrollView>
 
