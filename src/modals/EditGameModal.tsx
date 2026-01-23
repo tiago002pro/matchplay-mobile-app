@@ -18,7 +18,7 @@ type EditGameModalProps = {
   idRawgGame: number;
 }
 
-export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: EditGameModalProps) {
+export function EditGameModal({ modalVisible, setModalVisible, idRawgGame }: EditGameModalProps) {
   const { authState } = useAuth();
   const { getByGamerProfileAndIdRawgGame, newGame, updatePlatforms, deleteGame } = GamesService();
   const { getGameById } = RawgGamesService();
@@ -27,7 +27,7 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
   const [game, setGame] = React.useState<Game>(null);
   const [gameDataPlatforms, setGameDataPlatforms] = React.useState<GamePlatform[]>([]);
   const [rawgGame, setRawgGame] = React.useState<RawgGames>(null);
- 
+
   useFocusEffect(
     React.useCallback(() => {
       loadGame();
@@ -42,7 +42,7 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
     }
 
     if (idGamerProfile) {
-      const gameResult: Game = await getByGamerProfileAndIdRawgGame(idGamerProfile, idRawgGame);
+      const gameResult: Game = await getGameOnProfile();
 
       if (gameResult) {
         setGame(gameResult);
@@ -58,6 +58,14 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
         }
         setGame(newGame);
       }
+    }
+  }
+
+  async function getGameOnProfile() {
+    try {
+      return await getByGamerProfileAndIdRawgGame(idGamerProfile, idRawgGame);
+    } catch (e) {
+      return null;
     }
   }
 
@@ -94,7 +102,7 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
 
   };
 
-  const saveGame = async (platform: RawgGamePlatform) => { 
+  const saveGame = async (platform: RawgGamePlatform) => {
     const request: NewGameRequest = {
       idRawgGame: game.idRawgGame,
       name: game.name,
@@ -105,7 +113,7 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
 
     const response: Game = await newGame(request, idGamerProfile);
     setGame(response)
-    
+
     showMessage({
       message: "Jogo adicionado com sucesso!",
       type: "success",
@@ -124,13 +132,13 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
 
   const toggleDeleteGame = async () => {
     try {
-      const response:any = await deleteGame(game.id);
+      const response: any = await deleteGame(game.id);
       showMessage({
         message: response,
         type: "success",
         duration: 2000
       })
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     } finally {
       closeModal()
@@ -160,11 +168,11 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
                   rawgGame && rawgGame.backgroundImage && rawgGame.name &&
                   <Image
                     style={styles.image}
-                    source={{uri: rawgGame.backgroundImage}}
+                    source={{ uri: rawgGame.backgroundImage }}
                     alt={rawgGame.name}
                   />
                 }
-                
+
                 {
                   rawgGame && rawgGame.name &&
                   <Text style={styles.gameName}>{rawgGame.name}</Text>
@@ -177,7 +185,7 @@ export function EditGameModal({ modalVisible,  setModalVisible, idRawgGame }: Ed
                 {rawgGame && rawgGame.platforms && rawgGame.platforms.map((platform, index) => {
                   const IconComponent = platformIcons[platform.name];
                   const isSelected = gameDataPlatforms && gameDataPlatforms.some((item) => item.name === platform.name);
-                  
+
                   return IconComponent ? (
                     <Pressable key={index} style={isSelected ? [styles.platforms, styles.platformActive] : styles.platforms} onPress={() => togglePlatform(platform)}>
                       <Text style={styles.gameTagText}>{platform.name}</Text>
