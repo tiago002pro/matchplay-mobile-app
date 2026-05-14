@@ -19,7 +19,7 @@ import { THEME } from "styles/Theme";
 export default function MessageScreen({ route }:any) {
   const navigation = useNavigation();
   const { authState } = useAuth();
-  const { socket, newMessage } = useSocket();
+  const { connected, newMessage, sendMessage } = useSocket();
   const { setUnreadCount } = useUnreadMessages();
 
   const { getMessages, readAllMessages, getUnreadCount } = MessageService();
@@ -85,35 +85,42 @@ export default function MessageScreen({ route }:any) {
     if (inputText.trim()) {
       const data = {
         chatId: chat.id,
-        senderId,
-        senderName: senderName,
         content: inputText
       };
 
       const message:IMessageDTO = {
-        id: null,
-        senderId,
+        id: messages.length + 1,
+        sender: {
+          id: senderId,
+          name: '',
+          image: ''  
+        },
         content: inputText,
         isRead: false,
-        date: new Date().toDateString(),
+        date: new Date().toISOString(),
         chatId: chat.id,
       }
 
-      setMessages((prevMessages) => [message, ...prevMessages]);
+      // setMessages((prevMessages) => [message, ...prevMessages]);
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 100);
       setInputText('');
-      socket.send(JSON.stringify(data));
+
+      if (connected) {
+        sendMessage(data);
+      } else {
+        console.log("WebSocket desconectado");
+      }
     }
   };
 
-  function convertDate(date) {
+  function convertDate(date: string) {
     return moment(new Date(date)).calendar(); 
   }
 
   const renderMessage = ({ item }: { item: IMessageDTO }) => {
-    const isMe = item.senderId === senderId;
+    const isMe = item.sender.id === senderId;
     
     return (
       <View style={[styles.messageContainer, isMe ? styles.myMessage : styles.otherMessage]}>

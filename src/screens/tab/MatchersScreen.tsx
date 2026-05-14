@@ -175,8 +175,8 @@ export function MatchersScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <GradientBackground>
+    <GradientBackground>
+      <SafeAreaView style={styles.container}>
         <FlatList
           ref={listRef}
           data={machersList}
@@ -191,15 +191,14 @@ export function MatchersScreen() {
           renderItem={renderMatch}
           ListEmptyComponent={renderEmptyState}
         />
-      </GradientBackground>
-    </SafeAreaView>
+      </SafeAreaView>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
   },
   matchCard: {
     marginBottom: 16,
@@ -256,9 +255,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   nameContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column',
     marginBottom: 4,
   },
   matchName: {

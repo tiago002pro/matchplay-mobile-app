@@ -5,9 +5,9 @@ import { Platform } from 'react-native';
 export function NotificationService() {
 
   async function registerForPushNotificationsAsync() {
-    if (!Device.isDevice) {
-      alert('Notificações push funcionam apenas em dispositivos físicos!');
-    }
+    // if (!Device.isDevice) {
+    //   alert('Notificações push funcionam apenas em dispositivos físicos!');
+    // }
   
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
