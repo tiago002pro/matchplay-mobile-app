@@ -1,43 +1,79 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { IMessageDTO } from "interfaces/IMessage";
 
 import { EXPO_PUBLIC_WEBSOCKET_URL } from "@env";
 
-const SocketContext = createContext(null);
+interface ISocketContext {
+  connected: boolean;
+  newMessage: any;
+  sendMessage: (data: any) => void;
+}
 
-export const SocketProvider = ({ children }) => {
+const SocketContext = createContext<ISocketContext | null>(null);
+
+export const SocketProvider = ({ children }: any) => {
   const { authState } = useAuth();
-  const [socket, setSocket] = useState(null);
-  const [newMessage, setNewMessage] = useState<IMessageDTO>(null);
+
+  const socketRef = useRef<WebSocket | null>(null);
+
+  const [connected, setConnected] = useState(false);
+  const [newMessage, setNewMessage] = useState(null);
 
   useEffect(() => {
-    if (!authState?.user?.personId) return; // Só conecta se o usuário estiver logado
+    if (!authState?.token) return;
 
-    let ws = new WebSocket(`${EXPO_PUBLIC_WEBSOCKET_URL}?userId=${authState?.user?.personId}`);
+    const ws = new WebSocket(`${EXPO_PUBLIC_WEBSOCKET_URL}?token=${authState.token}`)
 
-    ws.onopen = () => console.log("✅ Conectado ao WebSocket!");
+    socketRef.current = ws;
+
+    ws.onopen = () => {
+      console.log("WS conectado");
+      setConnected(true);
+    };
+
     ws.onmessage = (event) => {
-      const data: IMessageDTO = JSON.parse(event.data);
-      console.log("📩 Nova mensagem recebida:", data);
+      const data = JSON.parse(event.data);
       setNewMessage(data);
     };
-    ws.onerror = (error) => console.error("❌ Erro no WebSocket:", error);
-    ws.onclose = () => console.log("🔌 Conexão WebSocket fechada.");
 
-    setSocket(ws);
+    ws.onerror = (error) => {
+      console.log("WS erro", error);
+    };
+
+    ws.onclose = () => {
+      console.log("WS fechado");
+      setConnected(false);
+    };
 
     return () => {
-      console.log("⚠️ Fechando conexão WebSocket...");
       ws.close();
     };
-  }, [authState?.user?.personId]);
+  }, [authState?.token]);
+
+  const sendMessage = (data: any) => {
+    if (
+      socketRef.current &&
+      socketRef.current.readyState === WebSocket.OPEN
+    ) {
+      socketRef.current.send(JSON.stringify(data));
+    } else {
+      console.log("WebSocket desconectado");
+    }
+  };
 
   return (
-    <SocketContext.Provider value={{ socket, newMessage }}>
+    <SocketContext.Provider value={{ connected, newMessage, sendMessage }}>
       {children}
     </SocketContext.Provider>
   );
 };
 
-export const useSocket = () => useContext(SocketContext);
+export const useSocket = () => {
+  const context = useContext(SocketContext);
+
+  if (!context) {
+    throw new Error("useSocket must be used within SocketProvider");
+  }
+
+  return context;
+};

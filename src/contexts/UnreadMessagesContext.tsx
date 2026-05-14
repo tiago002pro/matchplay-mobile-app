@@ -1,16 +1,34 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+
 import { useSocket } from "./SocketContext";
+import { useAuth } from "./AuthContext";
 
-const UnreadMessagesContext = createContext(null);
+interface Props {
+  children: ReactNode;
+}
 
-export const UnreadMessagesProvider = ({ children }) => {
+interface UnreadMessagesContextData {
+  unreadCount: number;
+  setUnreadCount: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const UnreadMessagesContext =
+  createContext<UnreadMessagesContextData>({} as UnreadMessagesContextData);
+
+export const UnreadMessagesProvider = ({ children }: Props) => {
   const { newMessage } = useSocket();
-  const [unreadCount, setUnreadCount] = useState(0);
-  
-  useEffect(() => {
-    if (!newMessage) return;
+  const { authState } = useAuth();
 
-    setUnreadCount((prev) => prev + 1)
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!newMessage?.id) return;
+
+    if (newMessage.senderId === authState?.user?.personId) {
+      return;
+    }
+
+    setUnreadCount((prev) => prev + 1);
   }, [newMessage]);
 
   return (
