@@ -6,8 +6,8 @@
     "development": {
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "development",
-        "EXPO_PUBLIC_API_URL": "http://192.168.18.10:9090/api/matchplay",
-        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://192.168.18.10:9091/api/matchplay/buildrun-livechat-websocket"
+        "EXPO_PUBLIC_API_URL": "http://192.168.18.10:8080/api/matchplay",
+        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://192.168.18.10:8080/api/matchplay/ws"
       },
       "distribution": "internal",
       "android": {
@@ -29,8 +29,8 @@
     "production": {
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "production",
-        "EXPO_PUBLIC_API_URL": "http://148.230.124.49:9090/api/matchplay",
-        "EXPO_PUBLIC_WEBSOCKET_URL": "ws://148.230.124.49:9091/api/matchplay/buildrun-livechat-websocket"
+        "EXPO_PUBLIC_API_URL": "https://api.matchplay.cloud/api/matchplay",
+        "EXPO_PUBLIC_WEBSOCKET_URL": "wss://api.matchplay.cloud/api/matchplay/ws"
       },
       "distribution": "store",
       "android": {
